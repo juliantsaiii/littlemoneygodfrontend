@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      title: '若依管理系统',
+      title: '安夏业务平台运维操作系统',
       logo: logoImg
     }
   }
