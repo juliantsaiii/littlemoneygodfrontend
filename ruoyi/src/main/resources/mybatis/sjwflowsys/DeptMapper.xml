@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowsys.mapper.DeptMapper">
+    
+    <resultMap type="Dept" id="DeptResult">
+        <result property="id"    column="ID"    />
+        <result property="pid"    column="PID"    />
+        <result property="name"    column="Name"    />
+        <result property="category"    column="Category"    />
+        <result property="sortcode"    column="SortCode"    />
+        <result property="serialnumber"    column="SerialNumber"    />
+        <result property="deleted"    column="Deleted"    />
+        <result property="flowinfotype"    column="FlowInfoType"    />
+        <result property="depttype"    column="DeptType"    />
+        <result property="xscode"    column="XSCode"    />
+        <result property="paizhuarea"    column="PaiZhuArea"    />
+        <result property="chargepersonid"    column="ChargePersonID"    />
+        <result property="chargepersonname"    column="ChargePersonName"    />
+        <result property="chargeleaderid"    column="ChargeLeaderID"    />
+        <result property="chargeleadername"    column="ChargeLeaderName"    />
+        <result property="mainleaderid"    column="MainLeaderID"    />
+        <result property="mainleadername"    column="MainLeaderName"    />
+        <result property="paizhusubleaderid"    column="PaiZhuSubLeaderID"    />
+        <result property="paizhusubleadername"    column="PaiZhuSubLeaderName"    />
+        <result property="paizhumainleaderid"    column="PaiZhuMainLeaderID"    />
+        <result property="paizhumainleadername"    column="PaiZhuMainLeaderName"    />
+    </resultMap>
+
+    <sql id="selectDeptVo">
+        select ID, PID, Name, Category, SortCode, SerialNumber, Deleted, FlowInfoType, DeptType, XSCode, PaiZhuArea, ChargePersonID, ChargePersonName, ChargeLeaderID, ChargeLeaderName, MainLeaderID, MainLeaderName, PaiZhuSubLeaderID, PaiZhuSubLeaderName, PaiZhuMainLeaderID, PaiZhuMainLeaderName from dept
+    </sql>
+
+    <select id="selectDeptList" parameterType="Dept" resultMap="DeptResult">
+        <include refid="selectDeptVo"/>
+        <where>  
+            <if test="pid != null  and pid != ''"> and PID = #{pid}</if>
+            <if test="name != null  and name != ''"> and Name like concat('%', #{name}, '%')</if>
+            <if test="depttype != null  and depttype != ''"> and DeptType = #{depttype}</if>
+            <if test="chargepersonname != null  and chargepersonname != ''"> and ChargePersonName like concat('%', #{chargepersonname}, '%')</if>
+            <if test="chargeleadername != null  and chargeleadername != ''"> and ChargeLeaderName like concat('%', #{chargeleadername}, '%')</if>
+            <if test="mainleadername != null  and mainleadername != ''"> and MainLeaderName like concat('%', #{mainleadername}, '%')</if>
+            <if test="paizhusubleadername != null  and paizhusubleadername != ''"> and PaiZhuSubLeaderName like concat('%', #{paizhusubleadername}, '%')</if>
+            <if test="paizhumainleadername != null  and paizhumainleadername != ''"> and PaiZhuMainLeaderName like concat('%', #{paizhumainleadername}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectDeptById" parameterType="String" resultMap="DeptResult">
+        <include refid="selectDeptVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertDept" parameterType="Dept">
+        insert into dept
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="pid != null">PID,</if>
+            <if test="name != null">Name,</if>
+            <if test="category != null">Category,</if>
+            <if test="sortcode != null">SortCode,</if>
+            <if test="serialnumber != null">SerialNumber,</if>
+            <if test="deleted != null">Deleted,</if>
+            <if test="flowinfotype != null">FlowInfoType,</if>
+            <if test="depttype != null">DeptType,</if>
+            <if test="xscode != null">XSCode,</if>
+            <if test="paizhuarea != null">PaiZhuArea,</if>
+            <if test="chargepersonid != null">ChargePersonID,</if>
+            <if test="chargepersonname != null">ChargePersonName,</if>
+            <if test="chargeleaderid != null">ChargeLeaderID,</if>
+            <if test="chargeleadername != null">ChargeLeaderName,</if>
+            <if test="mainleaderid != null">MainLeaderID,</if>
+            <if test="mainleadername != null">MainLeaderName,</if>
+            <if test="paizhusubleaderid != null">PaiZhuSubLeaderID,</if>
+            <if test="paizhusubleadername != null">PaiZhuSubLeaderName,</if>
+            <if test="paizhumainleaderid != null">PaiZhuMainLeaderID,</if>
+            <if test="paizhumainleadername != null">PaiZhuMainLeaderName,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="pid != null">#{pid},</if>
+            <if test="name != null">#{name},</if>
+            <if test="category != null">#{category},</if>
+            <if test="sortcode != null">#{sortcode},</if>
+            <if test="serialnumber != null">#{serialnumber},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="flowinfotype != null">#{flowinfotype},</if>
+            <if test="depttype != null">#{depttype},</if>
+            <if test="xscode != null">#{xscode},</if>
+            <if test="paizhuarea != null">#{paizhuarea},</if>
+            <if test="chargepersonid != null">#{chargepersonid},</if>
+            <if test="chargepersonname != null">#{chargepersonname},</if>
+            <if test="chargeleaderid != null">#{chargeleaderid},</if>
+            <if test="chargeleadername != null">#{chargeleadername},</if>
+            <if test="mainleaderid != null">#{mainleaderid},</if>
+            <if test="mainleadername != null">#{mainleadername},</if>
+            <if test="paizhusubleaderid != null">#{paizhusubleaderid},</if>
+            <if test="paizhusubleadername != null">#{paizhusubleadername},</if>
+            <if test="paizhumainleaderid != null">#{paizhumainleaderid},</if>
+            <if test="paizhumainleadername != null">#{paizhumainleadername},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDept" parameterType="Dept">
+        update dept
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pid != null">PID = #{pid},</if>
+            <if test="name != null">Name = #{name},</if>
+            <if test="category != null">Category = #{category},</if>
+            <if test="sortcode != null">SortCode = #{sortcode},</if>
+            <if test="serialnumber != null">SerialNumber = #{serialnumber},</if>
+            <if test="deleted != null">Deleted = #{deleted},</if>
+            <if test="flowinfotype != null">FlowInfoType = #{flowinfotype},</if>
+            <if test="depttype != null">DeptType = #{depttype},</if>
+            <if test="xscode != null">XSCode = #{xscode},</if>
+            <if test="paizhuarea != null">PaiZhuArea = #{paizhuarea},</if>
+            <if test="chargepersonid != null">ChargePersonID = #{chargepersonid},</if>
+            <if test="chargepersonname != null">ChargePersonName = #{chargepersonname},</if>
+            <if test="chargeleaderid != null">ChargeLeaderID = #{chargeleaderid},</if>
+            <if test="chargeleadername != null">ChargeLeaderName = #{chargeleadername},</if>
+            <if test="mainleaderid != null">MainLeaderID = #{mainleaderid},</if>
+            <if test="mainleadername != null">MainLeaderName = #{mainleadername},</if>
+            <if test="paizhusubleaderid != null">PaiZhuSubLeaderID = #{paizhusubleaderid},</if>
+            <if test="paizhusubleadername != null">PaiZhuSubLeaderName = #{paizhusubleadername},</if>
+            <if test="paizhumainleaderid != null">PaiZhuMainLeaderID = #{paizhumainleaderid},</if>
+            <if test="paizhumainleadername != null">PaiZhuMainLeaderName = #{paizhumainleadername},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteDeptById" parameterType="String">
+        delete from dept where ID = #{id}
+    </delete>
+
+    <delete id="deleteDeptByIds" parameterType="String">
+        delete from dept where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

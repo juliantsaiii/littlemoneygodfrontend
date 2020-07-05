@@ -29,6 +29,9 @@ public class GenConstants
     /** 数据库时间类型 */
     public static final String[] COLUMNTYPE_TIME = { "datetime", "time", "date", "timestamp" };
 
+    /** 数据库时间类型 */
+    public static final String[] COLUMNTYPE_BOOL = { "bit" };
+
     /** 数据库数字类型 */
     public static final String[] COLUMNTYPE_NUMBER = { "tinyint", "smallint", "mediumint", "int", "number", "integer",
             "bigint", "float", "float", "double", "decimal" };
@@ -70,6 +73,9 @@ public class GenConstants
 
     /** 字符串类型 */
     public static final String TYPE_STRING = "String";
+
+    /** 布尔型 */
+    public static final String TYPE_BOOLEAN = "Boolean";
 
     /** 整型 */
     public static final String TYPE_INTEGER = "Integer";

@@ -3,6 +3,9 @@ package com.ruoyi.project.system.service.impl;
 import java.util.Collection;
 import java.util.List;
 import javax.annotation.PostConstruct;
+
+import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
+import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.constant.Constants;
@@ -87,6 +90,7 @@ public class SysConfigServiceImpl implements ISysConfigService
      * @return 参数配置集合
      */
     @Override
+    @DataSource(value = DataSourceType.MASTER)
     public List<SysConfig> selectConfigList(SysConfig config)
     {
         return configMapper.selectConfigList(config);

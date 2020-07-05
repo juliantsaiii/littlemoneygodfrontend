@@ -54,6 +54,11 @@ public class GenUtils
             column.setJavaType(GenConstants.TYPE_DATE);
             column.setHtmlType(GenConstants.HTML_DATETIME);
         }
+        else if (arraysContains(GenConstants.COLUMNTYPE_BOOL, dataType))
+        {
+            column.setJavaType(GenConstants.TYPE_BOOLEAN);
+            column.setHtmlType(GenConstants.HTML_RADIO);
+        }
         else if (arraysContains(GenConstants.COLUMNTYPE_NUMBER, dataType))
         {
             column.setHtmlType(GenConstants.HTML_INPUT);
