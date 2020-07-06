@@ -117,6 +117,8 @@ export function handleTree(data, id, parentId, children, rootId) {
 	parentId = parentId || 'parentId'
 	children = children || 'children'
 	rootId = rootId || 0
+	console.log(parentId)
+
 	//对源数据深度克隆
 	const cloneData = JSON.parse(JSON.stringify(data))
 	//循环所有项
@@ -125,7 +127,9 @@ export function handleTree(data, id, parentId, children, rootId) {
 		//返回每一项的子级数组
 		return father[id] === child[parentId]
 	  });
+	  
 	  branchArr.length > 0 ? father.children = branchArr : '';
+	  console.log(branchArr.length)
 	  //返回第一层
 	  return father[parentId] === rootId;
 	});

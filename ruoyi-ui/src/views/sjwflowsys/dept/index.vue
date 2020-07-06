@@ -97,7 +97,6 @@
       v-loading="loading"
       :data="deptList"
       row-key="id"
-      default-expand-all
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
       <el-table-column label="部门名称" align="center" prop="name" />
@@ -130,15 +129,7 @@
     </el-table>
 
 
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
-    
+   
     <!-- 添加或修改部门对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -293,9 +284,9 @@ export default {
     getList() {
       this.loading = true;
       listDept(this.queryParams).then(response => {
-        this.deptList = this.handleTree(response.data, "id", "pid");
+        console.log(response)
+        this.deptList = this.handleTree(response.data, "id","pid","children",0);
         this.loading = false;
-        this.total = response.total;
       });
     },
     /** 转换部门数据结构 */
@@ -305,7 +296,7 @@ export default {
       }
       return {
         id: node.id,
-        label: node.pid,
+        label: node.name,
         children: node.children
       };
     },

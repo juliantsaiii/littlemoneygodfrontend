@@ -39,11 +39,10 @@ public class DeptController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('sjwflowsys:dept:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Dept dept)
+    public AjaxResult list(Dept dept)
     {
-        startPage();
         List<Dept> list = deptService.selectDeptList(dept);
-        return getDataTable(list);
+        return AjaxResult.success(list);
     }
 
     /**
