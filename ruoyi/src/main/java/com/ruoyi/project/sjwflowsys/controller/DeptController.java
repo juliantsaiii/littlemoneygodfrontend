@@ -1,6 +1,7 @@
 package com.ruoyi.project.sjwflowsys.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.web.page.TableDataInfo;
@@ -86,6 +87,7 @@ public class DeptController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody Dept dept)
     {
+        dept.setId(UUID.randomUUID().toString());
         return toAjax(deptService.insertDept(dept));
     }
 

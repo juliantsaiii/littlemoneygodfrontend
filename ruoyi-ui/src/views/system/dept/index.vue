@@ -269,7 +269,8 @@ export default {
         this.title = "修改部门";
       });
       listDeptExcludeChild(row.deptId).then(response => {
-	        this.deptOptions = this.handleTree(response.data, "deptId");
+          this.deptOptions = this.handleTree(response.data, "deptId");
+          console.log(this.deptOptions)
       });
     },
     /** 提交按钮 */
