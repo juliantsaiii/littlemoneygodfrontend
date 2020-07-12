@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="Dept" id="DeptResult">
         <result property="id"    column="ID"    />
         <result property="pid"    column="PID"    />
+        <result property="hasChildren"    column="HasChildren"    />
         <result property="name"    column="Name"    />
         <result property="category"    column="Category"    />
         <result property="sortcode"    column="SortCode"    />
@@ -29,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectDeptVo">
-        select ID, PID, Name, Category, SortCode, SerialNumber, Deleted, FlowInfoType, DeptType, XSCode, PaiZhuArea, ChargePersonID, ChargePersonName, ChargeLeaderID, ChargeLeaderName, MainLeaderID, MainLeaderName, PaiZhuSubLeaderID, PaiZhuSubLeaderName, PaiZhuMainLeaderID, PaiZhuMainLeaderName from dept
+        select ID, PID, Name, HasChildren,Category, SortCode, SerialNumber, Deleted, FlowInfoType, DeptType, XSCode, PaiZhuArea, ChargePersonID, ChargePersonName, ChargeLeaderID, ChargeLeaderName, MainLeaderID, MainLeaderName, PaiZhuSubLeaderID, PaiZhuSubLeaderName, PaiZhuMainLeaderID, PaiZhuMainLeaderName from dept
     </sql>
 
     <select id="selectDeptList" parameterType="Dept" resultMap="DeptResult">
@@ -44,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="paizhusubleadername != null  and paizhusubleadername != ''"> and PaiZhuSubLeaderName like concat('%', #{paizhusubleadername}, '%')</if>
             <if test="paizhumainleadername != null  and paizhumainleadername != ''"> and PaiZhuMainLeaderName like concat('%', #{paizhumainleadername}, '%')</if>
         </where>
+        order by sortcode
     </select>
     
     <select id="selectDeptById" parameterType="String" resultMap="DeptResult">

@@ -51,7 +51,7 @@ module.exports = {
     }
   },
   chainWebpack(config) {
-    config.plugins.delete('preload') // TODO: need test
+    config.plugins.delete('preload') // TODO: need test  删除预加载
     config.plugins.delete('prefetch') // TODO: need test
 
     // set svg-sprite-loader
@@ -77,7 +77,7 @@ module.exports = {
       .use('vue-loader')
       .loader('vue-loader')
       .tap(options => {
-        options.compilerOptions.preserveWhitespace = true
+        options.compilerOptions.preserveWhitespace = true //去除空格
         return options
       })
       .end()

@@ -97,17 +97,19 @@
       v-loading="loading"
       :data="deptList"
       row-key="id"
+      lazy
+      :load="load"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column label="部门名称" align="center" prop="name" />
-      <el-table-column label="是否删除" align="center" prop="deleted" />
+      <el-table-column label="部门名称"  prop="name" />
+      <!-- <el-table-column label="是否删除" align="center" prop="deleted" />
       <el-table-column label="流程类型" align="center" prop="flowinfotype" :formatter="flowinfotypeFormat" />
       <el-table-column label="部门类型" align="center" prop="depttype" :formatter="depttypeFormat" />
       <el-table-column label="分管常委姓名" align="center" prop="chargepersonname" />
       <el-table-column label="分管副书记姓名" align="center" prop="chargeleadername" />
       <el-table-column label="书记姓名" align="center" prop="mainleadername" />
       <el-table-column label="派驻副组长姓名" align="center" prop="paizhusubleadername" />
-      <el-table-column label="派驻组长姓名" align="center" prop="paizhumainleadername" />
+      <el-table-column label="派驻组长姓名" align="center" prop="paizhumainleadername" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -284,9 +286,15 @@ export default {
     getList() {
       this.loading = true;
       listDept(this.queryParams).then(response => {
-        console.log(response)
-        this.deptList = this.handleTree(response.data, "id","pid","children",0);
+        this.deptList = this.handleTree(response.data, "id","pid","children","0","1");
         this.loading = false;
+      });
+    },
+    /** 懒加载树 */
+   load (tree, treeNode, resolve) {
+     this.queryParams.pid = tree.id;
+      listDept(this.queryParams).then(response => {
+        resolve(response.data);
       });
     },
     /** 转换部门数据结构 */

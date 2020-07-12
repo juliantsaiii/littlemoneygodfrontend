@@ -27,6 +27,9 @@ public class TreeEntity extends BaseEntity
     /** 子部门 */
     private List<?> children = new ArrayList<>();
 
+    /** 是否有子部门 */
+    private Boolean hasChildren;
+
     public String getParentName()
     {
         return parentName;
@@ -36,7 +39,15 @@ public class TreeEntity extends BaseEntity
     {
         this.parentName = parentName;
     }
+    public Boolean getHasChildren()
+    {
+        return hasChildren;
+    }
 
+    public void setHasChildren(boolean hasChildren)
+    {
+        this.hasChildren = hasChildren;
+    }
     public Long getParentId()
     {
         return parentId;

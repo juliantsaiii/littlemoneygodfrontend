@@ -58,7 +58,7 @@ Vue.use(permission)
  */
 
 Vue.use(Element, {
-  size: Cookies.get('size') || 'medium' // set element-ui default size
+  size: Cookies.get('size') || 'medium' // set element-ui default size  //默认大小
 })
 
 Vue.config.productionTip = false

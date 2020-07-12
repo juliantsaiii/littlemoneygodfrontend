@@ -2,7 +2,10 @@ package com.ruoyi.project.sjwflowsys.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.web.page.TableDataInfo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +30,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
  * @author littlemoneygod
  * @date 2020-07-06
  */
+@Api("部门管理")
 @RestController
 @RequestMapping("/sjwflowsys/dept")
 public class DeptController extends BaseController
@@ -37,13 +41,19 @@ public class DeptController extends BaseController
     /**
      * 查询部门列表
      */
+    @ApiOperation("查询部门")
     @PreAuthorize("@ss.hasPermi('sjwflowsys:dept:list')")
     @GetMapping("/list")
     public AjaxResult list(Dept dept)
     {
+        if(!StringUtils.isNotEmpty(dept.getPid()))
+        {
+            dept.setPid("-1");
+        }
         List<Dept> list = deptService.selectDeptList(dept);
         return AjaxResult.success(list);
     }
+
 
     /**
      * 导出部门列表

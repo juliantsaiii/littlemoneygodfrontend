@@ -21,6 +21,9 @@ public class Dept extends TreeEntity
     /** 父级ID */
     private String pid;
 
+    /** 是否有子节点*/
+    private Boolean hasChildren;
+
     /** 部门名称 */
     @Excel(name = "部门名称")
     private String name;
@@ -91,12 +94,21 @@ public class Dept extends TreeEntity
     {
         this.id = id;
     }
-
-    public String getId() 
+    public String getId()
     {
         return id;
     }
-    public void setPid(String pid) 
+    public Boolean getHasChildren()
+    {
+        return hasChildren;
+    }
+    public void setHasChildren(Boolean hasChildren)
+    {
+        this.hasChildren = hasChildren;
+    }
+
+
+    public void setPid(String pid)
     {
         this.pid = pid;
     }

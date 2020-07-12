@@ -111,14 +111,14 @@ export function praseStrEmpty(str) {
  * @param {*} parentId 父节点字段 默认 'parentId'
  * @param {*} children 孩子节点字段 默认 'children'
  * @param {*} rootId 根Id 默认 0
+ * @param {*} isLazy 判断是否懒加载，默认0，非懒加载
  */
-export function handleTree(data, id, parentId, children, rootId) {
+export function handleTree(data, id, parentId, children, rootId, isLazy) {
 	id = id || 'id'
 	parentId = parentId || 'parentId'
 	children = children || 'children'
 	rootId = rootId || 0
-	console.log(parentId)
-
+	isLazy = isLazy || 0
 	//对源数据深度克隆
 	const cloneData = JSON.parse(JSON.stringify(data))
 	//循环所有项
@@ -127,9 +127,10 @@ export function handleTree(data, id, parentId, children, rootId) {
 		//返回每一项的子级数组
 		return father[id] === child[parentId]
 	  });
-	  
-	  branchArr.length > 0 ? father.children = branchArr : '';
-	  console.log(branchArr.length)
+	  //非懒加载则加载children
+	  isLazy == 0 && branchArr.length > 0 ? father.children = branchArr : ''
+	//   branchArr.length > 0 ? father.children = branchArr : '';
+	//   branchArr.length > 0 ? father.hasChildren = true : father.hasChildren=false; //判断是否有子节点
 	  //返回第一层
 	  return father[parentId] === rootId;
 	});
