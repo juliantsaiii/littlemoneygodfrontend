@@ -6,6 +6,7 @@
       :data="deptList"
       row-key="id"
       lazy
+      ref="table"
       :load="load"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
@@ -176,6 +177,7 @@ export default {
         paizhusubleadername: undefined,
         paizhumainleadername: undefined
       },
+      loadNodeMap:new Map(),
       // 部门属性字典
       categoryOptions: [{
           value: '区域',
@@ -220,38 +222,12 @@ export default {
     },
     /** 懒加载树 */
    load (tree, treeNode, resolve) {
-     console.log(tree);
-     console.log(treeNode);
-     console.log(resolve);
+     this.loadNodeMap.set(tree.id, {tree, treeNode, resolve})
      this.queryParams.pid = tree.id;
       listDept(this.queryParams).then(response => {
+        console.log(response.data)
         resolve(response.data);
       });
-    },
-   loadOptions({ action, parentNode, callback }) {
-      // Typically, do the AJAX stuff here.
-      // Once the server has responded,
-      // assign children options to the parent node & call the callback.
-      console.log(parentNode);
-      if (action === LOAD_CHILDREN_OPTIONS) {
-        this.queryParams.pid=parentNode.id;
-        listDept(this.queryParams).then(response=>{
-          let resData = response.data;
-          let arr = [];
-          resData.forEach(item => {
-            let objData = {};
-            objData.id = item.id;
-            objData.label = item.name;
-            objData.children = null;
-            if (item.hasChildren === false) {
-              delete objData.children; //有无子节点判断，树节点前面是否有箭头问题
-            }
-            arr.push(objData);
-          });
-          parentNode.children = arr;
-          callback();
-        })
-      }
     },
     /** 转换部门数据结构 */
     normalizer(node) {
@@ -263,16 +239,6 @@ export default {
         label: node.name,
         children: node.children
       };
-    },
-	/** 查询部门下拉树结构 */
-    getTreeselect() {
-      listDept().then(response => {
-        this.queryParams.pid = "-1";
-        listDept(this.queryParams).then(response=>{
-          let pNode = response.data[0];
-          this.deptOptions = [{ id: pNode.id, label: pNode.name,children: null }];
-        })
-      });
     },
     // 流程类型字典翻译
     flowinfotypeFormat(row, column) {
@@ -326,7 +292,6 @@ export default {
     /** 新增按钮操作 */
     handleAdd(row) {
       this.reset();
-      this.getTreeselect();
       if (row != undefined) {
         this.form.pid = row.id;
         this.form.hasChildren = false;
@@ -337,8 +302,7 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-    this.reset();
-	  this.getTreeselect();
+      this.reset();
       getDept(row.id).then(response => {
         this.form = response.data;
         this.open = true;
@@ -366,6 +330,20 @@ export default {
               }
             });
           }
+          //懒加载刷新当前级
+        
+          if (this.loadNodeMap.has(this.form.pid)) {
+            alert(1)
+            const {tree, treeNode, resolve} = this.loadNodeMap.get(this.form.pid);
+            this.$set(this.$refs.table.store.states.lazyTreeNodeMap, this.form.pid, []);
+             this.queryParams.pid = this.form.pid;
+            listDept(this.queryParams).then(response => {
+              resolve(response.data);
+            });
+          } else {
+            this.form.hasChildren = true
+          }
+
         }
       });
     },
