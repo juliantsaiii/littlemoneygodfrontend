@@ -22,7 +22,7 @@ public class Dept extends TreeEntity
     private String pid;
 
     /** 是否有子节点*/
-    private Boolean hasChildren;
+    private Boolean hasChild;
 
     /** 部门名称 */
     @Excel(name = "部门名称")
@@ -98,13 +98,15 @@ public class Dept extends TreeEntity
     {
         return id;
     }
-    public Boolean getHasChildren()
+
+    public Boolean getHasChild()
     {
-        return hasChildren;
+        return hasChild;
     }
-    public void setHasChildren(Boolean hasChildren)
+
+    public void setHasChild(Boolean hasChild)
     {
-        this.hasChildren = hasChildren;
+        this.hasChild = hasChild;
     }
 
 

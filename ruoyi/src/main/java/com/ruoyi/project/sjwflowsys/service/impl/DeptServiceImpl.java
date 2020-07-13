@@ -40,7 +40,12 @@ public class DeptServiceImpl implements IDeptService
     @Override
     public List<Dept> selectDeptList(Dept dept)
     {
-        return deptMapper.selectDeptList(dept);
+        List<Dept> depts = deptMapper.selectDeptList(dept);
+        for(Dept d:depts)
+        {
+            d.setHasChildren(d.getHasChild());
+        }
+        return depts;
     }
 
     /**

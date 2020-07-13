@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="Dept" id="DeptResult">
         <result property="id"    column="ID"    />
         <result property="pid"    column="PID"    />
-        <result property="hasChildren"    column="HasChildren"    />
+        <result property="hasChild"    column="HasChild"    />
         <result property="name"    column="Name"    />
         <result property="category"    column="Category"    />
         <result property="sortcode"    column="SortCode"    />
@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectDeptVo">
-        select ID, PID, Name, HasChildren,Category, SortCode, SerialNumber, Deleted, FlowInfoType, DeptType, XSCode, PaiZhuArea, ChargePersonID, ChargePersonName, ChargeLeaderID, ChargeLeaderName, MainLeaderID, MainLeaderName, PaiZhuSubLeaderID, PaiZhuSubLeaderName, PaiZhuMainLeaderID, PaiZhuMainLeaderName from dept
+        select ID, PID, Name, HasChild,Category, SortCode, SerialNumber, Deleted, FlowInfoType, DeptType, XSCode, PaiZhuArea, ChargePersonID, ChargePersonName, ChargeLeaderID, ChargeLeaderName, MainLeaderID, MainLeaderName, PaiZhuSubLeaderID, PaiZhuSubLeaderName, PaiZhuMainLeaderID, PaiZhuMainLeaderName from dept
     </sql>
 
     <select id="selectDeptList" parameterType="Dept" resultMap="DeptResult">
@@ -110,6 +110,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="name != null">Name = #{name},</if>
             <if test="category != null">Category = #{category},</if>
             <if test="sortcode != null">SortCode = #{sortcode},</if>
+            <if test="hasChild != null">hasChild = #{hasChild},</if>
             <if test="serialnumber != null">SerialNumber = #{serialnumber},</if>
             <if test="deleted != null">Deleted = #{deleted},</if>
             <if test="flowinfotype != null">FlowInfoType = #{flowinfotype},</if>

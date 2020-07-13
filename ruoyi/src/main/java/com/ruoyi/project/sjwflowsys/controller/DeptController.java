@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -88,6 +89,13 @@ public class DeptController extends BaseController
     public AjaxResult add(@RequestBody Dept dept)
     {
         dept.setId(UUID.randomUUID().toString());
+        Dept pdept = deptService.selectDeptById(dept.getPid());
+        //父级设为有子节点
+        if(!pdept.getHasChild())
+        {
+            pdept.setHasChild(true);
+            deptService.updateDept(pdept);
+        }
         return toAjax(deptService.insertDept(dept));
     }
 

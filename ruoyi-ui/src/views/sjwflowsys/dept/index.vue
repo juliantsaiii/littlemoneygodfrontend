@@ -53,7 +53,7 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-form-item label="父级ID" prop="pid">
           <!-- <treeselect v-model="form.pid" :options="deptOptions" :load-options="loadOptions" placeholder="请选择父级ID" /> -->
-          <dept-select-tree :pid="form.id"  @selectterm="updatepid" ></dept-select-tree>
+          <dept-select-tree :pid="form.pid" @selectterm="updatepid" ></dept-select-tree>
         </el-form-item>
         <el-form-item label="机构名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入部门名称" />
@@ -220,6 +220,9 @@ export default {
     },
     /** 懒加载树 */
    load (tree, treeNode, resolve) {
+     console.log(tree);
+     console.log(treeNode);
+     console.log(resolve);
      this.queryParams.pid = tree.id;
       listDept(this.queryParams).then(response => {
         resolve(response.data);
@@ -381,8 +384,7 @@ export default {
         }).catch(function() {});
     },
     updatepid(data){
-      alert(data)
-      this.form.id = data;
+      this.form.pid = data;
     }
   }
 };

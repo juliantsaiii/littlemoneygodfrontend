@@ -8,10 +8,6 @@ import {listDept}  from "@/api/sjwflowsys/dept";
 export default {
     components: { Treeselect },
     props: ['pid'],
-     model: {
-        prop: 'pid',
-        event: 'selectterm'
-    },
     data(){
         return {
             value:this.pid,
@@ -20,6 +16,9 @@ export default {
         }
     },
     watch: {
+            pid: function (newval) {
+                this.value = newval;
+            },
             value: function (newval) {
                 this.$emit('selectterm',newval);
             }
