@@ -221,11 +221,10 @@ export default {
       });
     },
     /** 懒加载树 */
-   load (tree, treeNode, resolve) {
+    load (tree, treeNode, resolve) {
      this.loadNodeMap.set(tree.id, {tree, treeNode, resolve})
      this.queryParams.pid = tree.id;
       listDept(this.queryParams).then(response => {
-        console.log(response.data)
         resolve(response.data);
       });
     },
@@ -318,7 +317,7 @@ export default {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
-                this.getList();
+                // this.getList();
               }
             });
           } else {
@@ -326,20 +325,14 @@ export default {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
-                this.getList();
+                // this.getList();
               }
             });
           }
           //懒加载刷新当前级
         
           if (this.loadNodeMap.has(this.form.pid)) {
-            alert(1)
-            const {tree, treeNode, resolve} = this.loadNodeMap.get(this.form.pid);
-            this.$set(this.$refs.table.store.states.lazyTreeNodeMap, this.form.pid, []);
-             this.queryParams.pid = this.form.pid;
-            listDept(this.queryParams).then(response => {
-              resolve(response.data);
-            });
+            this.refreshNode(this.form.pid);
           } else {
             this.form.hasChildren = true
           }
@@ -349,20 +342,29 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      this.$confirm('是否确认删除部门编号为"' + row.id + '"的数据项?', "警告", {
+      this.$confirm('是否确认删除-"' + row.name + '"-的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
           return delDept(row.id);
         }).then(() => {
-          this.queryParams = {};
-          this.getList();
+          this.refreshNode(row.pid);
           this.msgSuccess("删除成功");
         }).catch(function() {});
     },
+    /** 同步pid */
     updatepid(data){
       this.form.pid = data;
+    },
+    /** 刷新子节点 */
+    refreshNode(id){
+      const {tree, treeNode, resolve} = this.loadNodeMap.get(id);
+      this.$set(this.$refs.table.store.states.lazyTreeNodeMap, id, []);
+      this.queryParams.pid = id;
+      listDept(this.queryParams).then(response => {
+        resolve(response.data);
+      });
     }
   }
 };
