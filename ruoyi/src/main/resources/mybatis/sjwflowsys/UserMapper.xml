@@ -33,8 +33,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectUserList" parameterType="User" resultMap="UserResult">
         <include refid="selectUserVo"/>
-        <where>  
+        <where>
+            <if test="fullname != null  and fullname != ''"> and fullname like concat('%', #{fullname}, '%')</if>
+            <if test="usertype != null  and usertype != ''"> and usertype = #{usertype}</if>
+            <if test="deptid != null  and deptid != ''"> and DeptID = #{deptid}</if>
+            <if test="companyid != null  and companyid != ''"> and CompanyID = #{companyid}</if>
         </where>
+        order by sortcode
     </select>
     
     <select id="selectUserById" parameterType="String" resultMap="UserResult">

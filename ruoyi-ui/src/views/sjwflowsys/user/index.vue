@@ -1,88 +1,139 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+   <el-row :gutter="20">
+    <el-col :span="6">
+      <div v-loading.body="loading" :style="treeheight">
+        <el-tree
+          :data="deptList"
+          :props="props"
+          :load="loadNode"
+          lazy
+          @node-click="refreshUserList">
+        </el-tree>
+      </div>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['sjwflowsys:user:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['sjwflowsys:user:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['sjwflowsys:user:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['sjwflowsys:user:export']"
-        >导出</el-button>
-      </el-col>
-    </el-row>
+      
+    </el-col>
+    <el-col :span="18">
+       <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+           <el-form-item label="姓名" prop="fullname">
+            <el-input
+              v-model="queryParams.fullname"
+              placeholder="请输入用户姓名"
+              clearable
+              size="small"
+              style="width: 240px"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="人员类型" prop="usertype">
+            <el-select
+              v-model="queryParams.usertype"
+              placeholder="人员类型"
+              clearable
+              size="small"
+              style="width: 240px"
+            >
+              <el-option
+                v-for="dict in usertypeOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </el-form>
 
-    <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="部门名称" align="center" prop="deptname" />
-      <el-table-column label="用户名" align="center" prop="name" />
-      <el-table-column label="姓名" align="center" prop="fullname" />
-      <el-table-column label="机构名" align="center" prop="companyname" />
-      <el-table-column label="人员类型" align="center" prop="usertype" :formatter="usertypeFormat" />
-      <el-table-column label="激活" align="center" prop="activated" :formatter="activatedFormat" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['sjwflowsys:user:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['sjwflowsys:user:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              icon="el-icon-plus"
+              size="mini"
+              @click="handleAdd"
+              v-hasPermi="['sjwflowsys:user:add']"
+            >新增</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="success"
+              icon="el-icon-edit"
+              size="mini"
+              :disabled="single"
+              @click="handleUpdate"
+              v-hasPermi="['sjwflowsys:user:edit']"
+            >修改</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              size="mini"
+              :disabled="multiple"
+              @click="handleDelete"
+              v-hasPermi="['sjwflowsys:user:remove']"
+            >删除</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="warning"
+              icon="el-icon-download"
+              size="mini"
+              @click="handleExport"
+              v-hasPermi="['sjwflowsys:user:export']"
+            >导出</el-button>
+          </el-col>
+        </el-row>
+
+        <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange"
+        :height="windowHeight-200">
+          <el-table-column label="部门名称" align="center" prop="deptname" />
+          <el-table-column label="用户名" align="center" prop="name" />
+          <el-table-column label="姓名" align="center" prop="fullname" />
+          <el-table-column label="机构名" align="center" prop="companyname" />
+          <el-table-column label="人员类型" align="center" prop="usertype" :formatter="usertypeFormat" />
+          <el-table-column label="激活" align="center" prop="activated">
+            <template slot-scope="scope">
+                <el-switch v-model="scope.row.activated"
+                active-value="1"
+                inactive-value="0"
+                @change="updateActivated(scope.row)"></el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['sjwflowsys:user:edit']"
+              >修改</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['sjwflowsys:user:remove']"
+              >删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        
+        <pagination
+          v-show="total>0"
+          :total="total"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
+        />
+    </el-col>
+   </el-row>
+   
 
     <!-- 添加或修改业务平台用户管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -181,11 +232,13 @@
 
 <script>
 import { listUser, getUser, delUser, addUser, updateUser, exportUser } from "@/api/sjwflowsys/user";
-
+import {getDeptTree} from "@/api/sjwflowsys/dept";
 export default {
   name: "User",
   data() {
     return {
+      //部门树
+      deptList:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -210,8 +263,15 @@ export default {
       isadminOptions: [],
       // 查询参数
       queryParams: {
+        fullname:undefined,
+        usertype:undefined,
+        deptid:undefined,
+        companyid:undefined,
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 30,
+      },
+      deptQueryParams:{
+        pid: undefined,
       },
       // 表单参数
       form: {},
@@ -220,6 +280,16 @@ export default {
         deleted: [
           { required: true, message: "是否删除不能为空", trigger: "blur" }
         ],
+      },
+      props: {
+        label: 'name',
+        children: 'children',
+        isLeaf: 'hasChildren'
+      },
+      windowHeight:this.$store.getters.clientHeight,
+      treeheight: {
+        height: this.$store.getters.clientHeight-100 + "px",
+        overflow:"auto"
       }
     };
   },
@@ -370,7 +440,37 @@ export default {
         }).then(response => {
           this.download(response.msg);
         }).catch(function() {});
+    },
+     /** 懒加载树 */
+    loadNode (node, resolve) {
+      this.deptQueryParams.pid = node.data.id;
+        getDeptTree(this.deptQueryParams).then(response=>{
+        resolve(response.data);
+      });
+    },
+    /** 部门节点点击事件 */
+    refreshUserList(data){
+      data.category == "单位" && [this.queryParams.companyid = data.id,this.queryParams.deptid = undefined]|| [this.queryParams.deptid = data.id];
+      listUser(this.queryParams).then(response => {
+        this.userList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
+    },
+    /** 更新激活状态 */
+    updateActivated(data){
+      updateUser(data).then(response => {
+        if (response.code === 200) {
+          this.msgSuccess("修改成功");
+        }
+      });
     }
   }
 };
 </script>
+<style scoped>
+ .el-tree-node__label{
+   font-size: 17px;
+   font-weight: bold;
+ }
+</style>

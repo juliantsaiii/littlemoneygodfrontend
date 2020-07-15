@@ -51,3 +51,12 @@ export function exportDept(query) {
     params: query
   })
 }
+
+// 查询部门树
+export function getDeptTree(query) {
+  return request({
+    url: '/sjwflowsys/dept/listTree',
+    method: 'get',
+    params: query
+  })
+}

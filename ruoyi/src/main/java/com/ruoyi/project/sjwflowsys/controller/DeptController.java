@@ -56,6 +56,26 @@ public class DeptController extends BaseController
         return AjaxResult.success(list);
     }
 
+    /**
+     * 查询部门树
+     * @param dept
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('sjwflowsys:dept:list')")
+    @GetMapping("/listTree")
+    public AjaxResult listTree(Dept dept)
+    {
+        if(!StringUtils.isNotEmpty(dept.getPid()))
+        {
+            dept.setPid("-1");
+        }
+        List<Dept> list = deptService.selectDeptList(dept);
+        for(Dept d : list)
+        {
+            d.setHasChildren(!d.getHasChildren());
+        }
+        return AjaxResult.success(list);
+    }
 
     /**
      * 导出部门列表
