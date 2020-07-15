@@ -46,7 +46,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectUserVo"/>
         where ID = #{id}
     </select>
-        
+
+    <select id="checkUserNameUnique" parameterType="String" resultType="int">
+		select count(1) from user where name = #{userName} and deleted = 0
+	</select>
+
     <insert id="insertUser" parameterType="User">
         insert into user
         <trim prefix="(" suffix=")" suffixOverrides=",">

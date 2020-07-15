@@ -58,4 +58,11 @@ public interface IUserService
      * @return 结果
      */
     public int deleteUserById(String id);
+
+    /**
+     * 账号判重
+     * @param UserName
+     * @return
+     */
+    public int checkUserNameUnique(String UserName);
 }

@@ -58,4 +58,11 @@ public interface UserMapper
      * @return 结果
      */
     public int deleteUserByIds(String[] ids);
+
+    /**
+     * 账号判重
+     * @param UserName
+     * @return
+     */
+    public int checkUserNameUnique(String UserName);
 }

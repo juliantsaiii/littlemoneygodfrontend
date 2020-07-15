@@ -90,4 +90,13 @@ public class UserServiceImpl implements IUserService
     {
         return userMapper.deleteUserById(id);
     }
+
+    /**
+     * 账号判重
+     * @param UserName
+     * @return
+     */
+    public int checkUserNameUnique(String UserName){
+        return userMapper.checkUserNameUnique(UserName);
+    }
 }

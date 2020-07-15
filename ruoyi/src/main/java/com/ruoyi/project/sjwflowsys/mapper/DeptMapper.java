@@ -58,4 +58,11 @@ public interface DeptMapper
      * @return 结果
      */
     public int deleteDeptByIds(String[] ids);
+
+    /**
+     * 账号判重
+     * @param UserName
+     * @return
+     */
+    public int checkUserNameUnique(String UserName);
 }

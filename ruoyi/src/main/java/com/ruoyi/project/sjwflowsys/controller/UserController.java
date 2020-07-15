@@ -1,6 +1,8 @@
 package com.ruoyi.project.sjwflowsys.controller;
 
 import java.util.List;
+import java.util.UUID;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,8 @@ import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.web.page.TableDataInfo;
+
+import static com.ruoyi.common.utils.security.Md5Utils.hash;
 
 /**
  * 业务平台用户管理Controller
@@ -76,6 +80,12 @@ public class UserController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody User user)
     {
+        if (userService.checkUserNameUnique(user.getName())==1)
+        {
+            return AjaxResult.error("新增用户'" + user.getName() + "'失败，该账号已存在");
+        }
+        user.setId(UUID.randomUUID().toString());
+        user.setPassword(hash(user.getPassword()));
         return toAjax(userService.insertUser(user));
     }
 
@@ -100,4 +110,5 @@ public class UserController extends BaseController
     {
         return toAjax(userService.deleteUserByIds(ids));
     }
+
 }
