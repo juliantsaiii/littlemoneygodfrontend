@@ -162,14 +162,26 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="机构" prop="companyid">
-              <dept-select-tree :pid="form.companyid" @selectterm="updatecompanyid"></dept-select-tree>
+              <dept-select-tree
+                :pid="form.companyid"
+                @selectterm="updatepSelectTreeValue"
+                :type="'dept'"
+                :selectID="'companyid'"
+                :selectName="'companyname'"
+              ></dept-select-tree>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="部门名称" prop="deptid">
-              <dept-select-tree :pid="form.deptid" @selectterm="updatedeptid"></dept-select-tree>
+            <el-form-item label="部门" prop="deptid">
+              <dept-select-tree
+                :pid="form.deptid"
+                @selectterm="updatepSelectTreeValue"
+                :type="'dept'"
+                :selectID="'deptid'"
+                :selectName="'deptname'"
+              ></dept-select-tree>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -279,7 +291,9 @@ export default {
         pageSize: 30
       },
       deptQueryParams: {
-        pid: undefined
+        pid: "-1",
+        type: "dept",
+        selectType: "tree"
       },
       // 表单参数
       form: {},
@@ -473,6 +487,7 @@ export default {
     /** 懒加载树 */
     loadNode(node, resolve) {
       this.deptQueryParams.pid = node.data.id;
+      this.deptQueryParams.selectType = "tree";
       getDeptTree(this.deptQueryParams).then(response => {
         resolve(response.data);
       });
@@ -496,12 +511,11 @@ export default {
           this.msgSuccess("修改成功");
         }
       });
-    } /** 同步pid */,
-    updatecompanyid(data) {
-      this.form.companyid = data;
     },
-    updatedeptid(data) {
-      this.form.deptid = data;
+    /** 同步下拉树数据 */
+    updatepSelectTreeValue(node, id, label) {
+      this.form[id] = node.id;
+      label != undefined && [(this.form[label] = node.label)];
     }
   }
 };

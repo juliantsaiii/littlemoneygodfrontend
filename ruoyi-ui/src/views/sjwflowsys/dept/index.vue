@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-
     <el-table
       v-loading="loading"
       :data="deptList"
@@ -10,7 +9,7 @@
       :load="load"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column label="部门名称"  prop="name" />
+      <el-table-column label="部门名称" prop="name" />
       <!-- <el-table-column label="是否删除" align="center" prop="deleted" />
       <el-table-column label="流程类型" align="center" prop="flowinfotype" :formatter="flowinfotypeFormat" />
       <el-table-column label="部门类型" align="center" prop="depttype" :formatter="depttypeFormat" />
@@ -18,7 +17,7 @@
       <el-table-column label="分管副书记姓名" align="center" prop="chargeleadername" />
       <el-table-column label="书记姓名" align="center" prop="mainleadername" />
       <el-table-column label="派驻副组长姓名" align="center" prop="paizhusubleadername" />
-      <el-table-column label="派驻组长姓名" align="center" prop="paizhumainleadername" /> -->
+      <el-table-column label="派驻组长姓名" align="center" prop="paizhumainleadername" />-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -28,10 +27,10 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['sjwflowsys:dept:edit']"
           >修改</el-button>
-           <el-button 
-            size="mini" 
-            type="text" 
-            icon="el-icon-plus" 
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-plus"
             @click="handleAdd(scope.row)"
             v-hasPermi="['system:dept:add']"
           >新增</el-button>
@@ -47,32 +46,34 @@
       </el-table-column>
     </el-table>
 
-
-   
     <!-- 添加或修改部门对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
-        <el-form-item label="父级ID" prop="pid">
-          <!-- <treeselect v-model="form.pid" :options="deptOptions" :load-options="loadOptions" placeholder="请选择父级ID" /> -->
-          <dept-select-tree :pid="form.pid" @selectterm="updatepid" ></dept-select-tree>
+        <el-form-item label="上级部门" prop="pid">
+          <dept-select-tree
+            :pid="form.pid"
+            @selectterm="updatepSelectTreeValue"
+            :type="'dept'"
+            :selectID="'pid'"
+          ></dept-select-tree>
         </el-form-item>
-        <el-form-item label="机构名称" prop="name">
+        <el-form-item label="部门名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入部门名称" />
         </el-form-item>
-        <el-form-item label="机构分类" prop="category">
+        <el-form-item label="部门分类" prop="category">
           <el-select v-model="form.category" placeholder="请选择部门属性">
-           <el-option
+            <el-option
               v-for="item in categoryOptions"
               :key="item.value"
               :label="item.label"
-              :value="item.value">
-            </el-option>
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="排序" prop="sortcode">
-          <el-input-number v-model="form.sortcode" placeholder="请输入排序" controls-position="right"/>
+          <el-input-number v-model="form.sortcode" placeholder="请输入排序" controls-position="right" />
         </el-form-item>
-        <el-form-item label="流程类型">
+        <el-form-item label="流程类型" prop="flowinfotype">
           <el-select v-model="form.flowinfotype" placeholder="请选择流程类型">
             <el-option
               v-for="dict in flowinfotypeOptions"
@@ -82,7 +83,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="部门类型">
+        <el-form-item label="部门类型" prop="depttype">
           <el-select v-model="form.depttype" placeholder="请选择部门类型">
             <el-option
               v-for="dict in depttypeOptions"
@@ -98,35 +99,50 @@
         <el-form-item label="派驻地点" prop="paizhuarea">
           <el-input v-model="form.paizhuarea" placeholder="用于市级派驻文书生成标题" />
         </el-form-item>
-        <el-form-item label="分管常委ID" prop="chargepersonid">
-          <el-input v-model="form.chargepersonid" placeholder="请输入分管常委ID" />
+        <el-form-item label="分管常委" prop="chargepersonid">
+          <dept-select-tree
+            :pid="form.pid"
+            :type="'user'"
+            @selectterm="updatepSelectTreeValue"
+            :selectID="'chargepersonid'"
+            :selectName="'chargepersonname'"
+          ></dept-select-tree>
         </el-form-item>
-        <el-form-item label="分管常委姓名" prop="chargepersonname">
-          <el-input v-model="form.chargepersonname" placeholder="请输入分管常委姓名" />
+        <el-form-item label="分管副书记" prop="chargeleadername">
+          <dept-select-tree
+            :pid="form.pid"
+            :type="'user'"
+            @selectterm="updatepSelectTreeValue"
+            :selectID="'chargeleaderid'"
+            :selectName="'chargeleadername'"
+          ></dept-select-tree>
         </el-form-item>
-        <el-form-item label="分管副书记ID" prop="chargeleaderid">
-          <el-input v-model="form.chargeleaderid" placeholder="请输入分管副书记ID" />
+        <el-form-item label="书记" prop="mainleaderid">
+          <dept-select-tree
+            :pid="form.pid"
+            :type="'user'"
+            @selectterm="updatepSelectTreeValue"
+            :selectID="'mainleaderid'"
+            :selectName="'mainleadername'"
+          ></dept-select-tree>
         </el-form-item>
-        <el-form-item label="分管副书记姓名" prop="chargeleadername">
-          <el-input v-model="form.chargeleadername" placeholder="请输入分管副书记姓名" />
+        <el-form-item label="派驻副组长" prop="paizhusubleaderid">
+          <dept-select-tree
+            :pid="form.pid"
+            :type="'user'"
+            @selectterm="updatepSelectTreeValue"
+            :selectID="'paizhusubleaderid'"
+            :selectName="'paizhusubleadername'"
+          ></dept-select-tree>
         </el-form-item>
-        <el-form-item label="书记ID" prop="mainleaderid">
-          <el-input v-model="form.mainleaderid" placeholder="请输入书记ID" />
-        </el-form-item>
-        <el-form-item label="书记姓名" prop="mainleadername">
-          <el-input v-model="form.mainleadername" placeholder="请输入书记姓名" />
-        </el-form-item>
-        <el-form-item label="派驻副组长ID" prop="paizhusubleaderid">
-          <el-input v-model="form.paizhusubleaderid" placeholder="请输入派驻副组长ID" />
-        </el-form-item>
-        <el-form-item label="派驻副组长姓名" prop="paizhusubleadername">
-          <el-input v-model="form.paizhusubleadername" placeholder="请输入派驻副组长姓名" />
-        </el-form-item>
-        <el-form-item label="派驻组长ID" prop="paizhumainleaderid">
-          <el-input v-model="form.paizhumainleaderid" placeholder="请输入派驻组长ID" />
-        </el-form-item>
-        <el-form-item label="派驻组长姓名" prop="paizhumainleadername">
-          <el-input v-model="form.paizhumainleadername" placeholder="请输入派驻组长姓名" />
+        <el-form-item label="派驻组长" prop="paizhumainleaderid">
+          <dept-select-tree
+            :pid="form.pid"
+            :type="'user'"
+            @selectterm="updatepSelectTreeValue"
+            :selectID="'paizhumainleaderid'"
+            :selectName="'paizhumainleadername'"
+          ></dept-select-tree>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -138,20 +154,27 @@
 </template>
 
 <script>
-import { listDept, getDept, delDept, addDept, updateDept, exportDept } from "@/api/sjwflowsys/dept";
+import {
+  listDept,
+  getDept,
+  delDept,
+  addDept,
+  updateDept,
+  exportDept
+} from "@/api/sjwflowsys/dept";
 import Treeselect from "@riophae/vue-treeselect";
-import deptSelectTree from '@/views/sjwflowsys/dept/components/deptSelectTree';
-import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
+import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
+import { LOAD_CHILDREN_OPTIONS } from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 const simulateAsyncOperation = fn => {
-  setTimeout(fn, 2000)
-}
+  setTimeout(fn, 2000);
+};
 export default {
   name: "Dept",
-  components: { Treeselect,deptSelectTree },
+  components: { Treeselect, deptSelectTree },
   data() {
     return {
-      a:1,
+      a: 1,
       // 遮罩层
       loading: true,
       // 部门表格数据
@@ -177,28 +200,46 @@ export default {
         paizhusubleadername: undefined,
         paizhumainleadername: undefined
       },
-      loadNodeMap:new Map(),
+      loadNodeMap: new Map(),
       // 部门属性字典
-      categoryOptions: [{
-          value: '区域',
-          label: '区域'
-        }, {
-          value: '单位',
-          label: '单位'
-        }, {
-          value: '部门',
-          label: '部门'
-        },{
-          value: '工作组',
-          label: '工作组'
-        }],
+      categoryOptions: [
+        {
+          value: "区域",
+          label: "区域"
+        },
+        {
+          value: "单位",
+          label: "单位"
+        },
+        {
+          value: "部门",
+          label: "部门"
+        },
+        {
+          value: "工作组",
+          label: "工作组"
+        }
+      ],
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        deleted: [
-          { required: true, message: "是否删除不能为空", trigger: "blur" }
+        pid: [{ required: true, message: "上级部门不能为空", trigger: "blur" }],
+        name: [
+          { required: true, message: "部门名称不能为空", trigger: "blur" }
         ],
+        category: [
+          { required: true, message: "部门分类不能为空", trigger: "blur" }
+        ],
+        sortcode: [
+          { required: true, message: "排序不能为空", trigger: "blur" }
+        ],
+        infotype: [
+          { required: true, message: "流程类型不能为空", trigger: "blur" }
+        ],
+        depttype: [
+          { required: true, message: "部门类型不能为空", trigger: "blur" }
+        ]
       }
     };
   },
@@ -216,14 +257,21 @@ export default {
     getList() {
       this.loading = true;
       listDept(this.queryParams).then(response => {
-        this.deptList = this.handleTree(response.data, "id","pid","children","0","1");
+        this.deptList = this.handleTree(
+          response.data,
+          "id",
+          "pid",
+          "children",
+          "0",
+          "1"
+        );
         this.loading = false;
       });
     },
     /** 懒加载树 */
-    load (tree, treeNode, resolve) {
-     this.loadNodeMap.set(tree.id, {tree, treeNode, resolve})
-     this.queryParams.pid = tree.id;
+    load(tree, treeNode, resolve) {
+      this.loadNodeMap.set(tree.id, { tree, treeNode, resolve });
+      this.queryParams.pid = tree.id;
       listDept(this.queryParams).then(response => {
         resolve(response.data);
       });
@@ -330,41 +378,44 @@ export default {
             });
           }
           //懒加载刷新当前级
-        
+
           if (this.loadNodeMap.has(this.form.pid)) {
             this.refreshNode(this.form.pid);
           } else {
-            this.form.hasChildren = true
+            this.form.hasChildren = true;
           }
-
         }
       });
     },
     /** 删除按钮操作 */
     handleDelete(row) {
       this.$confirm('是否确认删除-"' + row.name + '"-的数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(function() {
           return delDept(row.id);
-        }).then(() => {
+        })
+        .then(() => {
           this.refreshNode(row.pid);
           this.msgSuccess("删除成功");
-        }).catch(function() {});
-    },
-    /** 同步pid */
-    updatepid(data){
-      this.form.pid = data;
+        })
+        .catch(function() {});
     },
     /** 刷新子节点 */
-    refreshNode(id){
-      const {tree, treeNode, resolve} = this.loadNodeMap.get(id);
+    refreshNode(id) {
+      const { tree, treeNode, resolve } = this.loadNodeMap.get(id);
       this.$set(this.$refs.table.store.states.lazyTreeNodeMap, id, []);
       this.queryParams.pid = id;
       listDept(this.queryParams).then(response => {
         resolve(response.data);
       });
+    },
+    /** 同步下拉树数据 */
+    updatepSelectTreeValue(node, id, label) {
+      this.form[id] = node.id;
+      label != undefined && [(this.form[label] = node.label)];
     }
   }
 };

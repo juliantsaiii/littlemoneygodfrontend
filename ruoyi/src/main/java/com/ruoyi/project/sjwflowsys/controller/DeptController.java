@@ -4,20 +4,16 @@ import java.util.List;
 import java.util.UUID;
 
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.web.domain.TreeEntity;
 import com.ruoyi.framework.web.page.TableDataInfo;
+import com.ruoyi.project.sjwflowsys.domain.User;
+import com.ruoyi.project.sjwflowsys.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.project.sjwflowsys.domain.Dept;
@@ -39,7 +35,8 @@ public class DeptController extends BaseController
 {
     @Autowired
     private IDeptService deptService;
-
+    @Autowired
+    private IUserService userService;
     /**
      * 查询部门列表
      */
@@ -58,21 +55,52 @@ public class DeptController extends BaseController
 
     /**
      * 查询部门树
-     * @param dept
+     * @param pid
+     * @param type "user"：查人树，"dept"：查部门树
      * @return
      */
     @PreAuthorize("@ss.hasPermi('sjwflowsys:dept:list')")
     @GetMapping("/listTree")
-    public AjaxResult listTree(Dept dept)
+    public AjaxResult listTree(@RequestParam(value="pid",required=false,defaultValue="-1")String pid,@RequestParam(value="type",defaultValue="dept")String type,@RequestParam(value="selectType" ,defaultValue="select")String selectType)
     {
-        if(!StringUtils.isNotEmpty(dept.getPid()))
+        Dept dept = new Dept();
+        if(!StringUtils.isNotEmpty(pid))
         {
             dept.setPid("-1");
+        }else{
+            dept.setPid(pid);
         }
         List<Dept> list = deptService.selectDeptList(dept);
-        for(Dept d : list)
+
+        //查的是人，把用户转成部门加入集合
+        if(type.equals("user"))
         {
-            d.setHasChildren(!d.getHasChildren());
+            for(Dept d : list)
+            {
+                d.setHasChildren(true);
+            }
+            User user = new User();
+            user.setDeptid(pid);
+            List<User> userList = userService.selectUserList(user);
+            for(User u : userList)
+            {
+                Dept d = new Dept();
+                d.setId(u.getId());
+                d.setName(u.getFullname());
+                d.setHasChildren(false);
+                list.add(d);
+            }
+        }
+        else //查询的是部门，并且展示方式是tree，haschildren值与selecttree相反，
+        {
+            if(selectType.equals("tree"))
+            {
+                for(Dept d : list)
+                {
+                    d.setHasChildren(!d.getHasChildren());
+                }
+            }
+
         }
         return AjaxResult.success(list);
     }
