@@ -117,7 +117,20 @@ export const constantRoutes = [
         meta: { title: '修改生成配置' }
       }
     ]
-  }
+  },
+  {
+    path: '/sjwflowbusiness',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'workflowtask/:id(\\d+)',
+        component: (resolve) => require(['@/views/sjwflowbusiness/workflowtask'], resolve),
+        name: 'Workflowtask',
+        meta: { title: '步骤详情', icon: '' }
+      }
+    ]
+  },
 ]
 
 export default new Router({

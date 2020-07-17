@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowbusiness.mapper.TempClueinfoMapper">
+    
+    <resultMap type="TempClueinfo" id="TempClueinfoResult">
+        <result property="id"    column="ID"    />
+        <result property="createuserid"    column="createUserID"    />
+        <result property="createdeptid"    column="createDeptID"    />
+        <result property="userid"    column="UserID"    />
+        <result property="deptid"    column="DeptID"    />
+        <result property="attachmentid"    column="AttachmentID"    />
+        <result property="handledept"    column="HandleDept"    />
+        <result property="handledeptid"    column="HandleDeptID"    />
+        <result property="handlestaff"    column="HandleStaff"    />
+        <result property="affix"    column="Affix"    />
+        <result property="state"    column="State"    />
+        <result property="unitcode"    column="UnitCode"    />
+        <result property="unitname"    column="UnitName"    />
+        <result property="reportdate"    column="ReportDate"    />
+        <result property="fourformno"    column="FourFormNO"    />
+        <result property="cluecode"    column="ClueCode"    />
+        <result property="personcode"    column="PersonCode"    />
+        <result property="isunit"    column="IsUnit"    />
+        <result property="personid"    column="PersonID"    />
+        <result property="personname"    column="PersonName"    />
+        <result property="personidcard"    column="PersonIDCard"    />
+        <result property="birthdate"    column="BirthDate"    />
+        <result property="nation"    column="Nation"    />
+        <result property="politic"    column="Politic"    />
+        <result property="politicdetail"    column="PoliticDetail"    />
+        <result property="partytime"    column="PartyTime"    />
+        <result property="personlevel"    column="PersonLevel"    />
+        <result property="personlevel2"    column="PersonLevel2"    />
+        <result property="secondlevel"    column="SecondLevel"    />
+        <result property="personduty"    column="PersonDuty"    />
+        <result property="personunit"    column="PersonUnit"    />
+        <result property="idcard"    column="IDCard"    />
+        <result property="isdeputy"    column="IsDeputy"    />
+        <result property="iscppcc"    column="IsCPPCC"    />
+        <result property="isddb"    column="IsDDB"    />
+        <result property="issupervision"    column="IsSupervision"    />
+        <result property="iscivilservant"    column="IsCivilServant"    />
+        <result property="cluesource"    column="ClueSource"    />
+        <result property="illegalbehavior"    column="IllegalBehavior"    />
+        <result property="lawbehaviour"    column="LawBehaviour"    />
+        <result property="handleunit"    column="HandleUnit"    />
+        <result property="accepttime"    column="AcceptTime"    />
+        <result property="handle1time"    column="Handle1Time"    />
+        <result property="handle1censustime"    column="Handle1CensusTime"    />
+        <result property="handletype1first"    column="HandleType1First"    />
+        <result property="handletype1second"    column="HandleType1Second"    />
+        <result property="handle2time"    column="Handle2Time"    />
+        <result property="handle2censustime"    column="Handle2CensusTime"    />
+        <result property="handletype2first"    column="HandleType2First"    />
+        <result property="handletype2second"    column="HandleType2Second"    />
+        <result property="handle3time"    column="Handle3Time"    />
+        <result property="handle3censustime"    column="Handle3CensusTime"    />
+        <result property="handletype3first"    column="HandleType3First"    />
+        <result property="handletype3second"    column="HandleType3Second"    />
+        <result property="handle4time"    column="Handle4Time"    />
+        <result property="handle4censusttime"    column="Handle4CensustTime"    />
+        <result property="handletype4first"    column="HandleType4First"    />
+        <result property="handletype4second"    column="HandleType4Second"    />
+        <result property="handle5time"    column="Handle5Time"    />
+        <result property="handle5census"    column="Handle5Census"    />
+        <result property="handletype5first"    column="HandleType5First"    />
+        <result property="handletype5second"    column="HandleType5Second"    />
+        <result property="handle6time"    column="Handle6Time"    />
+        <result property="handle6censustime"    column="Handle6CensusTime"    />
+        <result property="handletype6first"    column="HandleType6First"    />
+        <result property="handletype6second"    column="HandleType6Second"    />
+        <result property="handle7time"    column="Handle7Time"    />
+        <result property="handle7censustime"    column="Handle7CensusTime"    />
+        <result property="handletype7first"    column="HandleType7First"    />
+        <result property="handletype7second"    column="HandleType7Second"    />
+        <result property="handle8time"    column="Handle8Time"    />
+        <result property="handle8censustime"    column="Handle8CensusTime"    />
+        <result property="handletype8first"    column="HandleType8First"    />
+        <result property="handletype8second"    column="HandleType8Second"    />
+        <result property="orgmeasure"    column="OrgMeasure"    />
+        <result property="implementtime"    column="ImplementTime"    />
+        <result property="ischecked"    column="IsChecked"    />
+        <result property="iscomeclean"    column="IsComeClean"    />
+        <result property="retrieveeconomicloss"    column="RetrieveEconomicLoss"    />
+        <result property="captureassetmoney"    column="CaptureAssetMoney"    />
+        <result property="confiscatemoney"    column="ConfiscateMoney"    />
+        <result property="compensatemoney"    column="CompensateMoney"    />
+        <result property="handinmoney"    column="HandInMoney"    />
+        <result property="lossmoney"    column="LossMoney"    />
+        <result property="mainclue"    column="MainClue"    />
+        <result property="handlereport"    column="HandleReport"    />
+        <result property="handleremark"    column="HandleRemark"    />
+        <result property="isrepeated"    column="IsRepeated"    />
+        <result property="reportstaff"    column="ReportStaff"    />
+        <result property="checkstaff"    column="CheckStaff"    />
+        <result property="isdeleted"    column="IsDeleted"    />
+        <result property="timestamp"    column="Timestamp"    />
+        <result property="reflectname"    column="ReflectName"    />
+        <result property="reflectunit"    column="ReflectUnit"    />
+        <result property="reflectpost"    column="ReflectPost"    />
+        <result property="reflectphone"    column="ReflectPhone"    />
+        <result property="reflectidcard"    column="ReflectIDCard"    />
+        <result property="personsex"    column="PersonSex"    />
+        <result property="status"    column="Status"    />
+        <result property="clueno"    column="ClueNo"    />
+        <result property="personeducation"    column="PersonEducation"    />
+        <result property="personauthority"    column="PersonAuthority"    />
+        <result property="jobtime"    column="JobTime"    />
+        <result property="isparty"    column="IsParty"    />
+        <result property="issupervision2"    column="IsSupervision2"    />
+        <result property="issupervision3"    column="IsSupervision3"    />
+        <result property="lawbehaviourother"    column="LawBehaviourOther"    />
+        <result property="ischarge"    column="IsCharge"    />
+        <result property="address"    column="Address"    />
+        <result property="nativeplace"    column="NativePlace"    />
+        <result property="casecode"    column="CaseCode"    />
+        <result property="personcontact"    column="PersonContact"    />
+        <result property="receivestaut"    column="ReceiveStaut"    />
+        <result property="subcluesource"    column="subClueSource"    />
+        <result property="handlestate"    column="HandleState"    />
+        <result property="handletype"    column="HandleType"    />
+        <result property="handleresultlev1"    column="HandleResultLev1"    />
+        <result property="handleresultlev2"    column="HandleResultLev2"    />
+        <result property="handletime"    column="HandleTime"    />
+        <result property="isduban"    column="IsDuBan"    />
+        <result property="ismeasureclue"    column="IsMeasureClue"    />
+        <result property="basehandledept"    column="BaseHandleDept"    />
+        <result property="basehandledeptid"    column="BaseHandleDeptID"    />
+        <result property="sourcetype"    column="SourceType"    />
+        <result property="statisticaltime"    column="StatisticalTime"    />
+        <result property="storagestate"    column="StorageState"    />
+        <result property="handletypechange"    column="HandleTypeChange"    />
+        <result property="mainclueid"    column="MainClueID"    />
+        <result property="createcompanyid"    column="CreateCompanyID"    />
+        <result property="iseliminateevil"    column="IsEliminateEvil"    />
+        <result property="isaccountability"    column="IsAccountability"    />
+        <result property="urgent"    column="Urgent"    />
+        <result property="handledecisiontime"    column="HandleDecisionTime"    />
+        <result property="problemsummary"    column="ProblemSummary"    />
+        <result property="isoldclue"    column="IsOldClue"    />
+        <result property="iseasyclue"    column="IsEasyClue"    />
+        <result property="clueproperty"    column="ClueProperty"    />
+        <result property="samelevel"    column="SameLevel"    />
+        <result property="samelevelopinion"    column="SameLevelOpinion"    />
+        <result property="samelevelopinion2"    column="SameLevelOpinion2"    />
+        <result property="handlemethodtype"    column="HandleMethodType"    />
+        <result property="paizhuarea"    column="PaiZhuArea"    />
+        <result property="isup"    column="IsUp"    />
+        <result property="isupstatus"    column="IsUpStatus"    />
+        <result property="updept"    column="UpDept"    />
+        <result property="addpeoplemainid"    column="AddPeopleMainID"    />
+        <result property="samelevelopinionaffix"    column="SameLevelOpinionAffix"    />
+        <result property="issurrender"    column="IsSurrender"    />
+        <result property="isjwcadre"    column="IsJWCadre"    />
+        <result property="agsdistributetime"    column="AgsDistributeTime"    />
+        <result property="firsttransfertime"    column="FirstTransferTime"    />
+        <result property="firstdistributetime"    column="FirstDistributeTime"    />
+        <result property="yuqistatus"    column="YuqiStatus"    />
+        <result property="isexport"    column="IsExport"    />
+        <result property="handlerequire"    column="HandleRequire"    />
+        <result property="cadreauthority"    column="CadreAuthority"    />
+    </resultMap>
+
+    <sql id="selectTempClueinfoVo">
+        select ID, createUserID, createDeptID, UserID, DeptID, AttachmentID, HandleDept, HandleDeptID, HandleStaff, Affix, State, UnitCode, UnitName, ReportDate, FourFormNO, ClueCode, PersonCode, IsUnit, PersonID, PersonName, PersonIDCard, BirthDate, Nation, Politic, PoliticDetail, PartyTime, PersonLevel, PersonLevel2, SecondLevel, PersonDuty, PersonUnit, IDCard, IsDeputy, IsCPPCC, IsDDB, IsSupervision, IsCivilServant, ClueSource, IllegalBehavior, LawBehaviour, HandleUnit, AcceptTime, Handle1Time, Handle1CensusTime, HandleType1First, HandleType1Second, Handle2Time, Handle2CensusTime, HandleType2First, HandleType2Second, Handle3Time, Handle3CensusTime, HandleType3First, HandleType3Second, Handle4Time, Handle4CensustTime, HandleType4First, HandleType4Second, Handle5Time, Handle5Census, HandleType5First, HandleType5Second, Handle6Time, Handle6CensusTime, HandleType6First, HandleType6Second, Handle7Time, Handle7CensusTime, HandleType7First, HandleType7Second, Handle8Time, Handle8CensusTime, HandleType8First, HandleType8Second, OrgMeasure, ImplementTime, IsChecked, IsComeClean, RetrieveEconomicLoss, CaptureAssetMoney, ConfiscateMoney, CompensateMoney, HandInMoney, LossMoney, MainClue, HandleReport, HandleRemark, IsRepeated, ReportStaff, CheckStaff, IsDeleted, Timestamp, ReflectName, ReflectUnit, ReflectPost, ReflectPhone, ReflectIDCard, PersonSex, Status, ClueNo, PersonEducation, PersonAuthority, JobTime, IsParty, IsSupervision2, IsSupervision3, LawBehaviourOther, IsCharge, Address, NativePlace, CaseCode, PersonContact, ReceiveStaut, subClueSource, HandleState, HandleType, HandleResultLev1, HandleResultLev2, HandleTime, IsDuBan, IsMeasureClue, BaseHandleDept, BaseHandleDeptID, SourceType, StatisticalTime, StorageState, HandleTypeChange, MainClueID, CreateCompanyID, IsEliminateEvil, IsAccountability, Urgent, HandleDecisionTime, ProblemSummary, IsOldClue, IsEasyClue, ClueProperty, SameLevel, SameLevelOpinion, SameLevelOpinion2, HandleMethodType, PaiZhuArea, IsUp, IsUpStatus, UpDept, AddPeopleMainID, SameLevelOpinionAffix, IsSurrender, IsJWCadre, AgsDistributeTime, FirstTransferTime, FirstDistributeTime, YuqiStatus, IsExport, HandleRequire, CadreAuthority from temp_clueinfo
+    </sql>
+
+    <select id="selectTempClueinfoList" parameterType="TempClueinfo" resultMap="TempClueinfoResult">
+        <include refid="selectTempClueinfoVo"/>
+        <where>  
+            <if test="id != null  and id != ''"> and ID = #{id}</if>
+            <if test="unitname != null  and unitname != ''"> and UnitName like concat('%', #{unitname}, '%')</if>
+            <if test="cluecode != null  and cluecode != ''"> and ClueCode = #{cluecode}</if>
+            <if test="personname != null  and personname != ''"> and PersonName like concat('%', #{personname}, '%')</if>
+            <if test="personunit != null  and personunit != ''"> and PersonUnit = #{personunit}</if>
+            <if test="cluesource != null  and cluesource != ''"> and ClueSource = #{cluesource}</if>
+            <if test="clueno != null  and clueno != ''"> and ClueNo = #{clueno}</if>
+        </where>
+    </select>
+    
+    <select id="selectTempClueinfoById" parameterType="String" resultMap="TempClueinfoResult">
+        <include refid="selectTempClueinfoVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertTempClueinfo" parameterType="TempClueinfo">
+        insert into temp_clueinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="createuserid != null">createUserID,</if>
+            <if test="createdeptid != null">createDeptID,</if>
+            <if test="userid != null">UserID,</if>
+            <if test="deptid != null">DeptID,</if>
+            <if test="attachmentid != null">AttachmentID,</if>
+            <if test="handledept != null">HandleDept,</if>
+            <if test="handledeptid != null">HandleDeptID,</if>
+            <if test="handlestaff != null">HandleStaff,</if>
+            <if test="affix != null">Affix,</if>
+            <if test="state != null">State,</if>
+            <if test="unitcode != null">UnitCode,</if>
+            <if test="unitname != null">UnitName,</if>
+            <if test="reportdate != null">ReportDate,</if>
+            <if test="fourformno != null">FourFormNO,</if>
+            <if test="cluecode != null">ClueCode,</if>
+            <if test="personcode != null">PersonCode,</if>
+            <if test="isunit != null">IsUnit,</if>
+            <if test="personid != null">PersonID,</if>
+            <if test="personname != null">PersonName,</if>
+            <if test="personidcard != null">PersonIDCard,</if>
+            <if test="birthdate != null">BirthDate,</if>
+            <if test="nation != null">Nation,</if>
+            <if test="politic != null">Politic,</if>
+            <if test="politicdetail != null">PoliticDetail,</if>
+            <if test="partytime != null">PartyTime,</if>
+            <if test="personlevel != null">PersonLevel,</if>
+            <if test="personlevel2 != null">PersonLevel2,</if>
+            <if test="secondlevel != null">SecondLevel,</if>
+            <if test="personduty != null">PersonDuty,</if>
+            <if test="personunit != null">PersonUnit,</if>
+            <if test="idcard != null">IDCard,</if>
+            <if test="isdeputy != null">IsDeputy,</if>
+            <if test="iscppcc != null">IsCPPCC,</if>
+            <if test="isddb != null">IsDDB,</if>
+            <if test="issupervision != null">IsSupervision,</if>
+            <if test="iscivilservant != null">IsCivilServant,</if>
+            <if test="cluesource != null">ClueSource,</if>
+            <if test="illegalbehavior != null">IllegalBehavior,</if>
+            <if test="lawbehaviour != null">LawBehaviour,</if>
+            <if test="handleunit != null">HandleUnit,</if>
+            <if test="accepttime != null">AcceptTime,</if>
+            <if test="handle1time != null">Handle1Time,</if>
+            <if test="handle1censustime != null">Handle1CensusTime,</if>
+            <if test="handletype1first != null">HandleType1First,</if>
+            <if test="handletype1second != null">HandleType1Second,</if>
+            <if test="handle2time != null">Handle2Time,</if>
+            <if test="handle2censustime != null">Handle2CensusTime,</if>
+            <if test="handletype2first != null">HandleType2First,</if>
+            <if test="handletype2second != null">HandleType2Second,</if>
+            <if test="handle3time != null">Handle3Time,</if>
+            <if test="handle3censustime != null">Handle3CensusTime,</if>
+            <if test="handletype3first != null">HandleType3First,</if>
+            <if test="handletype3second != null">HandleType3Second,</if>
+            <if test="handle4time != null">Handle4Time,</if>
+            <if test="handle4censusttime != null">Handle4CensustTime,</if>
+            <if test="handletype4first != null">HandleType4First,</if>
+            <if test="handletype4second != null">HandleType4Second,</if>
+            <if test="handle5time != null">Handle5Time,</if>
+            <if test="handle5census != null">Handle5Census,</if>
+            <if test="handletype5first != null">HandleType5First,</if>
+            <if test="handletype5second != null">HandleType5Second,</if>
+            <if test="handle6time != null">Handle6Time,</if>
+            <if test="handle6censustime != null">Handle6CensusTime,</if>
+            <if test="handletype6first != null">HandleType6First,</if>
+            <if test="handletype6second != null">HandleType6Second,</if>
+            <if test="handle7time != null">Handle7Time,</if>
+            <if test="handle7censustime != null">Handle7CensusTime,</if>
+            <if test="handletype7first != null">HandleType7First,</if>
+            <if test="handletype7second != null">HandleType7Second,</if>
+            <if test="handle8time != null">Handle8Time,</if>
+            <if test="handle8censustime != null">Handle8CensusTime,</if>
+            <if test="handletype8first != null">HandleType8First,</if>
+            <if test="handletype8second != null">HandleType8Second,</if>
+            <if test="orgmeasure != null">OrgMeasure,</if>
+            <if test="implementtime != null">ImplementTime,</if>
+            <if test="ischecked != null">IsChecked,</if>
+            <if test="iscomeclean != null">IsComeClean,</if>
+            <if test="retrieveeconomicloss != null">RetrieveEconomicLoss,</if>
+            <if test="captureassetmoney != null">CaptureAssetMoney,</if>
+            <if test="confiscatemoney != null">ConfiscateMoney,</if>
+            <if test="compensatemoney != null">CompensateMoney,</if>
+            <if test="handinmoney != null">HandInMoney,</if>
+            <if test="lossmoney != null">LossMoney,</if>
+            <if test="mainclue != null">MainClue,</if>
+            <if test="handlereport != null">HandleReport,</if>
+            <if test="handleremark != null">HandleRemark,</if>
+            <if test="isrepeated != null">IsRepeated,</if>
+            <if test="reportstaff != null">ReportStaff,</if>
+            <if test="checkstaff != null">CheckStaff,</if>
+            <if test="isdeleted != null">IsDeleted,</if>
+            <if test="timestamp != null">Timestamp,</if>
+            <if test="reflectname != null">ReflectName,</if>
+            <if test="reflectunit != null">ReflectUnit,</if>
+            <if test="reflectpost != null">ReflectPost,</if>
+            <if test="reflectphone != null">ReflectPhone,</if>
+            <if test="reflectidcard != null">ReflectIDCard,</if>
+            <if test="personsex != null">PersonSex,</if>
+            <if test="status != null">Status,</if>
+            <if test="clueno != null">ClueNo,</if>
+            <if test="personeducation != null">PersonEducation,</if>
+            <if test="personauthority != null">PersonAuthority,</if>
+            <if test="jobtime != null">JobTime,</if>
+            <if test="isparty != null">IsParty,</if>
+            <if test="issupervision2 != null">IsSupervision2,</if>
+            <if test="issupervision3 != null">IsSupervision3,</if>
+            <if test="lawbehaviourother != null">LawBehaviourOther,</if>
+            <if test="ischarge != null">IsCharge,</if>
+            <if test="address != null">Address,</if>
+            <if test="nativeplace != null">NativePlace,</if>
+            <if test="casecode != null">CaseCode,</if>
+            <if test="personcontact != null">PersonContact,</if>
+            <if test="receivestaut != null">ReceiveStaut,</if>
+            <if test="subcluesource != null">subClueSource,</if>
+            <if test="handlestate != null">HandleState,</if>
+            <if test="handletype != null">HandleType,</if>
+            <if test="handleresultlev1 != null">HandleResultLev1,</if>
+            <if test="handleresultlev2 != null">HandleResultLev2,</if>
+            <if test="handletime != null">HandleTime,</if>
+            <if test="isduban != null">IsDuBan,</if>
+            <if test="ismeasureclue != null">IsMeasureClue,</if>
+            <if test="basehandledept != null">BaseHandleDept,</if>
+            <if test="basehandledeptid != null">BaseHandleDeptID,</if>
+            <if test="sourcetype != null">SourceType,</if>
+            <if test="statisticaltime != null">StatisticalTime,</if>
+            <if test="storagestate != null">StorageState,</if>
+            <if test="handletypechange != null">HandleTypeChange,</if>
+            <if test="mainclueid != null">MainClueID,</if>
+            <if test="createcompanyid != null">CreateCompanyID,</if>
+            <if test="iseliminateevil != null">IsEliminateEvil,</if>
+            <if test="isaccountability != null">IsAccountability,</if>
+            <if test="urgent != null">Urgent,</if>
+            <if test="handledecisiontime != null">HandleDecisionTime,</if>
+            <if test="problemsummary != null">ProblemSummary,</if>
+            <if test="isoldclue != null">IsOldClue,</if>
+            <if test="iseasyclue != null">IsEasyClue,</if>
+            <if test="clueproperty != null">ClueProperty,</if>
+            <if test="samelevel != null">SameLevel,</if>
+            <if test="samelevelopinion != null">SameLevelOpinion,</if>
+            <if test="samelevelopinion2 != null">SameLevelOpinion2,</if>
+            <if test="handlemethodtype != null">HandleMethodType,</if>
+            <if test="paizhuarea != null">PaiZhuArea,</if>
+            <if test="isup != null">IsUp,</if>
+            <if test="isupstatus != null">IsUpStatus,</if>
+            <if test="updept != null">UpDept,</if>
+            <if test="addpeoplemainid != null">AddPeopleMainID,</if>
+            <if test="samelevelopinionaffix != null">SameLevelOpinionAffix,</if>
+            <if test="issurrender != null">IsSurrender,</if>
+            <if test="isjwcadre != null">IsJWCadre,</if>
+            <if test="agsdistributetime != null">AgsDistributeTime,</if>
+            <if test="firsttransfertime != null">FirstTransferTime,</if>
+            <if test="firstdistributetime != null">FirstDistributeTime,</if>
+            <if test="yuqistatus != null">YuqiStatus,</if>
+            <if test="isexport != null">IsExport,</if>
+            <if test="handlerequire != null">HandleRequire,</if>
+            <if test="cadreauthority != null">CadreAuthority,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createuserid != null">#{createuserid},</if>
+            <if test="createdeptid != null">#{createdeptid},</if>
+            <if test="userid != null">#{userid},</if>
+            <if test="deptid != null">#{deptid},</if>
+            <if test="attachmentid != null">#{attachmentid},</if>
+            <if test="handledept != null">#{handledept},</if>
+            <if test="handledeptid != null">#{handledeptid},</if>
+            <if test="handlestaff != null">#{handlestaff},</if>
+            <if test="affix != null">#{affix},</if>
+            <if test="state != null">#{state},</if>
+            <if test="unitcode != null">#{unitcode},</if>
+            <if test="unitname != null">#{unitname},</if>
+            <if test="reportdate != null">#{reportdate},</if>
+            <if test="fourformno != null">#{fourformno},</if>
+            <if test="cluecode != null">#{cluecode},</if>
+            <if test="personcode != null">#{personcode},</if>
+            <if test="isunit != null">#{isunit},</if>
+            <if test="personid != null">#{personid},</if>
+            <if test="personname != null">#{personname},</if>
+            <if test="personidcard != null">#{personidcard},</if>
+            <if test="birthdate != null">#{birthdate},</if>
+            <if test="nation != null">#{nation},</if>
+            <if test="politic != null">#{politic},</if>
+            <if test="politicdetail != null">#{politicdetail},</if>
+            <if test="partytime != null">#{partytime},</if>
+            <if test="personlevel != null">#{personlevel},</if>
+            <if test="personlevel2 != null">#{personlevel2},</if>
+            <if test="secondlevel != null">#{secondlevel},</if>
+            <if test="personduty != null">#{personduty},</if>
+            <if test="personunit != null">#{personunit},</if>
+            <if test="idcard != null">#{idcard},</if>
+            <if test="isdeputy != null">#{isdeputy},</if>
+            <if test="iscppcc != null">#{iscppcc},</if>
+            <if test="isddb != null">#{isddb},</if>
+            <if test="issupervision != null">#{issupervision},</if>
+            <if test="iscivilservant != null">#{iscivilservant},</if>
+            <if test="cluesource != null">#{cluesource},</if>
+            <if test="illegalbehavior != null">#{illegalbehavior},</if>
+            <if test="lawbehaviour != null">#{lawbehaviour},</if>
+            <if test="handleunit != null">#{handleunit},</if>
+            <if test="accepttime != null">#{accepttime},</if>
+            <if test="handle1time != null">#{handle1time},</if>
+            <if test="handle1censustime != null">#{handle1censustime},</if>
+            <if test="handletype1first != null">#{handletype1first},</if>
+            <if test="handletype1second != null">#{handletype1second},</if>
+            <if test="handle2time != null">#{handle2time},</if>
+            <if test="handle2censustime != null">#{handle2censustime},</if>
+            <if test="handletype2first != null">#{handletype2first},</if>
+            <if test="handletype2second != null">#{handletype2second},</if>
+            <if test="handle3time != null">#{handle3time},</if>
+            <if test="handle3censustime != null">#{handle3censustime},</if>
+            <if test="handletype3first != null">#{handletype3first},</if>
+            <if test="handletype3second != null">#{handletype3second},</if>
+            <if test="handle4time != null">#{handle4time},</if>
+            <if test="handle4censusttime != null">#{handle4censusttime},</if>
+            <if test="handletype4first != null">#{handletype4first},</if>
+            <if test="handletype4second != null">#{handletype4second},</if>
+            <if test="handle5time != null">#{handle5time},</if>
+            <if test="handle5census != null">#{handle5census},</if>
+            <if test="handletype5first != null">#{handletype5first},</if>
+            <if test="handletype5second != null">#{handletype5second},</if>
+            <if test="handle6time != null">#{handle6time},</if>
+            <if test="handle6censustime != null">#{handle6censustime},</if>
+            <if test="handletype6first != null">#{handletype6first},</if>
+            <if test="handletype6second != null">#{handletype6second},</if>
+            <if test="handle7time != null">#{handle7time},</if>
+            <if test="handle7censustime != null">#{handle7censustime},</if>
+            <if test="handletype7first != null">#{handletype7first},</if>
+            <if test="handletype7second != null">#{handletype7second},</if>
+            <if test="handle8time != null">#{handle8time},</if>
+            <if test="handle8censustime != null">#{handle8censustime},</if>
+            <if test="handletype8first != null">#{handletype8first},</if>
+            <if test="handletype8second != null">#{handletype8second},</if>
+            <if test="orgmeasure != null">#{orgmeasure},</if>
+            <if test="implementtime != null">#{implementtime},</if>
+            <if test="ischecked != null">#{ischecked},</if>
+            <if test="iscomeclean != null">#{iscomeclean},</if>
+            <if test="retrieveeconomicloss != null">#{retrieveeconomicloss},</if>
+            <if test="captureassetmoney != null">#{captureassetmoney},</if>
+            <if test="confiscatemoney != null">#{confiscatemoney},</if>
+            <if test="compensatemoney != null">#{compensatemoney},</if>
+            <if test="handinmoney != null">#{handinmoney},</if>
+            <if test="lossmoney != null">#{lossmoney},</if>
+            <if test="mainclue != null">#{mainclue},</if>
+            <if test="handlereport != null">#{handlereport},</if>
+            <if test="handleremark != null">#{handleremark},</if>
+            <if test="isrepeated != null">#{isrepeated},</if>
+            <if test="reportstaff != null">#{reportstaff},</if>
+            <if test="checkstaff != null">#{checkstaff},</if>
+            <if test="isdeleted != null">#{isdeleted},</if>
+            <if test="timestamp != null">#{timestamp},</if>
+            <if test="reflectname != null">#{reflectname},</if>
+            <if test="reflectunit != null">#{reflectunit},</if>
+            <if test="reflectpost != null">#{reflectpost},</if>
+            <if test="reflectphone != null">#{reflectphone},</if>
+            <if test="reflectidcard != null">#{reflectidcard},</if>
+            <if test="personsex != null">#{personsex},</if>
+            <if test="status != null">#{status},</if>
+            <if test="clueno != null">#{clueno},</if>
+            <if test="personeducation != null">#{personeducation},</if>
+            <if test="personauthority != null">#{personauthority},</if>
+            <if test="jobtime != null">#{jobtime},</if>
+            <if test="isparty != null">#{isparty},</if>
+            <if test="issupervision2 != null">#{issupervision2},</if>
+            <if test="issupervision3 != null">#{issupervision3},</if>
+            <if test="lawbehaviourother != null">#{lawbehaviourother},</if>
+            <if test="ischarge != null">#{ischarge},</if>
+            <if test="address != null">#{address},</if>
+            <if test="nativeplace != null">#{nativeplace},</if>
+            <if test="casecode != null">#{casecode},</if>
+            <if test="personcontact != null">#{personcontact},</if>
+            <if test="receivestaut != null">#{receivestaut},</if>
+            <if test="subcluesource != null">#{subcluesource},</if>
+            <if test="handlestate != null">#{handlestate},</if>
+            <if test="handletype != null">#{handletype},</if>
+            <if test="handleresultlev1 != null">#{handleresultlev1},</if>
+            <if test="handleresultlev2 != null">#{handleresultlev2},</if>
+            <if test="handletime != null">#{handletime},</if>
+            <if test="isduban != null">#{isduban},</if>
+            <if test="ismeasureclue != null">#{ismeasureclue},</if>
+            <if test="basehandledept != null">#{basehandledept},</if>
+            <if test="basehandledeptid != null">#{basehandledeptid},</if>
+            <if test="sourcetype != null">#{sourcetype},</if>
+            <if test="statisticaltime != null">#{statisticaltime},</if>
+            <if test="storagestate != null">#{storagestate},</if>
+            <if test="handletypechange != null">#{handletypechange},</if>
+            <if test="mainclueid != null">#{mainclueid},</if>
+            <if test="createcompanyid != null">#{createcompanyid},</if>
+            <if test="iseliminateevil != null">#{iseliminateevil},</if>
+            <if test="isaccountability != null">#{isaccountability},</if>
+            <if test="urgent != null">#{urgent},</if>
+            <if test="handledecisiontime != null">#{handledecisiontime},</if>
+            <if test="problemsummary != null">#{problemsummary},</if>
+            <if test="isoldclue != null">#{isoldclue},</if>
+            <if test="iseasyclue != null">#{iseasyclue},</if>
+            <if test="clueproperty != null">#{clueproperty},</if>
+            <if test="samelevel != null">#{samelevel},</if>
+            <if test="samelevelopinion != null">#{samelevelopinion},</if>
+            <if test="samelevelopinion2 != null">#{samelevelopinion2},</if>
+            <if test="handlemethodtype != null">#{handlemethodtype},</if>
+            <if test="paizhuarea != null">#{paizhuarea},</if>
+            <if test="isup != null">#{isup},</if>
+            <if test="isupstatus != null">#{isupstatus},</if>
+            <if test="updept != null">#{updept},</if>
+            <if test="addpeoplemainid != null">#{addpeoplemainid},</if>
+            <if test="samelevelopinionaffix != null">#{samelevelopinionaffix},</if>
+            <if test="issurrender != null">#{issurrender},</if>
+            <if test="isjwcadre != null">#{isjwcadre},</if>
+            <if test="agsdistributetime != null">#{agsdistributetime},</if>
+            <if test="firsttransfertime != null">#{firsttransfertime},</if>
+            <if test="firstdistributetime != null">#{firstdistributetime},</if>
+            <if test="yuqistatus != null">#{yuqistatus},</if>
+            <if test="isexport != null">#{isexport},</if>
+            <if test="handlerequire != null">#{handlerequire},</if>
+            <if test="cadreauthority != null">#{cadreauthority},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTempClueinfo" parameterType="TempClueinfo">
+        update temp_clueinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createuserid != null">createUserID = #{createuserid},</if>
+            <if test="createdeptid != null">createDeptID = #{createdeptid},</if>
+            <if test="userid != null">UserID = #{userid},</if>
+            <if test="deptid != null">DeptID = #{deptid},</if>
+            <if test="attachmentid != null">AttachmentID = #{attachmentid},</if>
+            <if test="handledept != null">HandleDept = #{handledept},</if>
+            <if test="handledeptid != null">HandleDeptID = #{handledeptid},</if>
+            <if test="handlestaff != null">HandleStaff = #{handlestaff},</if>
+            <if test="affix != null">Affix = #{affix},</if>
+            <if test="state != null">State = #{state},</if>
+            <if test="unitcode != null">UnitCode = #{unitcode},</if>
+            <if test="unitname != null">UnitName = #{unitname},</if>
+            <if test="reportdate != null">ReportDate = #{reportdate},</if>
+            <if test="fourformno != null">FourFormNO = #{fourformno},</if>
+            <if test="cluecode != null">ClueCode = #{cluecode},</if>
+            <if test="personcode != null">PersonCode = #{personcode},</if>
+            <if test="isunit != null">IsUnit = #{isunit},</if>
+            <if test="personid != null">PersonID = #{personid},</if>
+            <if test="personname != null">PersonName = #{personname},</if>
+            <if test="personidcard != null">PersonIDCard = #{personidcard},</if>
+            <if test="birthdate != null">BirthDate = #{birthdate},</if>
+            <if test="nation != null">Nation = #{nation},</if>
+            <if test="politic != null">Politic = #{politic},</if>
+            <if test="politicdetail != null">PoliticDetail = #{politicdetail},</if>
+            <if test="partytime != null">PartyTime = #{partytime},</if>
+            <if test="personlevel != null">PersonLevel = #{personlevel},</if>
+            <if test="personlevel2 != null">PersonLevel2 = #{personlevel2},</if>
+            <if test="secondlevel != null">SecondLevel = #{secondlevel},</if>
+            <if test="personduty != null">PersonDuty = #{personduty},</if>
+            <if test="personunit != null">PersonUnit = #{personunit},</if>
+            <if test="idcard != null">IDCard = #{idcard},</if>
+            <if test="isdeputy != null">IsDeputy = #{isdeputy},</if>
+            <if test="iscppcc != null">IsCPPCC = #{iscppcc},</if>
+            <if test="isddb != null">IsDDB = #{isddb},</if>
+            <if test="issupervision != null">IsSupervision = #{issupervision},</if>
+            <if test="iscivilservant != null">IsCivilServant = #{iscivilservant},</if>
+            <if test="cluesource != null">ClueSource = #{cluesource},</if>
+            <if test="illegalbehavior != null">IllegalBehavior = #{illegalbehavior},</if>
+            <if test="lawbehaviour != null">LawBehaviour = #{lawbehaviour},</if>
+            <if test="handleunit != null">HandleUnit = #{handleunit},</if>
+            <if test="accepttime != null">AcceptTime = #{accepttime},</if>
+            <if test="handle1time != null">Handle1Time = #{handle1time},</if>
+            <if test="handle1censustime != null">Handle1CensusTime = #{handle1censustime},</if>
+            <if test="handletype1first != null">HandleType1First = #{handletype1first},</if>
+            <if test="handletype1second != null">HandleType1Second = #{handletype1second},</if>
+            <if test="handle2time != null">Handle2Time = #{handle2time},</if>
+            <if test="handle2censustime != null">Handle2CensusTime = #{handle2censustime},</if>
+            <if test="handletype2first != null">HandleType2First = #{handletype2first},</if>
+            <if test="handletype2second != null">HandleType2Second = #{handletype2second},</if>
+            <if test="handle3time != null">Handle3Time = #{handle3time},</if>
+            <if test="handle3censustime != null">Handle3CensusTime = #{handle3censustime},</if>
+            <if test="handletype3first != null">HandleType3First = #{handletype3first},</if>
+            <if test="handletype3second != null">HandleType3Second = #{handletype3second},</if>
+            <if test="handle4time != null">Handle4Time = #{handle4time},</if>
+            <if test="handle4censusttime != null">Handle4CensustTime = #{handle4censusttime},</if>
+            <if test="handletype4first != null">HandleType4First = #{handletype4first},</if>
+            <if test="handletype4second != null">HandleType4Second = #{handletype4second},</if>
+            <if test="handle5time != null">Handle5Time = #{handle5time},</if>
+            <if test="handle5census != null">Handle5Census = #{handle5census},</if>
+            <if test="handletype5first != null">HandleType5First = #{handletype5first},</if>
+            <if test="handletype5second != null">HandleType5Second = #{handletype5second},</if>
+            <if test="handle6time != null">Handle6Time = #{handle6time},</if>
+            <if test="handle6censustime != null">Handle6CensusTime = #{handle6censustime},</if>
+            <if test="handletype6first != null">HandleType6First = #{handletype6first},</if>
+            <if test="handletype6second != null">HandleType6Second = #{handletype6second},</if>
+            <if test="handle7time != null">Handle7Time = #{handle7time},</if>
+            <if test="handle7censustime != null">Handle7CensusTime = #{handle7censustime},</if>
+            <if test="handletype7first != null">HandleType7First = #{handletype7first},</if>
+            <if test="handletype7second != null">HandleType7Second = #{handletype7second},</if>
+            <if test="handle8time != null">Handle8Time = #{handle8time},</if>
+            <if test="handle8censustime != null">Handle8CensusTime = #{handle8censustime},</if>
+            <if test="handletype8first != null">HandleType8First = #{handletype8first},</if>
+            <if test="handletype8second != null">HandleType8Second = #{handletype8second},</if>
+            <if test="orgmeasure != null">OrgMeasure = #{orgmeasure},</if>
+            <if test="implementtime != null">ImplementTime = #{implementtime},</if>
+            <if test="ischecked != null">IsChecked = #{ischecked},</if>
+            <if test="iscomeclean != null">IsComeClean = #{iscomeclean},</if>
+            <if test="retrieveeconomicloss != null">RetrieveEconomicLoss = #{retrieveeconomicloss},</if>
+            <if test="captureassetmoney != null">CaptureAssetMoney = #{captureassetmoney},</if>
+            <if test="confiscatemoney != null">ConfiscateMoney = #{confiscatemoney},</if>
+            <if test="compensatemoney != null">CompensateMoney = #{compensatemoney},</if>
+            <if test="handinmoney != null">HandInMoney = #{handinmoney},</if>
+            <if test="lossmoney != null">LossMoney = #{lossmoney},</if>
+            <if test="mainclue != null">MainClue = #{mainclue},</if>
+            <if test="handlereport != null">HandleReport = #{handlereport},</if>
+            <if test="handleremark != null">HandleRemark = #{handleremark},</if>
+            <if test="isrepeated != null">IsRepeated = #{isrepeated},</if>
+            <if test="reportstaff != null">ReportStaff = #{reportstaff},</if>
+            <if test="checkstaff != null">CheckStaff = #{checkstaff},</if>
+            <if test="isdeleted != null">IsDeleted = #{isdeleted},</if>
+            <if test="timestamp != null">Timestamp = #{timestamp},</if>
+            <if test="reflectname != null">ReflectName = #{reflectname},</if>
+            <if test="reflectunit != null">ReflectUnit = #{reflectunit},</if>
+            <if test="reflectpost != null">ReflectPost = #{reflectpost},</if>
+            <if test="reflectphone != null">ReflectPhone = #{reflectphone},</if>
+            <if test="reflectidcard != null">ReflectIDCard = #{reflectidcard},</if>
+            <if test="personsex != null">PersonSex = #{personsex},</if>
+            <if test="status != null">Status = #{status},</if>
+            <if test="clueno != null">ClueNo = #{clueno},</if>
+            <if test="personeducation != null">PersonEducation = #{personeducation},</if>
+            <if test="personauthority != null">PersonAuthority = #{personauthority},</if>
+            <if test="jobtime != null">JobTime = #{jobtime},</if>
+            <if test="isparty != null">IsParty = #{isparty},</if>
+            <if test="issupervision2 != null">IsSupervision2 = #{issupervision2},</if>
+            <if test="issupervision3 != null">IsSupervision3 = #{issupervision3},</if>
+            <if test="lawbehaviourother != null">LawBehaviourOther = #{lawbehaviourother},</if>
+            <if test="ischarge != null">IsCharge = #{ischarge},</if>
+            <if test="address != null">Address = #{address},</if>
+            <if test="nativeplace != null">NativePlace = #{nativeplace},</if>
+            <if test="casecode != null">CaseCode = #{casecode},</if>
+            <if test="personcontact != null">PersonContact = #{personcontact},</if>
+            <if test="receivestaut != null">ReceiveStaut = #{receivestaut},</if>
+            <if test="subcluesource != null">subClueSource = #{subcluesource},</if>
+            <if test="handlestate != null">HandleState = #{handlestate},</if>
+            <if test="handletype != null">HandleType = #{handletype},</if>
+            <if test="handleresultlev1 != null">HandleResultLev1 = #{handleresultlev1},</if>
+            <if test="handleresultlev2 != null">HandleResultLev2 = #{handleresultlev2},</if>
+            <if test="handletime != null">HandleTime = #{handletime},</if>
+            <if test="isduban != null">IsDuBan = #{isduban},</if>
+            <if test="ismeasureclue != null">IsMeasureClue = #{ismeasureclue},</if>
+            <if test="basehandledept != null">BaseHandleDept = #{basehandledept},</if>
+            <if test="basehandledeptid != null">BaseHandleDeptID = #{basehandledeptid},</if>
+            <if test="sourcetype != null">SourceType = #{sourcetype},</if>
+            <if test="statisticaltime != null">StatisticalTime = #{statisticaltime},</if>
+            <if test="storagestate != null">StorageState = #{storagestate},</if>
+            <if test="handletypechange != null">HandleTypeChange = #{handletypechange},</if>
+            <if test="mainclueid != null">MainClueID = #{mainclueid},</if>
+            <if test="createcompanyid != null">CreateCompanyID = #{createcompanyid},</if>
+            <if test="iseliminateevil != null">IsEliminateEvil = #{iseliminateevil},</if>
+            <if test="isaccountability != null">IsAccountability = #{isaccountability},</if>
+            <if test="urgent != null">Urgent = #{urgent},</if>
+            <if test="handledecisiontime != null">HandleDecisionTime = #{handledecisiontime},</if>
+            <if test="problemsummary != null">ProblemSummary = #{problemsummary},</if>
+            <if test="isoldclue != null">IsOldClue = #{isoldclue},</if>
+            <if test="iseasyclue != null">IsEasyClue = #{iseasyclue},</if>
+            <if test="clueproperty != null">ClueProperty = #{clueproperty},</if>
+            <if test="samelevel != null">SameLevel = #{samelevel},</if>
+            <if test="samelevelopinion != null">SameLevelOpinion = #{samelevelopinion},</if>
+            <if test="samelevelopinion2 != null">SameLevelOpinion2 = #{samelevelopinion2},</if>
+            <if test="handlemethodtype != null">HandleMethodType = #{handlemethodtype},</if>
+            <if test="paizhuarea != null">PaiZhuArea = #{paizhuarea},</if>
+            <if test="isup != null">IsUp = #{isup},</if>
+            <if test="isupstatus != null">IsUpStatus = #{isupstatus},</if>
+            <if test="updept != null">UpDept = #{updept},</if>
+            <if test="addpeoplemainid != null">AddPeopleMainID = #{addpeoplemainid},</if>
+            <if test="samelevelopinionaffix != null">SameLevelOpinionAffix = #{samelevelopinionaffix},</if>
+            <if test="issurrender != null">IsSurrender = #{issurrender},</if>
+            <if test="isjwcadre != null">IsJWCadre = #{isjwcadre},</if>
+            <if test="agsdistributetime != null">AgsDistributeTime = #{agsdistributetime},</if>
+            <if test="firsttransfertime != null">FirstTransferTime = #{firsttransfertime},</if>
+            <if test="firstdistributetime != null">FirstDistributeTime = #{firstdistributetime},</if>
+            <if test="yuqistatus != null">YuqiStatus = #{yuqistatus},</if>
+            <if test="isexport != null">IsExport = #{isexport},</if>
+            <if test="handlerequire != null">HandleRequire = #{handlerequire},</if>
+            <if test="cadreauthority != null">CadreAuthority = #{cadreauthority},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteTempClueinfoById" parameterType="String">
+        delete from temp_clueinfo where ID = #{id}
+    </delete>
+
+    <delete id="deleteTempClueinfoByIds" parameterType="String">
+        delete from temp_clueinfo where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

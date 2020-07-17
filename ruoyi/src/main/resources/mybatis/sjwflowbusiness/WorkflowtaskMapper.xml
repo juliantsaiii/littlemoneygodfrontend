@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowbusiness.mapper.WorkflowtaskMapper">
+    
+    <resultMap type="Workflowtask" id="WorkflowtaskResult">
+        <result property="id"    column="ID"    />
+        <result property="previd"    column="PrevID"    />
+        <result property="prevstepid"    column="PrevStepID"    />
+        <result property="flowid"    column="FlowID"    />
+        <result property="stepid"    column="StepID"    />
+        <result property="stepname"    column="StepName"    />
+        <result property="instanceid"    column="InstanceID"    />
+        <result property="clueid"    column="ClueID"    />
+        <result property="groupid"    column="GroupID"    />
+        <result property="type"    column="Type"    />
+        <result property="title"    column="Title"    />
+        <result property="senderid"    column="SenderID"    />
+        <result property="sendername"    column="SenderName"    />
+        <result property="sendertime"    column="SenderTime"    />
+        <result property="receiveid"    column="ReceiveID"    />
+        <result property="receivename"    column="ReceiveName"    />
+        <result property="receivetime"    column="ReceiveTime"    />
+        <result property="touserid"    column="ToUserID"    />
+        <result property="tousername"    column="ToUserName"    />
+        <result property="opentime"    column="OpenTime"    />
+        <result property="completedtime"    column="CompletedTime"    />
+        <result property="completedtime1"    column="CompletedTime1"    />
+        <result property="comment"    column="Comment"    />
+        <result property="issign"    column="IsSign"    />
+        <result property="status"    column="Status"    />
+        <result property="note"    column="Note"    />
+        <result property="sort"    column="Sort"    />
+        <result property="subflowgroupid"    column="SubFlowGroupID"    />
+        <result property="handledeptid"    column="HandleDeptID"    />
+        <result property="subreceiveid"    column="SubReceiveID"    />
+        <result property="handlestaffid"    column="HandleStaffID"    />
+        <result property="handlestaffname"    column="HandleStaffName"    />
+        <result property="mainhandlestaffname"    column="MainHandleStaffName"    />
+        <result property="mainhandlestaffid"    column="MainHandleStaffID"    />
+        <result property="cluegroupid"    column="ClueGroupID"    />
+        <result property="rolltime"    column="RollTime"    />
+        <result property="stepstate"    column="StepState"    />
+        <result property="databasename"    column="DataBaseName"    />
+        <result property="ismodify"    column="IsModify"    />
+        <result property="formid"    column="FormID"    />
+        <result property="oldreceiveid"    column="OldReceiveId"    />
+        <result property="oldreceivename"    column="OldReceiveName"    />
+        <result property="oldstepid"    column="OldStepId"    />
+        <result property="infotype"    column="InfoType"    />
+        <result property="isdeleted"    column="IsDeleted"    />
+        <result property="spbid"    column="SpbID"    />
+        <result property="isdeletd"    column="IsDeletd"    />
+    </resultMap>
+
+    <sql id="selectWorkflowtaskVo">
+        select ID, PrevID, PrevStepID, FlowID, StepID, StepName, InstanceID, ClueID, GroupID, Type, Title, SenderID, SenderName, SenderTime, ReceiveID, ReceiveName, ReceiveTime, ToUserID, ToUserName, OpenTime, CompletedTime, CompletedTime1, Comment, IsSign, Status, Note, Sort, SubFlowGroupID, HandleDeptID, SubReceiveID, HandleStaffID, HandleStaffName, MainHandleStaffName, MainHandleStaffID, ClueGroupID, RollTime, StepState, DataBaseName, IsModify, FormID, OldReceiveId, OldReceiveName, OldStepId, InfoType, IsDeleted, SpbID, IsDeletd from workflowtask
+    </sql>
+
+    <select id="selectWorkflowtaskList" parameterType="Workflowtask" resultMap="WorkflowtaskResult">
+        <include refid="selectWorkflowtaskVo"/>
+        <where>
+            <if test="clueid != null  and clueid != ''"> and ClueID = #{clueid}</if>
+        </where>
+    </select>
+    
+    <select id="selectWorkflowtaskById" parameterType="String" resultMap="WorkflowtaskResult">
+        <include refid="selectWorkflowtaskVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertWorkflowtask" parameterType="Workflowtask">
+        insert into workflowtask
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="previd != null">PrevID,</if>
+            <if test="prevstepid != null">PrevStepID,</if>
+            <if test="flowid != null">FlowID,</if>
+            <if test="stepid != null">StepID,</if>
+            <if test="stepname != null">StepName,</if>
+            <if test="instanceid != null">InstanceID,</if>
+            <if test="clueid != null">ClueID,</if>
+            <if test="groupid != null">GroupID,</if>
+            <if test="type != null">Type,</if>
+            <if test="title != null">Title,</if>
+            <if test="senderid != null">SenderID,</if>
+            <if test="sendername != null">SenderName,</if>
+            <if test="sendertime != null">SenderTime,</if>
+            <if test="receiveid != null">ReceiveID,</if>
+            <if test="receivename != null">ReceiveName,</if>
+            <if test="receivetime != null">ReceiveTime,</if>
+            <if test="touserid != null">ToUserID,</if>
+            <if test="tousername != null">ToUserName,</if>
+            <if test="opentime != null">OpenTime,</if>
+            <if test="completedtime != null">CompletedTime,</if>
+            <if test="completedtime1 != null">CompletedTime1,</if>
+            <if test="comment != null">Comment,</if>
+            <if test="issign != null">IsSign,</if>
+            <if test="status != null">Status,</if>
+            <if test="note != null">Note,</if>
+            <if test="sort != null">Sort,</if>
+            <if test="subflowgroupid != null">SubFlowGroupID,</if>
+            <if test="handledeptid != null">HandleDeptID,</if>
+            <if test="subreceiveid != null">SubReceiveID,</if>
+            <if test="handlestaffid != null">HandleStaffID,</if>
+            <if test="handlestaffname != null">HandleStaffName,</if>
+            <if test="mainhandlestaffname != null">MainHandleStaffName,</if>
+            <if test="mainhandlestaffid != null">MainHandleStaffID,</if>
+            <if test="cluegroupid != null">ClueGroupID,</if>
+            <if test="rolltime != null">RollTime,</if>
+            <if test="stepstate != null">StepState,</if>
+            <if test="databasename != null">DataBaseName,</if>
+            <if test="ismodify != null">IsModify,</if>
+            <if test="formid != null">FormID,</if>
+            <if test="oldreceiveid != null">OldReceiveId,</if>
+            <if test="oldreceivename != null">OldReceiveName,</if>
+            <if test="oldstepid != null">OldStepId,</if>
+            <if test="infotype != null">InfoType,</if>
+            <if test="isdeleted != null">IsDeleted,</if>
+            <if test="spbid != null">SpbID,</if>
+            <if test="isdeletd != null">IsDeletd,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="previd != null">#{previd},</if>
+            <if test="prevstepid != null">#{prevstepid},</if>
+            <if test="flowid != null">#{flowid},</if>
+            <if test="stepid != null">#{stepid},</if>
+            <if test="stepname != null">#{stepname},</if>
+            <if test="instanceid != null">#{instanceid},</if>
+            <if test="clueid != null">#{clueid},</if>
+            <if test="groupid != null">#{groupid},</if>
+            <if test="type != null">#{type},</if>
+            <if test="title != null">#{title},</if>
+            <if test="senderid != null">#{senderid},</if>
+            <if test="sendername != null">#{sendername},</if>
+            <if test="sendertime != null">#{sendertime},</if>
+            <if test="receiveid != null">#{receiveid},</if>
+            <if test="receivename != null">#{receivename},</if>
+            <if test="receivetime != null">#{receivetime},</if>
+            <if test="touserid != null">#{touserid},</if>
+            <if test="tousername != null">#{tousername},</if>
+            <if test="opentime != null">#{opentime},</if>
+            <if test="completedtime != null">#{completedtime},</if>
+            <if test="completedtime1 != null">#{completedtime1},</if>
+            <if test="comment != null">#{comment},</if>
+            <if test="issign != null">#{issign},</if>
+            <if test="status != null">#{status},</if>
+            <if test="note != null">#{note},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="subflowgroupid != null">#{subflowgroupid},</if>
+            <if test="handledeptid != null">#{handledeptid},</if>
+            <if test="subreceiveid != null">#{subreceiveid},</if>
+            <if test="handlestaffid != null">#{handlestaffid},</if>
+            <if test="handlestaffname != null">#{handlestaffname},</if>
+            <if test="mainhandlestaffname != null">#{mainhandlestaffname},</if>
+            <if test="mainhandlestaffid != null">#{mainhandlestaffid},</if>
+            <if test="cluegroupid != null">#{cluegroupid},</if>
+            <if test="rolltime != null">#{rolltime},</if>
+            <if test="stepstate != null">#{stepstate},</if>
+            <if test="databasename != null">#{databasename},</if>
+            <if test="ismodify != null">#{ismodify},</if>
+            <if test="formid != null">#{formid},</if>
+            <if test="oldreceiveid != null">#{oldreceiveid},</if>
+            <if test="oldreceivename != null">#{oldreceivename},</if>
+            <if test="oldstepid != null">#{oldstepid},</if>
+            <if test="infotype != null">#{infotype},</if>
+            <if test="isdeleted != null">#{isdeleted},</if>
+            <if test="spbid != null">#{spbid},</if>
+            <if test="isdeletd != null">#{isdeletd},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWorkflowtask" parameterType="Workflowtask">
+        update workflowtask
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="previd != null">PrevID = #{previd},</if>
+            <if test="prevstepid != null">PrevStepID = #{prevstepid},</if>
+            <if test="flowid != null">FlowID = #{flowid},</if>
+            <if test="stepid != null">StepID = #{stepid},</if>
+            <if test="stepname != null">StepName = #{stepname},</if>
+            <if test="instanceid != null">InstanceID = #{instanceid},</if>
+            <if test="clueid != null">ClueID = #{clueid},</if>
+            <if test="groupid != null">GroupID = #{groupid},</if>
+            <if test="type != null">Type = #{type},</if>
+            <if test="title != null">Title = #{title},</if>
+            <if test="senderid != null">SenderID = #{senderid},</if>
+            <if test="sendername != null">SenderName = #{sendername},</if>
+            <if test="sendertime != null">SenderTime = #{sendertime},</if>
+            <if test="receiveid != null">ReceiveID = #{receiveid},</if>
+            <if test="receivename != null">ReceiveName = #{receivename},</if>
+            <if test="receivetime != null">ReceiveTime = #{receivetime},</if>
+            <if test="touserid != null">ToUserID = #{touserid},</if>
+            <if test="tousername != null">ToUserName = #{tousername},</if>
+            <if test="opentime != null">OpenTime = #{opentime},</if>
+            <if test="completedtime != null">CompletedTime = #{completedtime},</if>
+            <if test="completedtime1 != null">CompletedTime1 = #{completedtime1},</if>
+            <if test="comment != null">Comment = #{comment},</if>
+            <if test="issign != null">IsSign = #{issign},</if>
+            <if test="status != null">Status = #{status},</if>
+            <if test="note != null">Note = #{note},</if>
+            <if test="sort != null">Sort = #{sort},</if>
+            <if test="subflowgroupid != null">SubFlowGroupID = #{subflowgroupid},</if>
+            <if test="handledeptid != null">HandleDeptID = #{handledeptid},</if>
+            <if test="subreceiveid != null">SubReceiveID = #{subreceiveid},</if>
+            <if test="handlestaffid != null">HandleStaffID = #{handlestaffid},</if>
+            <if test="handlestaffname != null">HandleStaffName = #{handlestaffname},</if>
+            <if test="mainhandlestaffname != null">MainHandleStaffName = #{mainhandlestaffname},</if>
+            <if test="mainhandlestaffid != null">MainHandleStaffID = #{mainhandlestaffid},</if>
+            <if test="cluegroupid != null">ClueGroupID = #{cluegroupid},</if>
+            <if test="rolltime != null">RollTime = #{rolltime},</if>
+            <if test="stepstate != null">StepState = #{stepstate},</if>
+            <if test="databasename != null">DataBaseName = #{databasename},</if>
+            <if test="ismodify != null">IsModify = #{ismodify},</if>
+            <if test="formid != null">FormID = #{formid},</if>
+            <if test="oldreceiveid != null">OldReceiveId = #{oldreceiveid},</if>
+            <if test="oldreceivename != null">OldReceiveName = #{oldreceivename},</if>
+            <if test="oldstepid != null">OldStepId = #{oldstepid},</if>
+            <if test="infotype != null">InfoType = #{infotype},</if>
+            <if test="isdeleted != null">IsDeleted = #{isdeleted},</if>
+            <if test="spbid != null">SpbID = #{spbid},</if>
+            <if test="isdeletd != null">IsDeletd = #{isdeletd},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteWorkflowtaskById" parameterType="String">
+        delete from workflowtask where ID = #{id}
+    </delete>
+
+    <delete id="deleteWorkflowtaskByIds" parameterType="String">
+        delete from workflowtask where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
