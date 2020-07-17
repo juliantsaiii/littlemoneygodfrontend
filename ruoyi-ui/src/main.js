@@ -43,7 +43,7 @@ Vue.prototype.msgInfo = function (msg) {
   this.$message.info(msg);
 }
 
-Vue.prototype.msgIWaning = function (msg) {
+Vue.prototype.msgWarning = function (msg) {
   this.$message({ showClose: true, message: msg, type: "warning" });
 }
 

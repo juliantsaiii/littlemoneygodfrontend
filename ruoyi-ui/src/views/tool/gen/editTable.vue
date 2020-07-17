@@ -241,23 +241,26 @@ export default {
     //更改checkbox选项
     changeboxstatus(type) {
       if (!this.checkboxcol) {
-        this.msgIWaning("请先选择列");
+        this.msgWarning("请先选择列");
         return;
       }
       switch (type) {
         case "1":
           this.cloumns.forEach(item => {
-            item[this.checkboxcol] = true;
+            item[this.checkboxcol] = "1";
           });
           break;
         case "2":
           this.cloumns.forEach(item => {
-            item[this.checkboxcol] = false;
+            item[this.checkboxcol] = "0";
           });
           break;
         case "3":
           this.cloumns.forEach(item => {
-            item[this.checkboxcol] = !item[this.checkboxcol];
+            item[this.checkboxcol] =
+              item[this.checkboxcol] == null || item[this.checkboxcol] == "0"
+                ? "1"
+                : "0";
           });
           break;
       }
