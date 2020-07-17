@@ -5,6 +5,22 @@
         <basic-info-form ref="basicInfo" :info="info" />
       </el-tab-pane>
       <el-tab-pane label="字段信息" name="cloum">
+        <el-form>
+          <el-form-item>
+            <el-select placeholder="请选择列" v-model="checkboxcol">
+              <el-option
+                v-for="item in checkboxcloumns"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+            <el-button @click="changeboxstatus('1')">全选</el-button>
+            <el-button @click="changeboxstatus('2')">取消全选</el-button>
+            <el-button @click="changeboxstatus('3')">反选</el-button>
+          </el-form-item>
+        </el-form>
+
         <el-table ref="dragTable" :data="cloumns" row-key="columnId" :max-height="tableHeight">
           <el-table-column label="序号" type="index" min-width="5%" class-name="allowDrag" />
           <el-table-column
@@ -101,10 +117,11 @@
                   v-for="dict in dictOptions"
                   :key="dict.dictType"
                   :label="dict.dictName"
-                  :value="dict.dictType">
+                  :value="dict.dictType"
+                >
                   <span style="float: left">{{ dict.dictName }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">{{ dict.dictType }}</span>
-              </el-option>
+                </el-option>
               </el-select>
             </template>
           </el-table-column>
@@ -127,7 +144,7 @@ import { getGenTable, updateGenTable } from "@/api/tool/gen";
 import { optionselect as getDictOptionselect } from "@/api/system/dict/type";
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";
-import Sortable from 'sortablejs'
+import Sortable from "sortablejs";
 export default {
   name: "GenEdit",
   components: {
@@ -139,13 +156,34 @@ export default {
       // 选中选项卡的 name
       activeName: "cloum",
       // 表格的高度
-      tableHeight: document.documentElement.scrollHeight - 245 + "px",
+      tableHeight: document.documentElement.scrollHeight - 320 + "px",
       // 表列信息
       cloumns: [],
       // 字典信息
       dictOptions: [],
       // 表详细信息
-      info: {}
+      info: {},
+      //checkbox列
+      checkboxcol: undefined,
+      // checkbox类型
+      checkboxcloumns: [
+        {
+          value: "isInsert",
+          label: "插入"
+        },
+        {
+          value: "isEdit",
+          label: "编辑"
+        },
+        {
+          value: "isList",
+          label: "列表"
+        },
+        {
+          value: "isQuery",
+          label: "查询"
+        }
+      ]
     };
   },
   created() {
@@ -198,11 +236,37 @@ export default {
     /** 关闭按钮 */
     close() {
       this.$store.dispatch("tagsView/delView", this.$route);
-      this.$router.push({ path: "/tool/gen", query: { t: Date.now()}})
+      this.$router.push({ path: "/tool/gen", query: { t: Date.now() } });
+    },
+    //更改checkbox选项
+    changeboxstatus(type) {
+      if (!this.checkboxcol) {
+        this.msgIWaning("请先选择列");
+        return;
+      }
+      switch (type) {
+        case "1":
+          this.cloumns.forEach(item => {
+            item[this.checkboxcol] = true;
+          });
+          break;
+        case "2":
+          this.cloumns.forEach(item => {
+            item[this.checkboxcol] = false;
+          });
+          break;
+        case "3":
+          this.cloumns.forEach(item => {
+            item[this.checkboxcol] = !item[this.checkboxcol];
+          });
+          break;
+      }
     }
   },
   mounted() {
-    const el = this.$refs.dragTable.$el.querySelectorAll(".el-table__body-wrapper > table > tbody")[0];
+    const el = this.$refs.dragTable.$el.querySelectorAll(
+      ".el-table__body-wrapper > table > tbody"
+    )[0];
     const sortable = Sortable.create(el, {
       handle: ".allowDrag",
       onEnd: evt => {
