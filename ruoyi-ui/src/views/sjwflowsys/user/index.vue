@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row :gutter="20">
       <el-col :span="6">
-        <div v-loading.body="loading" :style="treeheight">
+        <div :style="treeheight">
           <el-tree
             :data="deptList"
             :props="props"
