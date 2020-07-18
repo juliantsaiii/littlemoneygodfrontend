@@ -1,6 +1,26 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+    <el-form :model="queryParams" ref="queryParams" :inline="true" label-width="80px">
+      <el-form-item label="接收人" prop="receivename">
+        <el-input
+          v-model="queryParams.receivename"
+          placeholder="请输入接收人"
+          clearable
+          size="small"
+          style="width: 240px"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="instanceid" prop="instanceid">
+        <el-input
+          v-model="queryParams.instanceid"
+          placeholder="请输入instanceid"
+          clearable
+          size="small"
+          style="width: 240px"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -8,35 +28,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['sjwflowbusiness:workflowtask:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['sjwflowbusiness:workflowtask:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['sjwflowbusiness:workflowtask:remove']"
-        >删除</el-button>
-      </el-col>
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -49,52 +40,91 @@
     </el-row>
 
     <el-table
+      border
       v-loading="loading"
       :data="workflowtaskList"
       @selection-change="handleSelectionChange"
+      :max-height="tableHeight"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="${comment}" align="center" prop="id" />
-      <el-table-column label="${comment}" align="center" prop="stepname" />
-      <el-table-column label="${comment}" align="center" prop="instanceid" />
-      <el-table-column label="${comment}" align="center" prop="clueid" />
-      <el-table-column label="${comment}" align="center" prop="title" />
-      <el-table-column label="${comment}" align="center" prop="sendername" />
-      <el-table-column label="${comment}" align="center" prop="sendertime" width="180">
+      <el-table-column
+        label="id"
+        align="center"
+        prop="id"
+        :show-overflow-tooltip="true"
+        min-width="300"
+      />
+      <el-table-column
+        label="流程名"
+        align="center"
+        prop="title"
+        min-width="200"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="步骤名"
+        align="center"
+        prop="stepname"
+        min-width="200"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="instanceid"
+        align="center"
+        prop="instanceid"
+        :show-overflow-tooltip="true"
+        min-width="300"
+      />
+      <el-table-column
+        label="clueid"
+        align="center"
+        prop="clueid"
+        :show-overflow-tooltip="true"
+        min-width="300"
+      />
+      <el-table-column label="发送人" align="center" prop="sendername" />
+      <el-table-column label="接收人" align="center" prop="receivename" />
+      <el-table-column label="接收时间" align="center" min-width="100" prop="receivetime">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.sendertime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.receivetime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="${comment}" align="center" prop="receivename" />
-      <el-table-column label="${comment}" align="center" prop="receivetime" width="180">
+      <el-table-column label="note" align="center" prop="note" />
+      <el-table-column label="status" align="center" :min-width="100">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.receivetime, '{y}-{m}-{d}') }}</span>
+          <el-select v-model="scope.row.status" placeholder @change="updateform(scope.row)">
+            <el-option
+              v-for="dict in statusOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="Number(dict.dictValue)"
+            ></el-option>
+          </el-select>
         </template>
       </el-table-column>
-      <el-table-column label="${comment}" align="center" prop="comment" />
-      <el-table-column label="${comment}" align="center" prop="status" />
-      <el-table-column label="${comment}" align="center" prop="handledeptid" />
-      <el-table-column label="线索组ID 措施中步骤监控需要使用" align="center" prop="stepstate" />
-      <el-table-column label="线索组ID 措施中步骤监控需要使用" align="center" prop="databasename" />
-      <el-table-column label="调换科室原接收人所在步骤" align="center" prop="infotype" />
-      <el-table-column label="调换科室原接收人所在步骤" align="center" prop="isdeleted" />
-      <el-table-column label="调换科室原接收人所在步骤" align="center" prop="isdeletd" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="步骤阶段" align="center" prop="stepstate" />
+      <el-table-column label="databasename" align="center" prop="databasename" min-width="150" />
+      <el-table-column label="infotype" align="center" prop="infotype" />
+      <el-table-column label="是否删除" align="center">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.isdeleted" @change="updateform(scope.row)"></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="操作"
+        align="center"
+        class-name="small-padding fixed-width"
+        min-width="200"
+        fixed="right"
+      >
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="openUpdateDialog(scope.row)"
             v-hasPermi="['sjwflowbusiness:workflowtask:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['sjwflowbusiness:workflowtask:remove']"
-          >删除</el-button>
+          >更换用户</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -107,209 +137,17 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改流程记录对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="调换科室原接收人所在步骤" prop="previd">
-          <el-input v-model="form.previd" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="prevstepid">
-          <el-input v-model="form.prevstepid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="flowid">
-          <el-input v-model="form.flowid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="stepid">
-          <el-input v-model="form.stepid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="stepname">
-          <el-input v-model="form.stepname" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="instanceid">
-          <el-input v-model="form.instanceid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="clueid">
-          <el-input v-model="form.clueid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="groupid">
-          <el-input v-model="form.groupid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤">
-          <el-select v-model="form.type" placeholder="请选择调换科室原接收人所在步骤">
-            <el-option label="请选择字典生成" value />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="title">
-          <el-input v-model="form.title" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="senderid">
-          <el-input v-model="form.senderid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="sendername">
-          <el-input v-model="form.sendername" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="sendertime">
-          <el-date-picker
-            clearable
-            size="small"
-            style="width: 200px"
-            v-model="form.sendertime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择调换科室原接收人所在步骤"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="receiveid">
-          <el-input v-model="form.receiveid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="receivename">
-          <el-input v-model="form.receivename" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="receivetime">
-          <el-date-picker
-            clearable
-            size="small"
-            style="width: 200px"
-            v-model="form.receivetime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择调换科室原接收人所在步骤"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="touserid">
-          <el-input v-model="form.touserid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="tousername">
-          <el-input v-model="form.tousername" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="opentime">
-          <el-date-picker
-            clearable
-            size="small"
-            style="width: 200px"
-            v-model="form.opentime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择调换科室原接收人所在步骤"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="completedtime">
-          <el-date-picker
-            clearable
-            size="small"
-            style="width: 200px"
-            v-model="form.completedtime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择调换科室原接收人所在步骤"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="completedtime1">
-          <el-date-picker
-            clearable
-            size="small"
-            style="width: 200px"
-            v-model="form.completedtime1"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择调换科室原接收人所在步骤"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="comment">
-          <el-input v-model="form.comment" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="issign">
-          <el-input v-model="form.issign" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤">
-          <el-radio-group v-model="form.status">
-            <el-radio label="1">请选择字典生成</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="note">
-          <el-input v-model="form.note" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="sort">
-          <el-input v-model="form.sort" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="subflowgroupid">
-          <el-input v-model="form.subflowgroupid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="handledeptid">
-          <el-input v-model="form.handledeptid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="subreceiveid">
-          <el-input v-model="form.subreceiveid" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="handlestaffid">
-          <el-input v-model="form.handlestaffid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="handlestaffname">
-          <el-input v-model="form.handlestaffname" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="mainhandlestaffname">
-          <el-input v-model="form.mainhandlestaffname" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="mainhandlestaffid">
-          <el-input v-model="form.mainhandlestaffid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="线索组ID 措施中步骤监控需要使用" prop="cluegroupid">
-          <el-input v-model="form.cluegroupid" placeholder="请输入线索组ID 措施中步骤监控需要使用" />
-        </el-form-item>
-        <el-form-item label="线索组ID 措施中步骤监控需要使用" prop="rolltime">
-          <el-date-picker
-            clearable
-            size="small"
-            style="width: 200px"
-            v-model="form.rolltime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择线索组ID 措施中步骤监控需要使用"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="线索组ID 措施中步骤监控需要使用" prop="stepstate">
-          <el-input v-model="form.stepstate" placeholder="请输入线索组ID 措施中步骤监控需要使用" />
-        </el-form-item>
-        <el-form-item label="线索组ID 措施中步骤监控需要使用" prop="databasename">
-          <el-input v-model="form.databasename" placeholder="请输入线索组ID 措施中步骤监控需要使用" />
-        </el-form-item>
-        <el-form-item label="线索组ID 措施中步骤监控需要使用" prop="ismodify">
-          <el-input v-model="form.ismodify" placeholder="请输入线索组ID 措施中步骤监控需要使用" />
-        </el-form-item>
-        <el-form-item label="线索组ID 措施中步骤监控需要使用" prop="formid">
-          <el-input v-model="form.formid" placeholder="请输入线索组ID 措施中步骤监控需要使用" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人或发送人" prop="oldreceiveid">
-          <el-input v-model="form.oldreceiveid" placeholder="请输入调换科室原接收人或发送人" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人或发送人" prop="oldreceivename">
-          <el-input v-model="form.oldreceivename" placeholder="请输入调换科室原接收人或发送人" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="oldstepid">
-          <el-input v-model="form.oldstepid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤">
-          <el-select v-model="form.infotype" placeholder="请选择调换科室原接收人所在步骤">
-            <el-option label="请选择字典生成" value />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤">
-          <el-radio-group v-model="form.isdeleted">
-            <el-radio label="1">请选择字典生成</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤" prop="spbid">
-          <el-input v-model="form.spbid" placeholder="请输入调换科室原接收人所在步骤" />
-        </el-form-item>
-        <el-form-item label="调换科室原接收人所在步骤">
-          <el-radio-group v-model="form.isdeletd">
-            <el-radio label="1">请选择字典生成</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
+    <el-dialog title="更换接收人" :visible.sync="dialogTreeVisible">
+      <dept-select-tree
+        :pid="form.receiveid"
+        @selectterm="updatepSelectTreeValue"
+        :type="'user'"
+        :selectID="'receiveid'"
+        :selectName="'receivename'"
+      ></dept-select-tree>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button @click="dialogTreeVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateReceiver">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -324,9 +162,12 @@ import {
   updateWorkflowtask,
   exportWorkflowtask
 } from "@/api/sjwflowbusiness/workflowtask";
-
+import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import Treeselect from "@riophae/vue-treeselect";
 export default {
   name: "Workflowtask",
+  components: { Treeselect, deptSelectTree },
   data() {
     return {
       // 遮罩层
@@ -348,9 +189,12 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
-        clueid: undefined
+        pageSize: 30,
+        clueid: undefined,
+        receivename: undefined,
+        instanceid: undefined
       },
+      statusOptions: [],
       // 表单参数
       form: {},
       // 表单校验
@@ -362,11 +206,16 @@ export default {
             trigger: "blur"
           }
         ]
-      }
+      },
+      tableHeight: this.$store.getters.clientHeight - 250 + "px",
+      dialogTreeVisible: false
     };
   },
   created() {
     this.queryParams.clueid = this.$route.params && this.$route.query.id;
+    this.getDicts("sjwflow_task_status").then(response => {
+      this.statusOptions = response.data;
+    });
     this.getList(this.queryParams);
   },
   methods: {
@@ -453,67 +302,6 @@ export default {
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加流程记录";
-    },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.reset();
-      const id = row.id || this.ids;
-      getWorkflowtask(id).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改流程记录";
-      });
-    },
-    /** 提交按钮 */
-    submitForm: function() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          if (this.form.id != undefined) {
-            updateWorkflowtask(this.form).then(response => {
-              if (response.code === 200) {
-                this.msgSuccess("修改成功");
-                this.open = false;
-                this.getList();
-              }
-            });
-          } else {
-            addWorkflowtask(this.form).then(response => {
-              if (response.code === 200) {
-                this.msgSuccess("新增成功");
-                this.open = false;
-                this.getList();
-              }
-            });
-          }
-        }
-      });
-    },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$confirm(
-        '是否确认删除流程记录编号为"' + ids + '"的数据项?',
-        "警告",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }
-      )
-        .then(function() {
-          return delWorkflowtask(ids);
-        })
-        .then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        })
-        .catch(function() {});
-    },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
@@ -529,6 +317,29 @@ export default {
           this.download(response.msg);
         })
         .catch(function() {});
+    },
+    /** 更新form */
+    updateform(data) {
+      updateWorkflowtask(data).then(res => {
+        if (res.code == "200") {
+          this.msgSuccess("修改成功");
+        }
+      });
+    } /** 同步下拉树数据 */,
+    updatepSelectTreeValue(node, id, label) {
+      this.form[id] = node.id;
+      label != undefined && [(this.form[label] = node.label)];
+    },
+    /** 打开换人框 */
+    openUpdateDialog(data) {
+      this.form = data;
+      this.dialogTreeVisible = true;
+    },
+    /** 更新接收人 */
+    updateReceiver() {
+      this.updateform(this.form);
+      this.dialogTreeVisible = false;
+      this.getList();
     }
   }
 };

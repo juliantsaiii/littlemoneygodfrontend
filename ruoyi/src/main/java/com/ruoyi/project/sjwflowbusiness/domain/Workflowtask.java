@@ -74,7 +74,7 @@ public class Workflowtask extends BaseEntity
     private String receivename;
 
     /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date receivetime;
 
     /** $column.columnComment */

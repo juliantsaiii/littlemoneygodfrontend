@@ -1,43 +1,43 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="四种形态" prop="id">
+      <el-form-item label="线索ID" prop="id">
         <el-input
           v-model="queryParams.id"
-          placeholder="请输入四种形态"
+          placeholder="请输入clueid"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="单位名称" prop="unitname">
+      <el-form-item label="单位" prop="unitname">
         <el-input
           v-model="queryParams.unitname"
-          placeholder="请输入单位名称"
+          placeholder="请输入单位"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="线索编码" prop="cluecode">
+      <el-form-item label="线索编号" prop="cluecode">
         <el-input
           v-model="queryParams.cluecode"
-          placeholder="请输入线索编码"
+          placeholder="请输入线索编号"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="被反映人" prop="personname">
+      <el-form-item label="姓名" prop="personname">
         <el-input
           v-model="queryParams.personname"
-          placeholder="请输入被反映人"
+          placeholder="请输入被反映人姓名"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="工作职务" prop="personunit">
+      <el-form-item label="职务" prop="personunit">
         <el-input
           v-model="queryParams.personunit"
           placeholder="请输入工作职务"
@@ -55,10 +55,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="函号信访编号" prop="clueno">
+      <el-form-item label="信访编号" prop="clueno">
         <el-input
           v-model="queryParams.clueno"
-          placeholder="请输入函号信访编号"
+          placeholder="请输入信访编号"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -71,25 +71,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['sjwflowbusiness:tempclueinfo:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['sjwflowbusiness:tempclueinfo:edit']"
-        >修改</el-button>
-      </el-col>
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -118,32 +99,53 @@
       :max-height="tableHeight"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="四种形态" align="center" prop="id" :show-overflow-tooltip="true" />
-      <el-table-column label="单位名称" align="center" prop="unitname" />
+      <el-table-column label="ID" align="center" prop="id" :show-overflow-tooltip="true" />
+      <el-table-column label="姓名" align="center" prop="personname" />
+      <el-table-column label="单位" align="center" prop="unitname" :show-overflow-tooltip="true" />
+      <el-table-column label="职务" align="center" prop="personunit" :show-overflow-tooltip="true" />
+      <el-table-column label="职级" align="center" prop="personlevel" :show-overflow-tooltip="true" />
+      <el-table-column label="编号" align="center" prop="cluecode" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <span>{{scope.row.cluecode}}/{{scope.row.clueno}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="填报日期" align="center" prop="reportdate" />
-      <el-table-column label="线索编码" align="center" prop="cluecode" />
-      <el-table-column label="被反映人" align="center" prop="personname" />
-      <el-table-column label="职级" align="center" prop="personlevel" />
-      <el-table-column label="工作职务" align="center" prop="personunit" />
-      <el-table-column label="线索来源" align="center" prop="cluesource" />
-      <el-table-column label="是否重复件" align="center" prop="isrepeated" />
-      <el-table-column label="审核人" align="center" prop="isdeleted" />
-      <el-table-column label="函号信访编号" align="center" prop="clueno" />
-      <el-table-column label="处置状态" align="center" prop="handlestate" />
-      <el-table-column label="处置方式" align="center" prop="handletype" />
-      <el-table-column label="是否措施线索" align="center" prop="ismeasureclue" />
-      <el-table-column label="是否措施线索" align="center" prop="basehandledept" />
-      <el-table-column label="是否措施线索" align="center" prop="basehandledeptid" />
-      <el-table-column label="0：默认；1：信访；2：巡视" align="center" prop="mainclueid" />
-      <el-table-column label="0：默认；1：信访；2：巡视" align="center" prop="createcompanyid" />
-      <el-table-column label="0：默认；1：信访；2：巡视" align="center" prop="iseliminateevil" />
-      <el-table-column label="加急" align="center" prop="urgent" />
-      <el-table-column label="添加多人主线索ID" align="center" prop="addpeoplemainid" />
+      <el-table-column label="线索来源" align="center" prop="cluesource" :show-overflow-tooltip="true" />
+      <el-table-column
+        label="承办部门"
+        align="center"
+        prop="basehandledept"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column label="状态" align="center" prop="handlestate" />
+      <el-table-column label="是否重复件" align="center" prop="isrepeated" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <span>{{scope.row.isrepeated?scope.row.isrepeated:'否'}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="是否添加多人件"
+        align="center"
+        prop="addpeoplemainid"
+        :show-overflow-tooltip="true"
+      />
+
+      <el-table-column label="是否删除" align="center">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.isdeleted" @change="updateform(scope.row)"></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否措施线索">
+        <template slot-scope="scope">
+          <span>{{scope.row.ismeasureclue?'是':'否'}}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
         fixed="right"
+        :min-width="200"
       >
         <template slot-scope="scope">
           <!-- <router-link :to="'/sjwflowbusiness/workflowtask/'" class="link-type"> -->
@@ -715,7 +717,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 30,
         id: undefined,
         unitname: undefined,
         cluecode: undefined,
@@ -728,7 +730,7 @@ export default {
       form: {},
       // 表单校验
       rules: {},
-      tableHeight: this.$store.getters.clientHeight - 300 + "px"
+      tableHeight: this.$store.getters.clientHeight - 250 + "px"
     };
   },
   created() {
@@ -1003,6 +1005,14 @@ export default {
           this.download(response.msg);
         })
         .catch(function() {});
+    },
+    /** 更新form */
+    updateform(data) {
+      updateTempclueinfo(data).then(res => {
+        if (res.code == "200") {
+          this.msgSuccess("修改成功");
+        }
+      });
     }
   }
 };
