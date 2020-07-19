@@ -131,6 +131,19 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/go',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'displayview/:id(\\d+)',
+        component: (resolve) => require(['@/views/tool/go/displayview'], resolve),
+        name: 'displayview',
+        meta: { title: '流程跳转' }
+      }
+    ]
+  }
 ]
 
 export default new Router({
