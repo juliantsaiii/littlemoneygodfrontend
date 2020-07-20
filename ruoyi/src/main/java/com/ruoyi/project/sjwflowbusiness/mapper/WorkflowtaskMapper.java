@@ -58,4 +58,11 @@ public interface WorkflowtaskMapper
      * @return 结果
      */
     public int deleteWorkflowtaskByIds(String[] ids);
+
+    /**
+     * 获取workflowtask最新步骤所在流程
+     * @param id
+     * @return
+     */
+    public List<Workflowtask> selectWorkflowtaskSteps(String id);
 }

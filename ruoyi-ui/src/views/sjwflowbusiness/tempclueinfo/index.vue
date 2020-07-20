@@ -153,9 +153,12 @@
           >
             <el-button size="mini" type="text" icon="el-icon-edit">步骤</el-button>
           </router-link>
-          <router-link :to="{path:'/go/displayview/',query: {id: scope.row.id}}" class="link-type">
-            <el-button size="mini" type="text" icon="el-icon-edit">跳转</el-button>
-          </router-link>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="openviewdialog(scope.row.id)"
+          >跳转</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -167,6 +170,12 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+
+    <el-dialog title="流程" :visible.sync="infoviewdialog" width="80%">
+      <template>
+        <displayview :curclueid="currentclueid"></displayview>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -179,8 +188,9 @@ import {
   updateTempclueinfo,
   exportTempclueinfo
 } from "@/api/sjwflowbusiness/tempclueinfo";
-
+import displayview from "@/views/tool/go/displayview";
 export default {
+  components: { displayview },
   name: "Tempclueinfo",
   data() {
     return {
@@ -216,7 +226,11 @@ export default {
       form: {},
       // 表单校验
       rules: {},
-      tableHeight: this.$store.getters.clientHeight - 250 + "px"
+      tableHeight: this.$store.getters.clientHeight - 250 + "px",
+      //流程图框
+      infoviewdialog: false,
+      //选中clueid
+      currentclueid: undefined
     };
   },
   created() {
@@ -438,6 +452,11 @@ export default {
           this.msgSuccess("修改成功");
         }
       });
+    },
+    /** 打开流程图框 */
+    openviewdialog(id) {
+      this.currentclueid = id;
+      this.infoviewdialog = true;
     }
   }
 };

@@ -54,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isdeletd"    column="IsDeletd"    />
     </resultMap>
 
+
     <sql id="selectWorkflowtaskVo">
         select ID, PrevID, PrevStepID, FlowID, StepID, StepName, InstanceID, ClueID, GroupID, Type, Title, SenderID, SenderName, SenderTime, ReceiveID, ReceiveName, ReceiveTime, ToUserID, ToUserName, OpenTime, CompletedTime, CompletedTime1, Comment, IsSign, Status, Note, Sort, SubFlowGroupID, HandleDeptID, SubReceiveID, HandleStaffID, HandleStaffName, MainHandleStaffName, MainHandleStaffID, ClueGroupID, RollTime, StepState, DataBaseName, IsModify, FormID, OldReceiveId, OldReceiveName, OldStepId, InfoType, IsDeleted, SpbID, IsDeletd from workflowtask
     </sql>
@@ -65,6 +66,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="receivename != null  and receivename != ''"> and receivename like concat('%',#{receivename},'%')</if>
             <if test="instanceid != null  and instanceid != ''"> and instanceid = #{instanceid}</if>
         </where>
+    </select>
+
+    <select id="selectWorkflowtaskSteps" parameterType="Workflowtask" resultMap="WorkflowtaskResult">
+      select flowid,stepid from workflowtask where InstanceID in (select InstanceID from (
+      select InstanceID from workflowtask where clueid = #{id} and isdeleted = 0 order by sendertime desc limit 1)a)
     </select>
     
     <select id="selectWorkflowtaskById" parameterType="String" resultMap="WorkflowtaskResult">

@@ -137,7 +137,7 @@ export const constantRoutes = [
     hidden: true,
     children: [
       {
-        path: 'displayview/:id(\\d+)',
+        path: 'displayview',
         component: (resolve) => require(['@/views/tool/go/displayview'], resolve),
         name: 'displayview',
         meta: { title: '流程跳转' }

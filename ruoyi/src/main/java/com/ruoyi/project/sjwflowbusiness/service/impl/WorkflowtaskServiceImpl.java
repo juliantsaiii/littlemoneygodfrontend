@@ -90,4 +90,15 @@ public class WorkflowtaskServiceImpl implements IWorkflowtaskService
     {
         return workflowtaskMapper.deleteWorkflowtaskById(id);
     }
+
+    /**
+     * 获取workflowtask最新步骤所在流程
+     * @param id
+     * @return
+     */
+    @Override
+    public List<Workflowtask> selectWorkflowtaskSteps(String id)
+    {
+        return workflowtaskMapper.selectWorkflowtaskSteps(id);
+    };
 }

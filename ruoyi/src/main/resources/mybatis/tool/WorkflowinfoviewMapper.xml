@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.tool.workflowinfoview.mapper.WorkflowinfoviewMapper">
+    
+    <resultMap type="Workflowinfoview" id="WorkflowinfoviewResult">
+        <result property="id"    column="ID"    />
+        <result property="json"    column="Json"    />
+    </resultMap>
+
+    <sql id="selectWorkflowinfoviewVo">
+        select ID, Json from workflowinfoview
+    </sql>
+
+    <select id="selectWorkflowinfoviewList" parameterType="Workflowinfoview" resultMap="WorkflowinfoviewResult">
+        <include refid="selectWorkflowinfoviewVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectWorkflowinfoviewById" parameterType="String" resultMap="WorkflowinfoviewResult">
+        <include refid="selectWorkflowinfoviewVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertWorkflowinfoview" parameterType="Workflowinfoview">
+        insert into workflowinfoview
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="json != null">Json,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="json != null">#{json},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWorkflowinfoview" parameterType="Workflowinfoview">
+        update workflowinfoview
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="json != null">Json = #{json},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteWorkflowinfoviewById" parameterType="String">
+        delete from workflowinfoview where ID = #{id}
+    </delete>
+
+    <delete id="deleteWorkflowinfoviewByIds" parameterType="String">
+        delete from workflowinfoview where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

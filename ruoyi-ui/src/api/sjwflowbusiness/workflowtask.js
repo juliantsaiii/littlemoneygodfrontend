@@ -51,3 +51,11 @@ export function exportWorkflowtask(query) {
     params: query
   })
 }
+
+// 获取当前所在环节流程图
+export function getCurrentSteps(clueid) {
+  return request({
+    url: '/sjwflowbusiness/workflowtask/getCurrentSteps' + clueid,
+    method: 'post',
+  })
+}

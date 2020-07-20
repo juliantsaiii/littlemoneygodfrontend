@@ -58,4 +58,11 @@ public interface IWorkflowtaskService
      * @return 结果
      */
     public int deleteWorkflowtaskById(String id);
+
+    /**
+     * 获取workflowtask最新步骤所在流程
+     * @param id
+     * @return
+     */
+    public List<Workflowtask> selectWorkflowtaskSteps(String id);
 }
