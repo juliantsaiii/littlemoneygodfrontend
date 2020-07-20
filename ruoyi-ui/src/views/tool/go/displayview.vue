@@ -22,7 +22,7 @@ export default {
     var G = go.GraphObject.make;
     var _this = {};
     var _displayer = {};
-
+    var that = this;
     /** --------public method----------------------------------------**/
 
     /**
@@ -102,8 +102,13 @@ export default {
 
       // 流程连接线的样式模板
       _displayer.linkTemplate = makeLinkTemplate();
-    }
 
+      // 双击事件
+      _displayer.addDiagramListener(
+        "ObjectDoubleClicked",
+        onObjectDoubleClicked
+      );
+    }
     /**
      * 步骤图的样式模板
      * @returns {*}
@@ -309,6 +314,14 @@ export default {
     }
 
     /**
+     * 流程图元素的双击事件
+     * @param ev
+     */
+    function onObjectDoubleClicked(ev) {
+      var node = ev.subject.part;
+      that.jumpStep(node);
+    }
+    /**
      *
      * 查找【开始】节点
      * @param {} steps
@@ -488,7 +501,6 @@ export default {
   },
   created() {
     this.initWorkflowinfoview(this.curclueid);
-    // alert(this.curclueid);
   },
   watch: {
     curclueid(val) {
@@ -503,6 +515,23 @@ export default {
           this.animateFlowPath(response.data.stepIds);
         }
       });
+    },
+    jumpStep(node) {
+      if (node instanceof go.Node && node.data.figure === "circle") {
+        this.msgInfo("开始和结束步骤不可编辑~");
+        return;
+      }
+      const stepid = node.data.key;
+      const stpename = node.data.text;
+      this.$confirm("是否跳转至" + stpename + "步骤?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.msgSuccess("success");
+        })
+        .catch(() => {});
     }
   }
 };
