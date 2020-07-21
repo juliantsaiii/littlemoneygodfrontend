@@ -21,6 +21,8 @@ import { getConfigKey } from "@/api/system/config";
 import { parseTime, resetForm, addDateRange, selectDictLabel, download, handleTree } from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";
 import less from 'less'
+//复制到粘贴板插件
+import VueClipboard from 'vue-clipboard2'
 
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
@@ -54,6 +56,8 @@ Vue.component('Pagination', Pagination)
 Vue.use(permission)
 Vue.use(less)
 
+VueClipboard.config.autoSetContainer = true
+Vue.use(VueClipboard)
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
