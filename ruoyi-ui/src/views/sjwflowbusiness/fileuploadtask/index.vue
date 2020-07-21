@@ -1,41 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="${comment}" prop="filename">
-        <el-input
-          v-model="queryParams.filename"
-          placeholder="请输入${comment}"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['sjwflowbusiness:fileuploadtask:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['sjwflowbusiness:fileuploadtask:edit']"
-        >修改</el-button>
-      </el-col>
+    <!-- <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -55,7 +20,7 @@
           v-hasPermi="['sjwflowbusiness:fileuploadtask:export']"
         >导出</el-button>
       </el-col>
-    </el-row>
+    </el-row>-->
 
     <el-table
       v-loading="loading"
@@ -100,24 +65,30 @@
 
     <!-- 添加或修改附件历史对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="${comment}" prop="id">
-          <el-input v-model="form.id" placeholder="请输入${comment}" />
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="id" prop="id">
+          <el-input v-model="form.id" placeholder="请输入id" />
         </el-form-item>
-        <el-form-item label="${comment}" prop="fileuploadid">
-          <el-input v-model="form.fileuploadid" placeholder="请输入${comment}" />
+        <el-form-item label="fileuploadid" prop="fileuploadid">
+          <el-input v-model="form.fileuploadid" placeholder="请输入fileuploadid" />
         </el-form-item>
-        <el-form-item label="${comment}" prop="taskid">
-          <el-input v-model="form.taskid" placeholder="请输入${comment}" />
+        <el-form-item label="taskid" prop="taskid">
+          <el-input v-model="form.taskid" placeholder="请输入taskid" />
         </el-form-item>
-        <el-form-item label="${comment}" prop="userid">
-          <el-input v-model="form.userid" placeholder="请输入${comment}" />
+        <el-form-item label="$userid" prop="userid">
+          <el-input v-model="form.userid" placeholder="请输入userid" />
         </el-form-item>
-        <el-form-item label="${comment}" prop="filename">
-          <el-input v-model="form.filename" placeholder="请输入${comment}" />
+        <el-form-item label="filename" prop="filename">
+          <el-input v-model="form.filename" placeholder="请输入filename" />
         </el-form-item>
-        <el-form-item label="${comment}" prop="modifytime">
-          <el-input v-model="form.modifytime" placeholder="请输入${comment}" />
+        <el-form-item label="modifytime" prop="modifytime">
+          <el-date-picker
+            v-model="form.modifytime"
+            type="datetime"
+            placeholder="请输入modifytime"
+            format="yyyy/MM/dd hh:MM:ss"
+            value-format="yyyy/MM/dd hh:MM:ss"
+          ></el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

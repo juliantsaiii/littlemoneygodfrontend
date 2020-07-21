@@ -9,7 +9,7 @@
  
 
 <script>
-import Ntko from "@/views/tool/ntko/Ntko";
+import Ntko from "@/views/tool/ntko/ntko";
 
 export default {
   components: { Ntko },
@@ -26,7 +26,7 @@ export default {
     open() {
       // 定义ntkoBrowser
 
-      let ntkoBrowser = require("./ntkobackground.min.js").ntkoBrowser;
+      // let ntkoBrowser = require("./ntkobackground.min.js").ntkoBrowser;
 
       let ntkoed = ntkoBrowser.ExtensionInstalled(); //alert(window.location.origin);
 
