@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowbusiness.mapper.FileuploadtaskMapper">
+    
+    <resultMap type="Fileuploadtask" id="FileuploadtaskResult">
+        <result property="id"    column="ID"    />
+        <result property="fileuploadid"    column="FileUploadID"    />
+        <result property="taskid"    column="TaskID"    />
+        <result property="userid"    column="UserID"    />
+        <result property="filename"    column="FileName"    />
+        <result property="modifytime"    column="ModifyTime"    />
+    </resultMap>
+
+    <sql id="selectFileuploadtaskVo">
+        select ID, FileUploadID, TaskID, UserID, FileName, ModifyTime from fileuploadtask
+    </sql>
+
+    <select id="selectFileuploadtaskList" parameterType="Fileuploadtask" resultMap="FileuploadtaskResult">
+        <include refid="selectFileuploadtaskVo"/>
+        <where>  
+            <if test="filename != null  and filename != ''"> and FileName like concat('%', #{filename}, '%')</if>
+            <if test="fileuploadid != null and fileuploadid != ''"> and fileuploadid = #{fileuploadid}</if>
+        </where>
+    </select>
+    
+    <select id="selectFileuploadtaskById" parameterType="String" resultMap="FileuploadtaskResult">
+        <include refid="selectFileuploadtaskVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertFileuploadtask" parameterType="Fileuploadtask">
+        insert into fileuploadtask
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="fileuploadid != null">FileUploadID,</if>
+            <if test="taskid != null">TaskID,</if>
+            <if test="userid != null">UserID,</if>
+            <if test="filename != null">FileName,</if>
+            <if test="modifytime != null">ModifyTime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="fileuploadid != null">#{fileuploadid},</if>
+            <if test="taskid != null">#{taskid},</if>
+            <if test="userid != null">#{userid},</if>
+            <if test="filename != null">#{filename},</if>
+            <if test="modifytime != null">#{modifytime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFileuploadtask" parameterType="Fileuploadtask">
+        update fileuploadtask
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileuploadid != null">FileUploadID = #{fileuploadid},</if>
+            <if test="taskid != null">TaskID = #{taskid},</if>
+            <if test="userid != null">UserID = #{userid},</if>
+            <if test="filename != null">FileName = #{filename},</if>
+            <if test="modifytime != null">ModifyTime = #{modifytime},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteFileuploadtaskById" parameterType="String">
+        delete from fileuploadtask where ID = #{id}
+    </delete>
+
+    <delete id="deleteFileuploadtaskByIds" parameterType="String">
+        delete from fileuploadtask where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

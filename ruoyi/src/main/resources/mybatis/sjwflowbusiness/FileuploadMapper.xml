@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowbusiness.mapper.FileuploadMapper">
+    
+    <resultMap type="Fileupload" id="FileuploadResult">
+        <result property="id"    column="ID"    />
+        <result property="filename"    column="FileName"    />
+        <result property="basepath"    column="BasePath"    />
+        <result property="savepath"    column="SavePath"    />
+        <result property="fileextend"    column="FileExtend"    />
+        <result property="editor"    column="Editor"    />
+        <result property="addtime"    column="AddTime"    />
+        <result property="history"    column="History"    />
+        <result property="deptname"    column="DeptName"    />
+        <result property="isdeleted"    column="IsDeleted"    />
+        <result property="dictid"    column="DictID"    />
+        <result property="clueid"    column="ClueID"    />
+        <result property="userid"    column="UserID"    />
+        <result property="category"    column="Category"    />
+        <result property="pdfid"    column="PdfID"    />
+        <result property="stepid"    column="StepID"    />
+        <result property="filesize"    column="FileSize"    />
+        <result property="stepname"    column="StepName"    />
+        <result property="username"    column="UserName"    />
+        <result property="state"    column="State"    />
+        <result property="applystamp"    column="ApplyStamp"    />
+        <result property="addstamp"    column="AddStamp"    />
+        <result property="ismeasure"    column="IsMeasure"    />
+        <result property="instanceid"    column="InstanceID"    />
+        <result property="process"    column="Process"    />
+        <result property="flowid"    column="FlowID"    />
+        <result property="groupid"    column="GroupID"    />
+        <result property="niwenid"    column="niwenID"    />
+        <result property="code"    column="Code"    />
+        <result property="hashistory"    column="HasHistory"    />
+        <result property="sourcetype"    column="sourceType"    />
+        <result property="issync"    column="IsSync"    />
+        <result property="wenshuid"    column="WenShuID"    />
+        <result property="stepstate"    column="StepState"    />
+        <result property="filepathid"    column="FilePathID"    />
+        <result property="docabbreviation"    column="DocAbbreviation"    />
+        <result property="printnum"    column="PrintNum"    />
+        <result property="isofd"    column="IsOfd"    />
+        <result property="isoldspb"    column="IsOldSpb"    />
+        <result property="isthing"    column="IsThing"    />
+    </resultMap>
+
+    <sql id="selectFileuploadVo">
+        select ID, FileName, BasePath, SavePath, FileExtend, Editor, AddTime, History, DeptName, IsDeleted, DictID, ClueID, UserID, Category, PdfID, StepID, FileSize, StepName, UserName, State, ApplyStamp, AddStamp, IsMeasure, InstanceID, Process, FlowID, GroupID, niwenID, Code, HasHistory, sourceType, IsSync, WenShuID, StepState, FilePathID, DocAbbreviation, PrintNum, IsOfd, IsOldSpb, IsThing from fileupload
+    </sql>
+
+    <select id="selectFileuploadList" parameterType="Fileupload" resultMap="FileuploadResult">
+        <include refid="selectFileuploadVo"/>
+        <where>  
+            <if test="filename != null  and filename != ''"> and FileName like concat('%', #{filename}, '%')</if>
+            <if test="username != null  and username != ''"> and UserName like concat('%', #{username}, '%')</if>
+            <if test="clueid != null and clueid != ''"> and clueid = #{clueid}</if>
+        </where>
+    </select>
+    
+    <select id="selectFileuploadById" parameterType="String" resultMap="FileuploadResult">
+        <include refid="selectFileuploadVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertFileupload" parameterType="Fileupload">
+        insert into fileupload
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="filename != null">FileName,</if>
+            <if test="basepath != null">BasePath,</if>
+            <if test="savepath != null">SavePath,</if>
+            <if test="fileextend != null and fileextend != ''">FileExtend,</if>
+            <if test="editor != null">Editor,</if>
+            <if test="addtime != null">AddTime,</if>
+            <if test="history != null">History,</if>
+            <if test="deptname != null">DeptName,</if>
+            <if test="isdeleted != null">IsDeleted,</if>
+            <if test="dictid != null">DictID,</if>
+            <if test="clueid != null and clueid != ''">ClueID,</if>
+            <if test="userid != null">UserID,</if>
+            <if test="category != null">Category,</if>
+            <if test="pdfid != null">PdfID,</if>
+            <if test="stepid != null">StepID,</if>
+            <if test="filesize != null">FileSize,</if>
+            <if test="stepname != null">StepName,</if>
+            <if test="username != null">UserName,</if>
+            <if test="state != null">State,</if>
+            <if test="applystamp != null">ApplyStamp,</if>
+            <if test="addstamp != null">AddStamp,</if>
+            <if test="ismeasure != null">IsMeasure,</if>
+            <if test="instanceid != null">InstanceID,</if>
+            <if test="process != null">Process,</if>
+            <if test="flowid != null">FlowID,</if>
+            <if test="groupid != null">GroupID,</if>
+            <if test="niwenid != null">niwenID,</if>
+            <if test="code != null">Code,</if>
+            <if test="hashistory != null">HasHistory,</if>
+            <if test="sourcetype != null">sourceType,</if>
+            <if test="issync != null">IsSync,</if>
+            <if test="wenshuid != null">WenShuID,</if>
+            <if test="stepstate != null">StepState,</if>
+            <if test="filepathid != null">FilePathID,</if>
+            <if test="docabbreviation != null">DocAbbreviation,</if>
+            <if test="printnum != null">PrintNum,</if>
+            <if test="isofd != null">IsOfd,</if>
+            <if test="isoldspb != null">IsOldSpb,</if>
+            <if test="isthing != null">IsThing,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="filename != null">#{filename},</if>
+            <if test="basepath != null">#{basepath},</if>
+            <if test="savepath != null">#{savepath},</if>
+            <if test="fileextend != null and fileextend != ''">#{fileextend},</if>
+            <if test="editor != null">#{editor},</if>
+            <if test="addtime != null">#{addtime},</if>
+            <if test="history != null">#{history},</if>
+            <if test="deptname != null">#{deptname},</if>
+            <if test="isdeleted != null">#{isdeleted},</if>
+            <if test="dictid != null">#{dictid},</if>
+            <if test="clueid != null and clueid != ''">#{clueid},</if>
+            <if test="userid != null">#{userid},</if>
+            <if test="category != null">#{category},</if>
+            <if test="pdfid != null">#{pdfid},</if>
+            <if test="stepid != null">#{stepid},</if>
+            <if test="filesize != null">#{filesize},</if>
+            <if test="stepname != null">#{stepname},</if>
+            <if test="username != null">#{username},</if>
+            <if test="state != null">#{state},</if>
+            <if test="applystamp != null">#{applystamp},</if>
+            <if test="addstamp != null">#{addstamp},</if>
+            <if test="ismeasure != null">#{ismeasure},</if>
+            <if test="instanceid != null">#{instanceid},</if>
+            <if test="process != null">#{process},</if>
+            <if test="flowid != null">#{flowid},</if>
+            <if test="groupid != null">#{groupid},</if>
+            <if test="niwenid != null">#{niwenid},</if>
+            <if test="code != null">#{code},</if>
+            <if test="hashistory != null">#{hashistory},</if>
+            <if test="sourcetype != null">#{sourcetype},</if>
+            <if test="issync != null">#{issync},</if>
+            <if test="wenshuid != null">#{wenshuid},</if>
+            <if test="stepstate != null">#{stepstate},</if>
+            <if test="filepathid != null">#{filepathid},</if>
+            <if test="docabbreviation != null">#{docabbreviation},</if>
+            <if test="printnum != null">#{printnum},</if>
+            <if test="isofd != null">#{isofd},</if>
+            <if test="isoldspb != null">#{isoldspb},</if>
+            <if test="isthing != null">#{isthing},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFileupload" parameterType="Fileupload">
+        update fileupload
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="filename != null">FileName = #{filename},</if>
+            <if test="basepath != null">BasePath = #{basepath},</if>
+            <if test="savepath != null">SavePath = #{savepath},</if>
+            <if test="fileextend != null and fileextend != ''">FileExtend = #{fileextend},</if>
+            <if test="editor != null">Editor = #{editor},</if>
+            <if test="addtime != null">AddTime = #{addtime},</if>
+            <if test="history != null">History = #{history},</if>
+            <if test="deptname != null">DeptName = #{deptname},</if>
+            <if test="isdeleted != null">IsDeleted = #{isdeleted},</if>
+            <if test="dictid != null">DictID = #{dictid},</if>
+            <if test="clueid != null and clueid != ''">ClueID = #{clueid},</if>
+            <if test="userid != null">UserID = #{userid},</if>
+            <if test="category != null">Category = #{category},</if>
+            <if test="pdfid != null">PdfID = #{pdfid},</if>
+            <if test="stepid != null">StepID = #{stepid},</if>
+            <if test="filesize != null">FileSize = #{filesize},</if>
+            <if test="stepname != null">StepName = #{stepname},</if>
+            <if test="username != null">UserName = #{username},</if>
+            <if test="state != null">State = #{state},</if>
+            <if test="applystamp != null">ApplyStamp = #{applystamp},</if>
+            <if test="addstamp != null">AddStamp = #{addstamp},</if>
+            <if test="ismeasure != null">IsMeasure = #{ismeasure},</if>
+            <if test="instanceid != null">InstanceID = #{instanceid},</if>
+            <if test="process != null">Process = #{process},</if>
+            <if test="flowid != null">FlowID = #{flowid},</if>
+            <if test="groupid != null">GroupID = #{groupid},</if>
+            <if test="niwenid != null">niwenID = #{niwenid},</if>
+            <if test="code != null">Code = #{code},</if>
+            <if test="hashistory != null">HasHistory = #{hashistory},</if>
+            <if test="sourcetype != null">sourceType = #{sourcetype},</if>
+            <if test="issync != null">IsSync = #{issync},</if>
+            <if test="wenshuid != null">WenShuID = #{wenshuid},</if>
+            <if test="stepstate != null">StepState = #{stepstate},</if>
+            <if test="filepathid != null">FilePathID = #{filepathid},</if>
+            <if test="docabbreviation != null">DocAbbreviation = #{docabbreviation},</if>
+            <if test="printnum != null">PrintNum = #{printnum},</if>
+            <if test="isofd != null">IsOfd = #{isofd},</if>
+            <if test="isoldspb != null">IsOldSpb = #{isoldspb},</if>
+            <if test="isthing != null">IsThing = #{isthing},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteFileuploadById" parameterType="String">
+        delete from fileupload where ID = #{id}
+    </delete>
+
+    <delete id="deleteFileuploadByIds" parameterType="String">
+        delete from fileupload where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

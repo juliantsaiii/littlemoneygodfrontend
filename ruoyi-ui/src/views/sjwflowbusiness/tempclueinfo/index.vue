@@ -177,17 +177,24 @@
         :min-width="200"
       >
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="fileuploaddialog = true;openviewdialog(scope.row.id)"
+          >附件</el-button>
           <router-link
             :to="{path:'/sjwflowbusiness/workflowtask/',query: {id: scope.row.id}}"
             class="link-type"
           >
             <el-button size="mini" type="text" icon="el-icon-edit">步骤</el-button>
           </router-link>
+
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="openviewdialog(scope.row.id)"
+            @click="infoviewdialog = true;openviewdialog(scope.row.id)"
           >跳转</el-button>
         </template>
       </el-table-column>
@@ -206,6 +213,12 @@
         <displayview :curclueid="currentclueid"></displayview>
       </template>
     </el-dialog>
+
+    <el-dialog title="附件" :visible.sync="fileuploaddialog" width="80%">
+      <template>
+        <fileupload :curclueid="currentclueid" :isdialog="true"></fileupload>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -219,8 +232,9 @@ import {
   exportTempclueinfo
 } from "@/api/sjwflowbusiness/tempclueinfo";
 import displayview from "@/views/tool/go/displayview";
+import fileupload from "@/views/sjwflowbusiness/fileupload/index";
 export default {
-  components: { displayview },
+  components: { displayview, fileupload },
   name: "Tempclueinfo",
   data() {
     return {
@@ -259,6 +273,8 @@ export default {
       tableHeight: this.$store.getters.clientHeight - 250 + "px",
       //流程图框
       infoviewdialog: false,
+      //附件框
+      fileuploaddialog: false,
       //选中clueid
       currentclueid: undefined
     };
@@ -486,7 +502,6 @@ export default {
     /** 打开流程图框 */
     openviewdialog(id) {
       this.currentclueid = id;
-      this.infoviewdialog = true;
     }
   }
 };
