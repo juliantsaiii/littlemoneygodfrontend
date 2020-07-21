@@ -44,7 +44,7 @@
       v-loading="loading"
       :data="workflowtaskList"
       @selection-change="handleSelectionChange"
-      :max-height="tableHeight"
+      :height="tableHeight"
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column
@@ -68,6 +68,25 @@
         min-width="200"
         :show-overflow-tooltip="true"
       />
+      <el-table-column label="发送人" align="center" prop="sendername" />
+      <el-table-column label="接收人" align="center" prop="receivename" />
+      <el-table-column label="接收时间" align="center" min-width="100" prop="receivetime">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.receivetime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="status" align="center" :min-width="100">
+        <template slot-scope="scope">
+          <el-select v-model="scope.row.status" placeholder @change="updateform(scope.row)">
+            <el-option
+              v-for="dict in statusOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="Number(dict.dictValue)"
+            ></el-option>
+          </el-select>
+        </template>
+      </el-table-column>
       <el-table-column
         label="instanceid"
         align="center"
@@ -82,26 +101,8 @@
         :show-overflow-tooltip="true"
         min-width="300"
       />
-      <el-table-column label="发送人" align="center" prop="sendername" />
-      <el-table-column label="接收人" align="center" prop="receivename" />
-      <el-table-column label="接收时间" align="center" min-width="100" prop="receivetime">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.receivetime) }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="note" align="center" prop="note" />
-      <el-table-column label="status" align="center" :min-width="100">
-        <template slot-scope="scope">
-          <el-select v-model="scope.row.status" placeholder @change="updateform(scope.row)">
-            <el-option
-              v-for="dict in statusOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="Number(dict.dictValue)"
-            ></el-option>
-          </el-select>
-        </template>
-      </el-table-column>
+
       <el-table-column label="步骤阶段" align="center" prop="stepstate" />
       <el-table-column label="databasename" align="center" prop="databasename" min-width="150" />
       <el-table-column label="infotype" align="center" prop="infotype" />
@@ -207,7 +208,7 @@ export default {
           }
         ]
       },
-      tableHeight: this.$store.getters.clientHeight - 250 + "px",
+      tableHeight: this.$store.getters.clientHeight - 200 + "px",
       dialogTreeVisible: false
     };
   },

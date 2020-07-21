@@ -98,12 +98,42 @@
       :max-height="tableHeight"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" align="center" prop="id" :show-overflow-tooltip="true" />
-      <el-table-column label="姓名" align="center" prop="personname" />
-      <el-table-column label="单位" align="center" prop="unitname" :show-overflow-tooltip="true" />
-      <el-table-column label="职务" align="center" prop="personunit" :show-overflow-tooltip="true" />
-      <el-table-column label="职级" align="center" prop="personlevel" :show-overflow-tooltip="true" />
-      <el-table-column label="编号" align="center" prop="cluecode" :show-overflow-tooltip="true">
+      <el-table-column
+        label="ID"
+        align="center"
+        prop="id"
+        :show-overflow-tooltip="true"
+        :min-width="300"
+      />
+      <el-table-column label="姓名" align="center" prop="personname" :min-width="150" />
+      <el-table-column
+        label="单位"
+        align="center"
+        prop="unitname"
+        :show-overflow-tooltip="true"
+        :min-width="150"
+      />
+      <el-table-column
+        label="职务"
+        align="center"
+        prop="personunit"
+        :show-overflow-tooltip="true"
+        :min-width="150"
+      />
+      <el-table-column
+        label="职级"
+        align="center"
+        prop="personlevel"
+        :show-overflow-tooltip="true"
+        :min-width="150"
+      />
+      <el-table-column
+        label="编号"
+        align="center"
+        prop="cluecode"
+        :show-overflow-tooltip="true"
+        :min-width="200"
+      >
         <template slot-scope="scope">
           <span>{{scope.row.cluecode}}/{{scope.row.clueno}}</span>
         </template>
