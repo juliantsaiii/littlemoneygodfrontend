@@ -98,12 +98,42 @@
       :max-height="tableHeight"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" align="center" prop="id" :show-overflow-tooltip="true" />
-      <el-table-column label="姓名" align="center" prop="personname" />
-      <el-table-column label="单位" align="center" prop="unitname" :show-overflow-tooltip="true" />
-      <el-table-column label="职务" align="center" prop="personunit" :show-overflow-tooltip="true" />
-      <el-table-column label="职级" align="center" prop="personlevel" :show-overflow-tooltip="true" />
-      <el-table-column label="编号" align="center" prop="cluecode" :show-overflow-tooltip="true">
+      <el-table-column
+        label="ID"
+        align="center"
+        prop="id"
+        :show-overflow-tooltip="true"
+        :min-width="300"
+      />
+      <el-table-column label="姓名" align="center" prop="personname" :min-width="150" />
+      <el-table-column
+        label="单位"
+        align="center"
+        prop="unitname"
+        :show-overflow-tooltip="true"
+        :min-width="150"
+      />
+      <el-table-column
+        label="职务"
+        align="center"
+        prop="personunit"
+        :show-overflow-tooltip="true"
+        :min-width="150"
+      />
+      <el-table-column
+        label="职级"
+        align="center"
+        prop="personlevel"
+        :show-overflow-tooltip="true"
+        :min-width="150"
+      />
+      <el-table-column
+        label="编号"
+        align="center"
+        prop="cluecode"
+        :show-overflow-tooltip="true"
+        :min-width="200"
+      >
         <template slot-scope="scope">
           <span>{{scope.row.cluecode}}/{{scope.row.clueno}}</span>
         </template>
@@ -147,17 +177,24 @@
         :min-width="200"
       >
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="fileuploaddialog = true;openviewdialog(scope.row.id)"
+          >附件</el-button>
           <router-link
             :to="{path:'/sjwflowbusiness/workflowtask/',query: {id: scope.row.id}}"
             class="link-type"
           >
             <el-button size="mini" type="text" icon="el-icon-edit">步骤</el-button>
           </router-link>
+
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="openviewdialog(scope.row.id)"
+            @click="infoviewdialog = true;openviewdialog(scope.row.id)"
           >跳转</el-button>
         </template>
       </el-table-column>
@@ -176,6 +213,12 @@
         <displayview :curclueid="currentclueid"></displayview>
       </template>
     </el-dialog>
+
+    <el-dialog title="附件" :visible.sync="fileuploaddialog" width="80%">
+      <template>
+        <fileupload :curclueid="currentclueid" :isdialog="true"></fileupload>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -189,8 +232,9 @@ import {
   exportTempclueinfo
 } from "@/api/sjwflowbusiness/tempclueinfo";
 import displayview from "@/views/tool/go/displayview";
+import fileupload from "@/views/sjwflowbusiness/fileupload/index";
 export default {
-  components: { displayview },
+  components: { displayview, fileupload },
   name: "Tempclueinfo",
   data() {
     return {
@@ -229,6 +273,8 @@ export default {
       tableHeight: this.$store.getters.clientHeight - 250 + "px",
       //流程图框
       infoviewdialog: false,
+      //附件框
+      fileuploaddialog: false,
       //选中clueid
       currentclueid: undefined
     };
@@ -456,7 +502,6 @@ export default {
     /** 打开流程图框 */
     openviewdialog(id) {
       this.currentclueid = id;
-      this.infoviewdialog = true;
     }
   }
 };
