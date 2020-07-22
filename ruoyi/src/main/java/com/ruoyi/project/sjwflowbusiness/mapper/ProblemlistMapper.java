@@ -1,6 +1,8 @@
 package com.ruoyi.project.sjwflowbusiness.mapper;
 
 import java.util.List;
+
+import com.ruoyi.project.sjwflowbusiness.domain.CountMapper;
 import com.ruoyi.project.sjwflowbusiness.domain.Problemlist;
 
 /**
@@ -58,4 +60,10 @@ public interface ProblemlistMapper
      * @return 结果
      */
     public int deleteProblemlistByIds(String[] ids);
+
+    /**
+     * 获取运维类型统计
+     * @return
+     */
+    public List<CountMapper> selectServiceTypeCount();
 }

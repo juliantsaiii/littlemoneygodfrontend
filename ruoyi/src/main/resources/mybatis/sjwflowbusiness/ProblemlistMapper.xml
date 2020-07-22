@@ -31,6 +31,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isdeleted"    column="IsDeleted"    />
     </resultMap>
 
+    <resultMap type="com.ruoyi.project.sjwflowbusiness.domain.CountMapper" id="CountMapperResult">
+        <result property="value"    column="Value"    />
+        <result property="name"    column="Name"    />
+    </resultMap>
+
     <sql id="selectProblemlistVo">
         select ID, MainID, CreateUserID, CreateUserName, CreateDeptID, CreateDeptName, Number, CreateDate, PArea, POffice, PClass, PName, PPhone, Servicetype, Problem, ClueCode, HandleType, HandleState, IsUp, HandleStaff, CurrentStep, Status, Timestamp, IsDeleted from problemlist
     </sql>
@@ -45,6 +50,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectProblemlistById" parameterType="String" resultMap="ProblemlistResult">
         <include refid="selectProblemlistVo"/>
         where ID = #{id}
+    </select>
+
+    <select id="selectServiceTypeCount" resultMap="CountMapperResult">
+        select count(Servicetype) as value ,Servicetype as name from problemlist group by Servicetype
     </select>
         
     <insert id="insertProblemlist" parameterType="Problemlist">

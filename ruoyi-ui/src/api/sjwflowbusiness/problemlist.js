@@ -51,3 +51,12 @@ export function exportProblemlist(query) {
     params: query
   })
 }
+
+
+// 查询运维类型统计
+export function listServiceType() {
+  return request({
+    url: '/sjwflowbusiness/problemlist/selectServiceTypeCount',
+    method: 'post'
+  })
+}

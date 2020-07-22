@@ -1,6 +1,8 @@
 package com.ruoyi.project.sjwflowbusiness.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.project.sjwflowbusiness.domain.CountMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.sjwflowbusiness.mapper.ProblemlistMapper;
@@ -90,4 +92,10 @@ public class ProblemlistServiceImpl implements IProblemlistService
     {
         return problemlistMapper.deleteProblemlistById(id);
     }
+
+    /**
+     * 获取运维类型统计
+     * @return
+     */
+    public List<CountMapper> selectServiceTypeCount(){ return problemlistMapper.selectServiceTypeCount();}
 }

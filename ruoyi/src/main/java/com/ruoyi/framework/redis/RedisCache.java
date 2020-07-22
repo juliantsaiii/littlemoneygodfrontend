@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
@@ -79,6 +80,20 @@ public class RedisCache
     {
         redisTemplate.delete(key);
     }
+
+    /**
+     * 根据database删除单个对象
+     * @param key
+     * @param index
+     */
+    public void deleteObject(String key,int index){
+        LettuceConnectionFactory jedisConnectionFactory = (LettuceConnectionFactory) redisTemplate.getConnectionFactory();
+        jedisConnectionFactory.setDatabase(index);
+        redisTemplate.setConnectionFactory(jedisConnectionFactory);
+        jedisConnectionFactory.resetConnection();
+        redisTemplate.delete(key);
+    }
+
 
     /**
      * 删除集合对象

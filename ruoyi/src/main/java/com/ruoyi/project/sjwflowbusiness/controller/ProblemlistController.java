@@ -3,6 +3,7 @@ package com.ruoyi.project.sjwflowbusiness.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.ruoyi.framework.redis.RedisCache;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,9 @@ public class ProblemlistController extends BaseController
 {
     @Autowired
     private IProblemlistService problemlistService;
+
+    @Autowired
+    private RedisCache redisCache;
 
     /**
      * 查询运维记录列表
@@ -102,5 +106,18 @@ public class ProblemlistController extends BaseController
     public AjaxResult remove(@PathVariable String[] ids)
     {
         return toAjax(problemlistService.deleteProblemlistByIds(ids));
+    }
+
+    @PostMapping("/deleteRedis/{id}")
+    public AjaxResult removeRedis(@PathVariable("id") String id)
+    {
+        redisCache.deleteObject(id,1);
+        return toAjax(1);
+    }
+
+    @PostMapping("/selectServiceTypeCount")
+    public AjaxResult selectServiceTypeCount()
+    {
+        return AjaxResult.success(problemlistService.selectServiceTypeCount());
     }
 }

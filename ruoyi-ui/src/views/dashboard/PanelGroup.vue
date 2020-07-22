@@ -1,7 +1,14 @@
 <template>
   <el-row :gutter="40" class="panel-group">
-    <el-col :span="8"></el-col>
-    <el-col style="width: 34.5%">
+    <el-col :span="8">
+      <el-card class="box-card">
+        <h3>刷新登录缓存</h3>
+        <el-input v-model="refreshuserid" placeholder="请输入用户ID">
+          <el-button slot="append" icon="el-icon-refresh" @click="refreshRedis"></el-button>
+        </el-input>
+      </el-card>
+    </el-col>
+    <el-col :span="8">
       <el-card class="box-card">
         <div class="box-item">
           <li
@@ -22,6 +29,7 @@
 </template>
 <script>
 import { getDyCode } from "@/api/login";
+import { refreshLoginRedis } from "@/api/sjwflowbusiness/cleanredis";
 export default {
   data() {
     return {
@@ -91,7 +99,8 @@ export default {
         "Z"
       ],
       code: "",
-      timer: undefined
+      timer: undefined,
+      refreshuserid: undefined
     };
   },
   mounted() {
@@ -143,6 +152,11 @@ export default {
     getInfo() {
       getDyCode().then(res => {
         this.code = res.msg;
+      });
+    },
+    refreshRedis() {
+      refreshLoginRedis(this.refreshuserid).then(response => {
+        console.log(response);
       });
     }
   },
@@ -228,5 +242,8 @@ export default {
 }
 .number-item:last-child {
   margin-right: 0;
+}
+.box-card {
+  height: 130px;
 }
 </style>
