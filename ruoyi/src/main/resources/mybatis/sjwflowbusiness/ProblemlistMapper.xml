@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowbusiness.mapper.ProblemlistMapper">
+    
+    <resultMap type="Problemlist" id="ProblemlistResult">
+        <result property="id"    column="ID"    />
+        <result property="mainid"    column="MainID"    />
+        <result property="createuserid"    column="CreateUserID"    />
+        <result property="createusername"    column="CreateUserName"    />
+        <result property="createdeptid"    column="CreateDeptID"    />
+        <result property="createdeptname"    column="CreateDeptName"    />
+        <result property="number"    column="Number"    />
+        <result property="createdate"    column="CreateDate"    />
+        <result property="parea"    column="PArea"    />
+        <result property="poffice"    column="POffice"    />
+        <result property="pclass"    column="PClass"    />
+        <result property="pname"    column="PName"    />
+        <result property="pphone"    column="PPhone"    />
+        <result property="servicetype"    column="Servicetype"    />
+        <result property="problem"    column="Problem"    />
+        <result property="cluecode"    column="ClueCode"    />
+        <result property="handletype"    column="HandleType"    />
+        <result property="handlestate"    column="HandleState"    />
+        <result property="isup"    column="IsUp"    />
+        <result property="handlestaff"    column="HandleStaff"    />
+        <result property="currentstep"    column="CurrentStep"    />
+        <result property="status"    column="Status"    />
+        <result property="timestamp"    column="Timestamp"    />
+        <result property="isdeleted"    column="IsDeleted"    />
+    </resultMap>
+
+    <sql id="selectProblemlistVo">
+        select ID, MainID, CreateUserID, CreateUserName, CreateDeptID, CreateDeptName, Number, CreateDate, PArea, POffice, PClass, PName, PPhone, Servicetype, Problem, ClueCode, HandleType, HandleState, IsUp, HandleStaff, CurrentStep, Status, Timestamp, IsDeleted from problemlist
+    </sql>
+
+    <select id="selectProblemlistList" parameterType="Problemlist" resultMap="ProblemlistResult">
+        <include refid="selectProblemlistVo"/>
+        <where>  
+        </where>
+        order by createdate desc
+    </select>
+    
+    <select id="selectProblemlistById" parameterType="String" resultMap="ProblemlistResult">
+        <include refid="selectProblemlistVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertProblemlist" parameterType="Problemlist">
+        insert into problemlist
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="mainid != null">MainID,</if>
+            <if test="createuserid != null">CreateUserID,</if>
+            <if test="createusername != null">CreateUserName,</if>
+            <if test="createdeptid != null">CreateDeptID,</if>
+            <if test="createdeptname != null">CreateDeptName,</if>
+            <if test="number != null">Number,</if>
+            <if test="createdate != null">CreateDate,</if>
+            <if test="parea != null">PArea,</if>
+            <if test="poffice != null">POffice,</if>
+            <if test="pclass != null">PClass,</if>
+            <if test="pname != null">PName,</if>
+            <if test="pphone != null">PPhone,</if>
+            <if test="servicetype != null">Servicetype,</if>
+            <if test="problem != null">Problem,</if>
+            <if test="cluecode != null">ClueCode,</if>
+            <if test="handletype != null">HandleType,</if>
+            <if test="handlestate != null">HandleState,</if>
+            <if test="isup != null">IsUp,</if>
+            <if test="handlestaff != null">HandleStaff,</if>
+            <if test="currentstep != null">CurrentStep,</if>
+            <if test="status != null">Status,</if>
+            <if test="timestamp != null">Timestamp,</if>
+            <if test="isdeleted != null">IsDeleted,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="mainid != null">#{mainid},</if>
+            <if test="createuserid != null">#{createuserid},</if>
+            <if test="createusername != null">#{createusername},</if>
+            <if test="createdeptid != null">#{createdeptid},</if>
+            <if test="createdeptname != null">#{createdeptname},</if>
+            <if test="number != null">#{number},</if>
+            <if test="createdate != null">#{createdate},</if>
+            <if test="parea != null">#{parea},</if>
+            <if test="poffice != null">#{poffice},</if>
+            <if test="pclass != null">#{pclass},</if>
+            <if test="pname != null">#{pname},</if>
+            <if test="pphone != null">#{pphone},</if>
+            <if test="servicetype != null">#{servicetype},</if>
+            <if test="problem != null">#{problem},</if>
+            <if test="cluecode != null">#{cluecode},</if>
+            <if test="handletype != null">#{handletype},</if>
+            <if test="handlestate != null">#{handlestate},</if>
+            <if test="isup != null">#{isup},</if>
+            <if test="handlestaff != null">#{handlestaff},</if>
+            <if test="currentstep != null">#{currentstep},</if>
+            <if test="status != null">#{status},</if>
+            <if test="timestamp != null">#{timestamp},</if>
+            <if test="isdeleted != null">#{isdeleted},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProblemlist" parameterType="Problemlist">
+        update problemlist
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mainid != null">MainID = #{mainid},</if>
+            <if test="createuserid != null">CreateUserID = #{createuserid},</if>
+            <if test="createusername != null">CreateUserName = #{createusername},</if>
+            <if test="createdeptid != null">CreateDeptID = #{createdeptid},</if>
+            <if test="createdeptname != null">CreateDeptName = #{createdeptname},</if>
+            <if test="number != null">Number = #{number},</if>
+            <if test="createdate != null">CreateDate = #{createdate},</if>
+            <if test="parea != null">PArea = #{parea},</if>
+            <if test="poffice != null">POffice = #{poffice},</if>
+            <if test="pclass != null">PClass = #{pclass},</if>
+            <if test="pname != null">PName = #{pname},</if>
+            <if test="pphone != null">PPhone = #{pphone},</if>
+            <if test="servicetype != null">Servicetype = #{servicetype},</if>
+            <if test="problem != null">Problem = #{problem},</if>
+            <if test="cluecode != null">ClueCode = #{cluecode},</if>
+            <if test="handletype != null">HandleType = #{handletype},</if>
+            <if test="handlestate != null">HandleState = #{handlestate},</if>
+            <if test="isup != null">IsUp = #{isup},</if>
+            <if test="handlestaff != null">HandleStaff = #{handlestaff},</if>
+            <if test="currentstep != null">CurrentStep = #{currentstep},</if>
+            <if test="status != null">Status = #{status},</if>
+            <if test="timestamp != null">Timestamp = #{timestamp},</if>
+            <if test="isdeleted != null">IsDeleted = #{isdeleted},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteProblemlistById" parameterType="String">
+        delete from problemlist where ID = #{id}
+    </delete>
+
+    <delete id="deleteProblemlistByIds" parameterType="String">
+        delete from problemlist where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

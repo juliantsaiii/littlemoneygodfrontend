@@ -219,7 +219,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 30,
         dictName: undefined,
         dictType: undefined,
         status: undefined

@@ -25,7 +25,7 @@ import { getDyCode } from "@/api/login";
 export default {
   data() {
     return {
-      orderNum: ["0", "0", "0", "0", "0", "0", "0", "0", "0"], // 默认订单总数
+      orderNum: ["0", "0", "0", "0", "0", "0", "0", "0"], // 默认订单总数
       orderSort: [
         "a",
         "b",
