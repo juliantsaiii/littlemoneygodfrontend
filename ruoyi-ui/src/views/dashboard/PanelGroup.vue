@@ -5,12 +5,12 @@
       <el-card class="box-card">
         <div class="box-item">
           <li
-            :class="{'number-item': !isNaN(item), 'mark-item': isNaN(item) }"
+            :class="{'number-item':item, 'mark-item': item}"
             v-for="(item,index) in orderNum"
             :key="index"
           >
-            <span v-if="!isNaN(item)">
-              <i ref="numberItem">0123456789</i>
+            <span v-if="item">
+              <i ref="numberItem">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</i>
             </span>
             <span class="comma" v-else>{{item}}</span>
           </li>
@@ -21,36 +21,111 @@
   </el-row>
 </template>
 <script>
+import { getDyCode } from "@/api/login";
 export default {
   data() {
     return {
       orderNum: ["0", "0", "0", "0", "0", "0", "0", "0", "0"], // 默认订单总数
-      code: "535322652"
+      orderSort: [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k",
+        "l",
+        "m",
+        "n",
+        "o",
+        "p",
+        "q",
+        "r",
+        "s",
+        "t",
+        "u",
+        "v",
+        "w",
+        "x",
+        "y",
+        "z",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z"
+      ],
+      code: "",
+      timer: undefined
     };
   },
   mounted() {
     this.$nextTick(() => {
-      this.orderNum = this.code.split(""); // 这里输入数字即可调用
-      this.increaseNumber();
+      setInterval(() => {
+        this.getInfo();
+      }, 100000);
+      this.getInfo();
+      // this.increaseNumber();
     });
+  },
+  watch: {
+    code(val) {
+      this.increaseNumber();
+    }
   },
   methods: {
     // 定时增长数字
     increaseNumber() {
+      this.orderNum = this.code.split(""); // 这里输入数字即可调用
       let self = this;
       this.timer = setInterval(() => {
-        self.newNumber = self.newNumber + this.getRandomNumber(1, 100);
         self.setNumberTransform();
-      }, 3000);
+      }, 1000);
     },
     // 设置文字滚动
     setNumberTransform() {
       const numberItems = this.$refs.numberItem; // 拿到数字的ref，计算元素数量
-      const numberArr = this.orderNum.filter(item => !isNaN(item));
+
       // 结合CSS 对数字字符进行滚动,显示订单数量
       for (let index = 0; index < numberItems.length; index++) {
         const elem = numberItems[index];
-        elem.style.transform = `translate(-50%, -${numberArr[index] * 10}%)`;
+        const numberArr = this.findeindex(this.orderNum[index]);
+        elem.style.transform = `translate(-50%, -${numberArr * 1.61290322}%)`;
       }
     },
     getRandomNumber(min, max) {
@@ -58,7 +133,21 @@ export default {
     },
     onCopy() {
       this.msgSuccess("已复制到剪切板");
+    },
+    /** 获取字符下标 */
+    findeindex(num) {
+      return this.orderSort.findIndex(v => {
+        return v == num;
+      });
+    },
+    getInfo() {
+      getDyCode().then(res => {
+        this.code = res.msg;
+      });
     }
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   }
 };
 </script>
@@ -129,11 +218,11 @@ export default {
     & > i {
       font-style: normal;
       position: absolute;
-      top: 11px;
+      top: 13px;
       left: 50%;
       transform: translate(-50%, 0);
       transition: transform 1s ease-in-out;
-      letter-spacing: 10px;
+      letter-spacing: 15px;
     }
   }
 }

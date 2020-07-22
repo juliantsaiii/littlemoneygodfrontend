@@ -1,5 +1,8 @@
 package com.ruoyi.test;
 
+import com.ruoyi.common.utils.security.Md5Utils;
+import com.ruoyi.project.tool.dynamic.domain.Dynamictoken;
+import com.ruoyi.project.tool.dynamic.service.IDynamictokenService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,18 +13,28 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.UUID;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class TestDemo {
-
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private IDynamictokenService dynamictokenService;
+
     @Test
     public void getPassword()
     {
-        String password = bCryptPasswordEncoder.encode("admin123");
-        System.out.println("加密字符串"+password);
-        System.out.println("匹配结果"+bCryptPasswordEncoder.matches("admin123",password));
+        long r = 0;
+        r = (long) ((Math.random() + 1) * 1000000000);
+        long a = System.currentTimeMillis();
+        long b = Long.parseLong(String.valueOf(r).substring(1));
+        System.out.println(a);
+
     }
 
     @Before

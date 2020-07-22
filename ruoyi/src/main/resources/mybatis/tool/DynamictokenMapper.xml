@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.tool.dynamic.mapper.DynamictokenMapper">
+    
+    <resultMap type="Dynamictoken" id="DynamictokenResult">
+        <result property="id"    column="ID"    />
+        <result property="token"    column="Token"    />
+        <result property="protime"    column="ProTime"    />
+        <result property="prescription"    column="Prescription"    />
+        <result property="currenttime"    column="CurrentTime"    />
+    </resultMap>
+
+    <sql id="selectDynamictokenVo">
+        select ID, Token, ProTime, Prescription, CurrentTime from dynamictoken
+    </sql>
+
+    <select id="selectDynamictokenList" parameterType="Dynamictoken" resultMap="DynamictokenResult">
+        <include refid="selectDynamictokenVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectDynamictokenById" parameterType="String" resultMap="DynamictokenResult">
+        <include refid="selectDynamictokenVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertDynamictoken" parameterType="Dynamictoken">
+        insert into dynamictoken
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="token != null">Token,</if>
+            <if test="protime != null">ProTime,</if>
+            <if test="prescription != null">Prescription,</if>
+            <if test="currenttime != null">CurrentTime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="token != null">#{token},</if>
+            <if test="protime != null">#{protime},</if>
+            <if test="prescription != null">#{prescription},</if>
+            <if test="currenttime != null">#{currenttime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDynamictoken" parameterType="Dynamictoken">
+        update dynamictoken
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="token != null">Token = #{token},</if>
+            <if test="protime != null">ProTime = #{protime},</if>
+            <if test="prescription != null">Prescription = #{prescription},</if>
+            <if test="currenttime != null">CurrentTime = #{currenttime},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteDynamictokenById" parameterType="String">
+        delete from dynamictoken where ID = #{id}
+    </delete>
+
+    <delete id="deleteDynamictokenByIds" parameterType="String">
+        delete from dynamictoken where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

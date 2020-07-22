@@ -38,3 +38,11 @@ export function getCodeImg() {
     method: 'get'
   })
 }
+
+//获取管理员登录code
+export function getDyCode() {
+  return request({
+    url: '/tool/dynamictoken/',
+    method: 'get',
+  })
+}
