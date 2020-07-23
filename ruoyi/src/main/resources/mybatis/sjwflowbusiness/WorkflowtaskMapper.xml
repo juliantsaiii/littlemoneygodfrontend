@@ -66,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="receivename != null  and receivename != ''"> and receivename like concat('%',#{receivename},'%')</if>
             <if test="instanceid != null  and instanceid != ''"> and instanceid = #{instanceid}</if>
         </where>
+        order by sendertime desc
     </select>
 
     <select id="selectWorkflowtaskSteps" parameterType="Workflowtask" resultMap="WorkflowtaskResult">
