@@ -136,7 +136,7 @@ export default {
       let self = this;
       this.timer = setInterval(() => {
         self.setNumberTransform();
-      }, 1000);
+      }, 100);
     },
     // 设置文字滚动
     setNumberTransform() {
@@ -171,7 +171,9 @@ export default {
         this.code = res.msg;
         this.$copyText(this.code).then(
           e => {
-            this.msgSuccess("已复制到剪切板");
+            setTimeout(() => {
+              this.msgSuccess("已复制到剪切板");
+            }, 100);
           },
           e => {
             this.msgError("复制失败");
@@ -208,7 +210,7 @@ export default {
 }
 
 .panel-group {
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 
 /*订单总量滚动数字设置*/

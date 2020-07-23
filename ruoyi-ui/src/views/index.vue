@@ -1,12 +1,33 @@
 <template>
   <div class="dashboard-editor-container">
     <panel-group />
-
-    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+    <el-card class="chart-wrapper">
+      <div slot="header" class="clearfix">
+        <span>地市运维量</span>
+      </div>
       <bar-chart />
-    </el-row>
+    </el-card>
 
     <el-row :gutter="32">
+      <el-col :xs="24" :sm="24" :lg="10">
+        <el-card class="chart-wrapper">
+          <div slot="header" class="clearfix">
+            <span>服务类型</span>
+          </div>
+          <pie-chart />
+        </el-card>
+      </el-col>
+      <el-col :xs="24" :sm="24" :lg="14">
+        <el-card class="chart-wrapper">
+          <div slot="header" class="clearfix">
+            <span>月份统计</span>
+          </div>
+          <line-chart />
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <!-- <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="10">
         <div class="chart-wrapper">
           <pie-chart />
@@ -17,7 +38,7 @@
           <line-chart />
         </div>
       </el-col>
-    </el-row>
+    </el-row>-->
   </div>
 </template>
 
@@ -46,14 +67,13 @@ export default {
 
 <style lang="scss" scoped>
 .dashboard-editor-container {
-  padding: 32px;
+  padding: 20px;
   background-color: rgb(240, 242, 245);
   position: relative;
 
   .chart-wrapper {
     background: #fff;
-    padding: 16px 16px 0;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
   }
 }
 

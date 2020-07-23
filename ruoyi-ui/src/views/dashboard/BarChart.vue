@@ -24,7 +24,7 @@ export default {
     },
     height: {
       type: String,
-      default: "300px"
+      default: "280px"
     }
   },
   data() {
@@ -95,7 +95,7 @@ export default {
             name: "数量",
             type: "bar",
             stack: "vistors",
-            barWidth: "60%",
+            barWidth: "40%",
             color: "#b698ec",
             data: this.count,
             animationDuration
