@@ -66,4 +66,16 @@ public interface IProblemlistService
      * @return
      */
     public List<CountMapper> selectServiceTypeCount();
+
+    /**
+     * 获取运维类型统计
+     * @return
+     */
+    public List<CountMapper> selectCountAreaCount();
+
+    /**
+     * 获取运维类型统计
+     * @return
+     */
+    public List<CountMapper> selectCountMonthCount(String handletype,String year);
 }

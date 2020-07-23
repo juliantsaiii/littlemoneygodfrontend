@@ -60,3 +60,20 @@ export function listServiceType() {
     method: 'post'
   })
 }
+
+
+// 查询运维类型统计
+export function pareaServiceType() {
+  return request({
+    url: '/sjwflowbusiness/problemlist/selectCountAreaCount',
+    method: 'post'
+  })
+}
+
+// 查询运维月份统计
+export function countMonthCount() {
+  return request({
+    url: '/sjwflowbusiness/problemlist/selectCountMonthCount',
+    method: 'post'
+  })
+}

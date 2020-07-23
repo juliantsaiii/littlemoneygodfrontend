@@ -10,6 +10,16 @@
     </el-col>
     <el-col :span="8">
       <el-card class="box-card">
+        <h3>刷新线索查询</h3>
+        <el-input v-model="clueid" placeholder="请输入线索ID">
+          <el-button slot="append" icon="el-icon-refresh" @click="refreshCore"></el-button>
+        </el-input>
+      </el-card>
+    </el-col>
+    <el-col :span="8">
+      <el-card class="box-card" style="
+  align-items: center;
+  display: flex;">
         <div class="box-item">
           <li
             :class="{'number-item':item, 'mark-item': item}"
@@ -22,12 +32,14 @@
             <span class="comma" v-else>{{item}}</span>
           </li>
         </div>
-        <i class="el-icon-document-copy" v-clipboard:copy="code" v-clipboard:success="onCopy"></i>
+        <!-- <i class="el-icon-document-copy" v-clipboard:copy="code" v-clipboard:success="onCopy"></i> -->
+        <i class="el-icon-refresh" @click="refreshAndCopy"></i>
       </el-card>
     </el-col>
   </el-row>
 </template>
 <script>
+import axios from "axios";
 import { getDyCode } from "@/api/login";
 import { refreshLoginRedis } from "@/api/sjwflowbusiness/cleanredis";
 export default {
@@ -100,16 +112,16 @@ export default {
       ],
       code: "",
       timer: undefined,
-      refreshuserid: undefined
+      refreshuserid: undefined,
+      clueid: undefined
     };
   },
   mounted() {
     this.$nextTick(() => {
-      setInterval(() => {
-        this.getInfo();
-      }, 100000);
-      this.getInfo();
-      // this.increaseNumber();
+      // setInterval(() => {
+      //   this.getInfo();
+      // }, 1000000);
+      // this.getInfo();
     });
   },
   watch: {
@@ -154,10 +166,34 @@ export default {
         this.code = res.msg;
       });
     },
-    refreshRedis() {
-      refreshLoginRedis(this.refreshuserid).then(response => {
-        console.log(response);
+    refreshAndCopy() {
+      getDyCode().then(res => {
+        this.code = res.msg;
+        this.$copyText(this.code).then(
+          e => {
+            this.msgSuccess("已复制到剪切板");
+          },
+          e => {
+            this.msgError("复制失败");
+          }
+        );
       });
+    },
+    /** 刷新用户缓存 */
+    refreshRedis() {
+      if (!!this.refreshuserid) {
+        refreshLoginRedis(this.refreshuserid).then(response => {
+          this.msgSuccess("刷新完成");
+        });
+      }
+    },
+    /** 刷新core表 */
+    refreshCore() {
+      if (!!this.clueid) {
+        axios.get("/refresh?clueid=" + this.clueid).then(() => {
+          this.msgSuccess("刷新完成");
+        });
+      }
     }
   },
   beforeDestroy() {
@@ -166,7 +202,7 @@ export default {
 };
 </script>
 <style scoped lang='scss'>
-.el-icon-document-copy:hover {
+.el-icon-refresh:hover {
   color: #5cb6ff;
   cursor: pointer;
 }

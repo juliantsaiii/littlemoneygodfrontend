@@ -52,8 +52,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where ID = #{id}
     </select>
 
+    <select id="selectCountMonthCount" resultMap="CountMapperResult">
+        select SUBSTR(createdate,6,2) as name,count(*) as value  from problemlist where handletype = #{handletype} and createdate like concat(#{year},'%') group by name
+    </select>
+
+    <select id="selectCountAreaCount" resultMap="CountMapperResult">
+        select count(*) as value,parea as name from problemlist where parea is not null group by PArea
+    </select>
+
     <select id="selectServiceTypeCount" resultMap="CountMapperResult">
-        select count(Servicetype) as value ,Servicetype as name from problemlist group by Servicetype
+        select count(Servicetype) as value ,Servicetype as name from problemlist where servicetype is not null group by Servicetype
     </select>
         
     <insert id="insertProblemlist" parameterType="Problemlist">

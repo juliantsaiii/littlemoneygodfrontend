@@ -1,9 +1,10 @@
 package com.ruoyi.project.sjwflowbusiness.controller;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import com.ruoyi.framework.redis.RedisCache;
+import com.ruoyi.project.sjwflowbusiness.domain.CountMapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -119,5 +120,24 @@ public class ProblemlistController extends BaseController
     public AjaxResult selectServiceTypeCount()
     {
         return AjaxResult.success(problemlistService.selectServiceTypeCount());
+    }
+
+    @PostMapping("/selectCountAreaCount")
+    public AjaxResult selectCountAreaCount()
+    {
+        return AjaxResult.success(problemlistService.selectCountAreaCount());
+    }
+
+    @PostMapping("/selectCountMonthCount")
+    public AjaxResult selectCountMonthCount()
+    {
+        Calendar date = Calendar.getInstance();
+        String year = String.valueOf(date.get(Calendar.YEAR));
+        List<CountMapper> phoneCount = problemlistService.selectCountMonthCount("电话解决",year);
+        List<CountMapper> operateCount = problemlistService.selectCountMonthCount("运维解决",year);
+        Map<String,List<CountMapper>> countData = new HashMap<>();
+        countData.put("phoneCount",phoneCount);
+        countData.put("operateCount",operateCount);
+        return AjaxResult.success(countData);
     }
 }

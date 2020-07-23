@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.project.sjwflowbusiness.domain.CountMapper;
 import com.ruoyi.project.sjwflowbusiness.domain.Problemlist;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 运维记录Mapper接口
@@ -66,4 +67,17 @@ public interface ProblemlistMapper
      * @return
      */
     public List<CountMapper> selectServiceTypeCount();
+
+
+    /**
+     * 获取运维类型统计
+     * @return
+     */
+    public List<CountMapper> selectCountAreaCount();
+
+    /**
+     * 获取运维类型统计
+     * @return
+     */
+    public List<CountMapper> selectCountMonthCount(@Param("handletype") String handletype, @Param("year") String year);
 }

@@ -66,11 +66,11 @@ export default {
         },
         series: [
           {
-            name: "WEEKLY WRITE ARTICLES",
+            name: "服务类型",
             type: "pie",
             roseType: "radius",
             radius: [15, 95],
-            center: ["50%", "45%"],
+            center: ["70%", "45%"],
             data: this.servicetypedata,
             animationEasing: "cubicInOut",
             animationDuration: 2600
@@ -80,7 +80,6 @@ export default {
     },
     getServiceType() {
       listServiceType().then(response => {
-        console.log(response);
         this.servicetypedata = response.data;
       });
     }

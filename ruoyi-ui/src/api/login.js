@@ -46,3 +46,10 @@ export function getDyCode() {
     method: 'get',
   })
 }
+
+export function test() {
+  return request({
+    url: '/users',
+    method: 'get'
+  })
+}

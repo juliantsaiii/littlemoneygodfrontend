@@ -98,4 +98,18 @@ public class ProblemlistServiceImpl implements IProblemlistService
      * @return
      */
     public List<CountMapper> selectServiceTypeCount(){ return problemlistMapper.selectServiceTypeCount();}
+
+
+    /**
+     * 获取运维类型统计
+     * @return
+     */
+    public List<CountMapper> selectCountAreaCount(){return problemlistMapper.selectCountAreaCount();};
+
+
+    /**
+     * 获取运维类型统计
+     * @return
+     */
+    public List<CountMapper> selectCountMonthCount(String handletype,String year){return problemlistMapper.selectCountMonthCount(handletype,year);};
 }
