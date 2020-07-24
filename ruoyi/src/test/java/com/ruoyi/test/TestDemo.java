@@ -1,5 +1,6 @@
 package com.ruoyi.test;
 
+import com.ruoyi.common.utils.file.SambFileUtil;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.project.tool.dynamic.domain.Dynamictoken;
 import com.ruoyi.project.tool.dynamic.service.IDynamictokenService;
@@ -26,15 +27,17 @@ public class TestDemo {
     @Autowired
     private IDynamictokenService dynamictokenService;
 
+    @Autowired
+    private SambFileUtil sambFileUtil;
+
     @Test
     public void getPassword()
     {
-        long r = 0;
-        r = (long) ((Math.random() + 1) * 1000000000);
-        long a = System.currentTimeMillis();
-        long b = Long.parseLong(String.valueOf(r).substring(1));
-        System.out.println(a);
-
+        try {
+            sambFileUtil.testSmb();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Before

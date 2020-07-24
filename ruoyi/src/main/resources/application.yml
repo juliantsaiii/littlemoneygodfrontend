@@ -13,6 +13,17 @@ ruoyi:
   # 获取ip地址开关
   addressEnabled: false
 
+# 文件服务器配置
+samba:
+  # ip地址
+  ip: 156.11.1.234
+  # 文件夹路径
+  url: 156.11.1.234/share
+  # 账号
+  name: administrator
+  # 密码
+  password: Anshare.cc
+
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080

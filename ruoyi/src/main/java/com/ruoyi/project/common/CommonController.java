@@ -2,6 +2,8 @@ package com.ruoyi.project.common;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.framework.config.RuoYiConfig;
 import com.ruoyi.framework.config.ServerConfig;
 import com.ruoyi.framework.web.domain.AjaxResult;
+
+import java.io.IOException;
 
 /**
  * 通用请求处理
@@ -37,7 +41,7 @@ public class CommonController
      * @param delete 是否删除
      */
     @GetMapping("common/download")
-    public void fileDownload(String fileName, Boolean delete, HttpServletResponse response, HttpServletRequest request)
+    public void fileDownload(String fileName, Boolean delete, String filePath,String realFileName, HttpServletResponse response, HttpServletRequest request)
     {
         try
         {
@@ -45,9 +49,14 @@ public class CommonController
             {
                 throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
             }
-            String realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf("_") + 1);
-            String filePath = RuoYiConfig.getDownloadPath() + fileName;
-
+            if(StringUtils.isEmpty(realFileName))
+            {
+                realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf("_") + 1);
+            }
+            if(StringUtils.isEmpty(filePath))
+            {
+                filePath = RuoYiConfig.getDownloadPath() + fileName;
+            }
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
             response.setHeader("Content-Disposition",
@@ -57,6 +66,50 @@ public class CommonController
             {
                 FileUtils.deleteFile(filePath);
             }
+        }
+        catch (Exception e)
+        {
+            log.error("下载文件失败", e);
+        }
+    }
+
+    /**
+     *  远程文件下载
+     * @param fileName
+     * @param delete
+     * @param filePath
+     * @param realFileName
+     * @param response
+     * @param request
+     */
+    public void smbfileDownload(String fileName, String filePath,String realFileName, HttpServletResponse response, HttpServletRequest request)
+    {
+        try
+        {
+            if (!FileUtils.isValidFilename(fileName))
+            {
+                throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
+            }
+
+
+
+
+
+
+
+            if(StringUtils.isEmpty(realFileName))
+            {
+                realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf("_") + 1);
+            }
+            if(StringUtils.isEmpty(filePath))
+            {
+                filePath = RuoYiConfig.getDownloadPath() + fileName;
+            }
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("multipart/form-data");
+            response.setHeader("Content-Disposition",
+                    "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, realFileName));
+            FileUtils.writeBytes(filePath, response.getOutputStream());
         }
         catch (Exception e)
         {
@@ -106,4 +159,6 @@ public class CommonController
                 "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, downloadName));
         FileUtils.writeBytes(downloadPath, response.getOutputStream());
     }
+
+
 }

@@ -1,5 +1,8 @@
 package com.ruoyi.common.utils.file;
 
+import jcifs.smb.SmbFile;
+import jcifs.smb.SmbFileInputStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,6 +39,58 @@ public class FileUtils
                 throw new FileNotFoundException(filePath);
             }
             fis = new FileInputStream(file);
+            byte[] b = new byte[1024];
+            int length;
+            while ((length = fis.read(b)) > 0)
+            {
+                os.write(b, 0, length);
+            }
+        }
+        catch (IOException e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (os != null)
+            {
+                try
+                {
+                    os.close();
+                }
+                catch (IOException e1)
+                {
+                    e1.printStackTrace();
+                }
+            }
+            if (fis != null)
+            {
+                try
+                {
+                    fis.close();
+                }
+                catch (IOException e1)
+                {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 将远程文件并输出指定文件的byte数组
+     *
+     * @param smbFile smb获取的文件
+     * @param os 输出流
+     * @return
+     */
+    public static void writeBytes(SmbFile smbFile, OutputStream os) throws IOException
+    {
+        SmbFileInputStream fis = null;
+        try
+        {
+            fis = new SmbFileInputStream(smbFile);
             byte[] b = new byte[1024];
             int length;
             while ((length = fis.read(b)) > 0)
