@@ -47,6 +47,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isthing"    column="IsThing"    />
     </resultMap>
 
+
+    <resultMap type="com.ruoyi.project.sjwflowbusiness.domain.FileuploadDownload" id="FileuploadDownloadResult">
+        <result property="id"    column="ID"    />
+        <result property="fileuploadid"    column="FileUploadID"    />
+        <result property="companyid"    column="CompanyID"    />
+        <result property="userid"    column="UserID"    />
+        <result property="filename"    column="FileName"    />
+        <result property="fileextend"    column="FileExtend"    />
+        <result property="basepath"    column="BasePath"    />
+    </resultMap>
+
     <sql id="selectFileuploadVo">
         select ID, FileName, BasePath, SavePath, FileExtend, Editor, AddTime, History, DeptName, IsDeleted, DictID, ClueID, UserID, Category, PdfID, StepID, FileSize, StepName, UserName, State, ApplyStamp, AddStamp, IsMeasure, InstanceID, Process, FlowID, GroupID, niwenID, Code, HasHistory, sourceType, IsSync, WenShuID, StepState, FilePathID, DocAbbreviation, PrintNum, IsOfd, IsOldSpb, IsThing from fileupload
     </sql>
@@ -63,6 +74,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectFileuploadById" parameterType="String" resultMap="FileuploadResult">
         <include refid="selectFileuploadVo"/>
         where ID = #{id}
+    </select>
+
+    <select id="selectMapperIPAddress" parameterType="String" resultType="String">
+        select mapipaddress from fileservermapping where companyid = #{id}
+    </select>
+
+    <select id="selectDownloadMsg" parameterType="String" resultMap="FileuploadDownloadResult" >
+        select fk.ID,fk.FileUploadID,u.CompanyID,f.UserID,fk.FileName,f.FileExtend,f.BasePath  from fileuploadtask fk join fileupload f on fk.fileuploadid = f.id join user u on f.UserID = u.id where IsDeleted = 0 and fileuploadid=#{id} order by fk.ModifyTime desc limit 1;
     </select>
         
     <insert id="insertFileupload" parameterType="Fileupload">

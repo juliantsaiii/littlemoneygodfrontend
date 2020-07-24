@@ -80,7 +80,12 @@
         :min-width="200"
       >
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-download">下载</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-download"
+            @click="fileDownload(scope.row.id)"
+          >下载</el-button>
           <el-button
             size="mini"
             type="text"
@@ -114,7 +119,8 @@ import {
   delFileupload,
   addFileupload,
   updateFileupload,
-  exportFileupload
+  exportFileupload,
+  getFileDownloadMsg
 } from "@/api/sjwflowbusiness/fileupload";
 import fileuploadtask from "@/views/sjwflowbusiness/fileuploadtask/index";
 
@@ -307,6 +313,11 @@ export default {
         if (res.code == "200") {
           this.msgSuccess("修改成功");
         }
+      });
+    },
+    fileDownload(id) {
+      getFileDownloadMsg(id).then(res => {
+        this.downloadbypath(res.data.filename, res.data.filepath);
       });
     }
   }

@@ -16,4 +16,8 @@ public class FileException extends BaseException
         super("file", code, args, null);
     }
 
+    public FileException(String defaultMessage)
+    {
+        this(defaultMessage,null);
+    }
 }

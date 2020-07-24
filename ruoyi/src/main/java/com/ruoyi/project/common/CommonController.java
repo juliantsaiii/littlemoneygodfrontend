@@ -3,6 +3,8 @@ package com.ruoyi.project.common;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.common.utils.file.SambFileUtil;
+import jcifs.smb.SmbFile;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,9 @@ public class CommonController
 
     @Autowired
     private ServerConfig serverConfig;
+    @Autowired
+    private SambFileUtil sambFileUtil;
+
 
     /**
      * 通用下载请求
@@ -76,40 +81,25 @@ public class CommonController
     /**
      *  远程文件下载
      * @param fileName
-     * @param delete
      * @param filePath
-     * @param realFileName
      * @param response
      * @param request
      */
-    public void smbfileDownload(String fileName, String filePath,String realFileName, HttpServletResponse response, HttpServletRequest request)
+    @GetMapping("common/downloadpath")
+    public void smbfileDownload(String fileName, String filePath, HttpServletResponse response, HttpServletRequest request)
     {
         try
         {
-            if (!FileUtils.isValidFilename(fileName))
+            SmbFile smbFile = sambFileUtil.getRemoteFile(filePath);
+            if(smbFile == null)
             {
-                throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
-            }
-
-
-
-
-
-
-
-            if(StringUtils.isEmpty(realFileName))
-            {
-                realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf("_") + 1);
-            }
-            if(StringUtils.isEmpty(filePath))
-            {
-                filePath = RuoYiConfig.getDownloadPath() + fileName;
+                throw new Exception(StringUtils.format("文件不存在！"));
             }
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
             response.setHeader("Content-Disposition",
-                    "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, realFileName));
-            FileUtils.writeBytes(filePath, response.getOutputStream());
+                    "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, fileName));
+            FileUtils.writeBytes(smbFile,response.getOutputStream());
         }
         catch (Exception e)
         {

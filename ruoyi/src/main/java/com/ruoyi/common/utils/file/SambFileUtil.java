@@ -1,5 +1,6 @@
 package com.ruoyi.common.utils.file;
 
+import com.ruoyi.common.exception.file.FileException;
 import com.ruoyi.common.utils.StringUtils;
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbFile;
@@ -27,46 +28,37 @@ public class SambFileUtil {
     public  void testSmb() throws Exception {
         String path = profile + "/download/";
         String remotePath = url+"/UploadFiles/Upload/2020/5fae2ab2-450e-4e29-bdea-342c6362888f/67d63743-0490-4962-bf60-24f4802a9781/bbee22ad-f55d-4c79-812c-84cebba9b358.jpg";
-        getRemoteFile(name,password,remotePath,path);
     }
 
 
     /**
      * 获取远程文件
-     * @param remoteUsername 远程目录访问用户名
-     * @param remotePassword 远程目录访问密码
      * @param remoteFilepath 远程文件地址,该参数需以IP打头,如'192.168.8.2/aa/bb.java'或者'192.168.8.2/aa/',如'192.168.8.2/aa'是不对的
-     * @param localDirectory 本地存储目录,该参数需以'/'结尾,如'D:/'或者'D:/mylocal/'
      * @return boolean 是否获取成功
      * @throws Exception
      */
-    public static boolean getRemoteFile(String remoteUsername, String remotePassword, String remoteFilepath,
-                                        String localDirectory) throws Exception {
-        boolean isSuccess = Boolean.FALSE;
+    public SmbFile getRemoteFile(String remoteFilepath) throws Exception {
+        remoteFilepath = url + remoteFilepath;
         if (remoteFilepath.startsWith("/") || remoteFilepath.startsWith("\\")) {
-            return isSuccess;
-        }
-        if (!(localDirectory.endsWith("/") || localDirectory.endsWith("\\"))) {
-            return isSuccess;
+            throw new FileException("文件服务器路径错误！");
         }
         SmbFile smbFile = null;
-        if (StringUtils.isNotEmpty(remoteUsername) && StringUtils.isNotEmpty(remotePassword)) {
-            smbFile = new SmbFile("smb://" + remoteUsername + ":" + remotePassword + "@" + remoteFilepath);
+        if (StringUtils.isNotEmpty(name) && StringUtils.isNotEmpty(password)) {
+            smbFile = new SmbFile("smb://" + name + ":" + password + "@" + remoteFilepath);
         } else {
             smbFile = new SmbFile("smb://" + remoteFilepath);
         }
 
         if (smbFile != null) {
             if (smbFile.isDirectory()) {
-                for (SmbFile file : smbFile.listFiles()) {
-                    isSuccess = copyRemoteFile(file, localDirectory);
-                }
+                throw new FileException("文件不存在！");
             } else if (smbFile.isFile()) {
-                isSuccess = copyRemoteFile(smbFile, localDirectory);
+                return smbFile;
             }
+        }else{
+            throw new FileException("文件不存在！");
         }
-
-        return isSuccess;
+        return null;
     }
 
     /**

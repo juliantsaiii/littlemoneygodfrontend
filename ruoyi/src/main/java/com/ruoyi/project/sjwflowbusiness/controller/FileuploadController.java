@@ -1,6 +1,12 @@
 package com.ruoyi.project.sjwflowbusiness.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.project.sjwflowbusiness.domain.FileuploadDownload;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +38,9 @@ public class FileuploadController extends BaseController
 {
     @Autowired
     private IFileuploadService fileuploadService;
+    //使用value注入
+    @Value("${samba.path}")
+    private String basepath;
 
     /**
      * 查询附件管理列表
@@ -99,5 +108,26 @@ public class FileuploadController extends BaseController
     public AjaxResult remove(@PathVariable String[] ids)
     {
         return toAjax(fileuploadService.deleteFileuploadByIds(ids));
+    }
+
+    @GetMapping("/getfilepath/{id}")
+    public AjaxResult getfilepath(@PathVariable String id)
+    {
+        FileuploadDownload fd = fileuploadService.selectDownloadMsg(id);
+        if(fd == null){
+           return AjaxResult.error("文件不存在！");
+        }else{
+            String path = fileuploadService.selectMapperIPAddress(fd.companyid);
+            if(StringUtils.isEmpty(path))
+            {
+                return AjaxResult.error("未找到该文件的创建者！");
+            }else{
+                path = path.replace("\\\\","").replace("\\","/") + basepath + fd.basepath + fd.getId() + fd.getFileextend();
+                Map<String,String> map = new HashMap<>();
+                map.put("filename",fd.getFilename() + fd.getFileextend());
+                map.put("filepath",path);
+                return AjaxResult.success(map);
+            }
+        }
     }
 }

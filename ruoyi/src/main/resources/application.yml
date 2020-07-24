@@ -23,6 +23,8 @@ samba:
   name: administrator
   # 密码
   password: Anshare.cc
+  # path
+  path: /UploadFiles/Upload/
 
 # 开发环境配置
 server:

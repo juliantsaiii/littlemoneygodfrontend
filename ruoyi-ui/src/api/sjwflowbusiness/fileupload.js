@@ -51,3 +51,10 @@ export function exportFileupload(query) {
     params: query
   })
 }
+
+export function getFileDownloadMsg(id) {
+  return request({
+    url: '/sjwflowbusiness/fileupload/getfilepath/' + id,
+    method: 'get'
+  })
+}

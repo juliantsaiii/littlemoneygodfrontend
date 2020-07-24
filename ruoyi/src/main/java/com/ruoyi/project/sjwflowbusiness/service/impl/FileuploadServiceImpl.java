@@ -1,6 +1,8 @@
 package com.ruoyi.project.sjwflowbusiness.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.project.sjwflowbusiness.domain.FileuploadDownload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.sjwflowbusiness.mapper.FileuploadMapper;
@@ -90,4 +92,19 @@ public class FileuploadServiceImpl implements IFileuploadService
     {
         return fileuploadMapper.deleteFileuploadById(id);
     }
+
+
+    /**
+     * 根据companyid查询文件服务器路径
+     * @param id
+     * @return
+     */
+    public String selectMapperIPAddress(String id){return fileuploadMapper.selectMapperIPAddress(id);};
+
+    /**
+     * 根据fileid获取文件下载信息
+     * @param id
+     * @return
+     */
+    public FileuploadDownload selectDownloadMsg(String id){return fileuploadMapper.selectDownloadMsg(id);};
 }

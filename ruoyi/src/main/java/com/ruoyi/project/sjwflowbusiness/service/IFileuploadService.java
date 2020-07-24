@@ -2,6 +2,8 @@ package com.ruoyi.project.sjwflowbusiness.service;
 
 import java.util.List;
 import com.ruoyi.project.sjwflowbusiness.domain.Fileupload;
+import com.ruoyi.project.sjwflowbusiness.domain.FileuploadDownload;
+import com.ruoyi.project.sjwflowbusiness.mapper.FileuploadMapper;
 
 /**
  * 附件管理Service接口
@@ -58,4 +60,18 @@ public interface IFileuploadService
      * @return 结果
      */
     public int deleteFileuploadById(String id);
+
+    /**
+     * 根据companyid查询文件服务器路径
+     * @param id
+     * @return
+     */
+    public String selectMapperIPAddress(String id);
+
+    /**
+     * 根据fileid获取文件下载信息
+     * @param id
+     * @return
+     */
+    public FileuploadDownload selectDownloadMsg(String id);
 }
