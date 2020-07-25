@@ -24,7 +24,7 @@ samba:
   # 密码
   password: Anshare.cc
   # path
-  path: /UploadFiles/Upload/
+  path: /UploadFiles/wenshu/
 
 # 开发环境配置
 server:

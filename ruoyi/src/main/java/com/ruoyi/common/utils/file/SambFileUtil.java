@@ -38,7 +38,6 @@ public class SambFileUtil {
      * @throws Exception
      */
     public SmbFile getRemoteFile(String remoteFilepath) throws Exception {
-        remoteFilepath = url + remoteFilepath;
         if (remoteFilepath.startsWith("/") || remoteFilepath.startsWith("\\")) {
             throw new FileException("文件服务器路径错误！");
         }

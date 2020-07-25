@@ -86,24 +86,25 @@ public class CommonController
      * @param request
      */
     @GetMapping("common/downloadpath")
-    public void smbfileDownload(String fileName, String filePath, HttpServletResponse response, HttpServletRequest request)
+    public AjaxResult smbfileDownload(String fileName, String filePath, HttpServletResponse response, HttpServletRequest request)
     {
         try
         {
             SmbFile smbFile = sambFileUtil.getRemoteFile(filePath);
             if(smbFile == null)
             {
-                throw new Exception(StringUtils.format("文件不存在！"));
+                return AjaxResult.error("文件不存在！");
             }
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
             response.setHeader("Content-Disposition",
                     "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, fileName));
             FileUtils.writeBytes(smbFile,response.getOutputStream());
+            return AjaxResult.success("");
         }
         catch (Exception e)
         {
-            log.error("下载文件失败", e);
+            return AjaxResult.error(e.getMessage());
         }
     }
 
