@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="ntkoofficecontrol.js"></script>
+
+
+    <!--NTKO !!!-->
+    <script type="text/javascript">
+
+
+
+        var TANGER_OCX_OBJ;
+        var TANGER_OCX_SIGN;
+        // var Word__FileID = '@Word__FileID';
+        // var StepID = '@StepID';
+        // var TaskID = '@TaskID';
+        // var CPARA = "Word__FileID=" + Word__FileID + "&StepID=" + StepID + "&TaskID=" + TaskID;
+        function init() {
+            TANGER_OCX_OBJ = document.getElementById("TANGER_OCX");
+            TANGER_OCX_OBJ.Activate(true);
+
+            if (window.navigator.platform == "Win64") {
+                TANGER_OCX_OBJ.AddDocTypePlugin(".tif", "tif.NtkoDocument", "4.0.0.2", "ntkooledocallx64.cab", 51, true);
+                TANGER_OCX_OBJ.AddDocTypePlugin(".pdf", "PDF.NtkoDocument", "4.0.0.2", "ntkooledocallx64.cab", 51, true);
+
+            } else {
+                TANGER_OCX_OBJ.AddDocTypePlugin(".pdf", "PDF.NtkoDocument", "4.0.0.2", "ntkooledocall.cab", 51, true);
+                TANGER_OCX_OBJ.AddDocTypePlugin(".tif", "tif.NtkoDocument", "4.0.0.2", "ntkooledocall.cab", 51, true);
+            }
+
+            TANGER_OCX_OBJ.Menubar = false;
+            TANGER_OCX_OBJ.ToolBars = true;
+            TANGER_OCX_OBJ.CustomToolBar = true;
+
+            TANGER_OCX_OBJ.FullScreenMode = true;
+            TANGER_OCX_OBJ.IsShowFullScreenButton = true;
+
+
+
+
+
+        }
+
+        var isreadonly = "@ReadOnly";
+        //var url = "@URL" + "?" + Math.random();
+        var url = geturl();
+        //console.log(url);
+        window.onload = function () {
+            // window.location.href = url;
+            init();
+            if (isreadonly == "1") {
+                TANGER_OCX_OBJ.BeginOpenFromURL(url, true, true);
+                // TANGER_OCX_OBJ.AddCustomToolButton("另存为", 5);
+                TANGER_OCX_OBJ.AddCustomToolButton("打印预览", 10);
+
+                TANGER_OCX_OBJ.AddCustomToolButton("打印", 9);
+                TANGER_OCX_OBJ.AddCustomToolButton("关闭", 2);
+
+            }
+
+            else {
+                TANGER_OCX_OBJ.AddCustomToolButton("保存", 5);
+                // TANGER_OCX_OBJ.AddCustomToolButton("另存为", 5);
+                TANGER_OCX_OBJ.AddCustomToolButton("打印预览", 10);
+
+                TANGER_OCX_OBJ.AddCustomToolButton("打印", 9);
+
+                TANGER_OCX_OBJ.AddCustomToolButton("关闭", 2);
+
+                TANGER_OCX_OBJ.BeginOpenFromURL(url, false, false);
+
+            }
+            //console.log(url.replace(/\//g, "\\\\"));
+
+
+        }
+
+        function geturl() {
+            var query = location.search.substring(1);
+            var values = query.split("ntkourl=");
+            return values[1];
+        }
+    </script>
+    <script language="javascript" for="TANGER_OCX" event="ondocumentopened(str,doc)">
+
+      //文档打开之后触发
+    </script>
+    <script language="javascript" for="TANGER_OCX" event="ondocumentopened(str,doc)">
+
+      //文档打开之后触发
+    </script>
+    <script language="javascript" for="TANGER_OCX" event="ondocumentclosed(str,doc)">
+
+      //文档打开之后触发
+    </script>
+
+
+    <script language="JScript" for="TANGER_OCX" event="onfilecommand(cmd,str)">
+
+        if (cmd == 3 || cmd == 4) {
+            //alert("触发事件");
+            // cancellastcommand = true;
+        }
+    </script>
+</head>
+
+<body>
+
+
+
+    <script src="~/Assets/ntkoofficecontrol.js"></script>
+    <script>
+        console.log("在这里" + "@URL");
+    </script>
+</body>
+
+</html>

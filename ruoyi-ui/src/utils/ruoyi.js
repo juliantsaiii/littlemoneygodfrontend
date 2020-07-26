@@ -84,7 +84,12 @@ export function download(fileName) {
 
 // 通用下载方法
 export function downloadbypath(fileName, filePath) {
-	window.location.href = baseURL + "/common/downloadpath?fileName=" + encodeURI(fileName) + "&filePath=" + encodeURI(filePath);
+	window.location.href = getdownloadbypath(fileName, filePath);
+}
+
+// 拼接下载方法路径
+export function getdownloadbypath(fileName, filePath) {
+	return baseURL + "/common/downloadpath?fileName=" + encodeURI(fileName) + "&filePath=" + encodeURI(filePath);
 }
 
 // 字符串格式化(%s )

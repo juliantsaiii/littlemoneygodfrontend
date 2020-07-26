@@ -80,6 +80,7 @@
         :min-width="200"
       >
         <template slot-scope="scope">
+          <el-button size="mini" type="text" icon="el-icon-view" @click="fileView(scope.row.id)">查看</el-button>
           <el-button
             size="mini"
             type="text"
@@ -89,7 +90,7 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-folder-opened"
             @click="open=true;curfileid=scope.row.id"
             v-show="scope.row.hashistory==1"
           >历史记录</el-button>
@@ -318,6 +319,15 @@ export default {
     fileDownload(id) {
       getFileDownloadMsg(id).then(res => {
         this.downloadbypath(res.data.filename, res.data.filepath);
+      });
+    },
+    fileView(id) {
+      getFileDownloadMsg(id).then(res => {
+        const url = this.getdownloadbypath(
+          res.data.filename,
+          res.data.filepath
+        );
+        window.open("/ntko/Word.html?ntkourl=" + url, "_blank");
       });
     }
   }
