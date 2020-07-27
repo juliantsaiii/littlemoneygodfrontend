@@ -80,7 +80,7 @@
         :min-width="200"
       >
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-view" @click="fileView(scope.row.id)">查看</el-button>
+          <el-button size="mini" type="text" icon="el-icon-view" @click="fileView(scope.row)">查看</el-button>
           <el-button
             size="mini"
             type="text"
@@ -110,6 +110,10 @@
     <el-dialog title="历史版本" :visible.sync="open" width="70%" append-to-body>
       <fileuploadtask :curfileid="curfileid"></fileuploadtask>
     </el-dialog>
+
+    <el-dialog title="预览" :visible.sync="picmodal" width="70%" append-to-body>
+      <img :src="picUrl" alt />
+    </el-dialog>
   </div>
 </template>
 
@@ -123,7 +127,7 @@ import {
   exportFileupload,
   getFileDownloadMsg
 } from "@/api/sjwflowbusiness/fileupload";
-import { openNtkoWindow } from "@/api/monitor/ntko";
+import { viewFile } from "@/api/monitor/viewfile";
 import fileuploadtask from "@/views/sjwflowbusiness/fileuploadtask/index";
 
 export default {
@@ -146,8 +150,12 @@ export default {
       fileuploadList: [],
       // 弹出层标题
       title: "",
+      // 图片弹出层
+      picmodal: false,
       // 是否显示弹出层
       open: false,
+      // 图片地址
+      picUrl: "",
       // 步骤阶段字典
       isofdOptions: [],
       //附件id
@@ -322,14 +330,15 @@ export default {
         this.downloadbypath(res.data.filename, res.data.filepath);
       });
     },
-    fileView(id) {
-      getFileDownloadMsg(id).then(res => {
+    fileView(data) {
+      getFileDownloadMsg(data.id).then(res => {
         const url = this.getdownloadbypath(
           res.data.filename,
           res.data.filepath
         );
-        console.log(url);
-        openNtkoWindow(url);
+        this.picmodal = true;
+        this.picUrl = url;
+        // viewFile(url, data.fileextend);
       });
     }
   }

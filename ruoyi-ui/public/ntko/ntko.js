@@ -13,5 +13,7 @@ function init(url) {
 		//TANGER_OCX_OBJ.AddDocTypePlugin(".tif","tif.NtkoDocument","4.0.1.0","officecontrol/ntkooledocallx64.cab",51,true);	
 	}
 	ntko.OpenFromURL(url);
+	ntko.SetReadOnly(true);
+
 }
 
