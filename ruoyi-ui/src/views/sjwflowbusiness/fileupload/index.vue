@@ -123,6 +123,7 @@ import {
   exportFileupload,
   getFileDownloadMsg
 } from "@/api/sjwflowbusiness/fileupload";
+import { openNtkoWindow } from "@/api/monitor/ntko";
 import fileuploadtask from "@/views/sjwflowbusiness/fileuploadtask/index";
 
 export default {
@@ -327,7 +328,8 @@ export default {
           res.data.filename,
           res.data.filepath
         );
-        window.open("/ntko/Word.html?ntkourl=" + url, "_blank");
+        console.log(url);
+        openNtkoWindow(url);
       });
     }
   }

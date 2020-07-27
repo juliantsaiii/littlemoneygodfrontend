@@ -71,6 +71,7 @@ public class SambFileUtil {
         FileOutputStream out = null;
         try {
             File[] localFiles = new File(localDirectory).listFiles();
+
             if (null == localFiles) {
                 // 目录不存在的话,就创建目录
                 new File(localDirectory).mkdirs();
