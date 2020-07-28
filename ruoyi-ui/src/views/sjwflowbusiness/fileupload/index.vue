@@ -336,9 +336,9 @@ export default {
           res.data.filename,
           res.data.filepath
         );
-        this.picmodal = true;
-        this.picUrl = url;
-        // viewFile(url, data.fileextend);
+        // this.picmodal = true;
+        // this.picUrl = url;
+        viewFile(url, data.fileextend);
       });
     }
   }

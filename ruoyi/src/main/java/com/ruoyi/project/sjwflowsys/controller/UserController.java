@@ -1,10 +1,13 @@
 package com.ruoyi.project.sjwflowsys.controller;
 
+import java.security.DigestException;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,6 +39,9 @@ public class UserController extends BaseController
 {
     @Autowired
     private IUserService userService;
+
+    @Value("${sjwflowbusiness.initpwd}")
+    private String initpwd;
 
     /**
      * 查询业务平台用户管理列表
@@ -111,4 +117,12 @@ public class UserController extends BaseController
         return toAjax(userService.deleteUserByIds(ids));
     }
 
+    @PutMapping("/restpassword")
+    public AjaxResult restpassword(String id){
+        String pwdmd5 = DigestUtils.md5DigestAsHex(initpwd.getBytes());
+        User user = new User();
+        user.setPassword(pwdmd5);
+        user.setId(id);
+        return toAjax(userService.updateUser(user));
+    }
 }

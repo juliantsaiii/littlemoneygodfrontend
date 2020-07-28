@@ -26,6 +26,11 @@ samba:
   # path
   path: /UploadFiles/wenshu/
 
+# 业务配置
+sjwflowbusiness:
+  # 初始密码
+  initpwd: jssjw@12345
+
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080

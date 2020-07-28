@@ -140,7 +140,14 @@
     </el-row>
 
     <!-- 添加或修改业务平台用户管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px" height="900px" append-to-body>
+    <el-dialog
+      :title="title"
+      :visible.sync="open"
+      width="600px"
+      height="900px"
+      append-to-body
+      :close-on-click-modal="false"
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
@@ -157,7 +164,10 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="密码" prop="password">
-              <el-input v-model="form.password" placeholder="请输入密码" />
+              <!-- <el-input v-model="form.password" placeholder="请输入密码" type="password" /> -->
+              <template>
+                <el-button type="warning" size="mini" @click="resetpassword">重置密码</el-button>
+              </template>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -249,7 +259,8 @@ import {
   delUser,
   addUser,
   updateUser,
-  exportUser
+  exportUser,
+  resetPassword
 } from "@/api/sjwflowsys/user";
 import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
 import { getDeptTree } from "@/api/sjwflowsys/dept";
@@ -258,6 +269,14 @@ export default {
   name: "User",
   components: { deptSelectTree },
   data() {
+    //自定义密码校验规则
+    var validatePassword = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        callback();
+      }
+    };
     return {
       //部门树
       deptList: [],
@@ -305,7 +324,7 @@ export default {
         fullname: [
           { required: true, message: "请输入真实姓名", trigger: "blur" }
         ],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        // password: [{ validator: validatePassword, trigger: "blur" }],
         companyid: [
           { required: true, message: "请选择组织机构", trigger: "blur" }
         ],
@@ -371,7 +390,6 @@ export default {
         deptid: undefined,
         deptname: undefined,
         name: undefined,
-        password: undefined,
         fullname: undefined,
         idcard: undefined,
         companyid: undefined,
@@ -518,6 +536,15 @@ export default {
     updatepSelectTreeValue(node, id, label) {
       this.form[id] = node.id;
       label != undefined && [(this.form[label] = node.label)];
+    },
+    resetpassword() {
+      this.$confirm("是否确认重置密码？", "提示", {}).then(() => {
+        resetPassword(this.form.id).then(response => {
+          if (response.code === 200) {
+            this.msgSuccess("密码已重置");
+          }
+        });
+      });
     }
   }
 };

@@ -60,5 +60,3 @@ export function getDeptTree(query) {
     params: query
   })
 }
-
-

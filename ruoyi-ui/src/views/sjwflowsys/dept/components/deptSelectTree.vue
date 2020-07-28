@@ -33,7 +33,6 @@ export default {
     pid(val) {
       this.value = val;
       this.deptOptions.splice(0, 1, { id: val, label: this.label });
-      console.log(val, this.label);
     }
   },
   methods: {

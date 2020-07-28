@@ -51,3 +51,13 @@ export function exportUser(query) {
     params: query
   })
 }
+
+// 重置密码
+export function resetPassword(id) {
+  return request({
+    url: '/sjwflowsys/user/restpassword',
+    method: 'put',
+    params: { id: id }
+  })
+}
+
