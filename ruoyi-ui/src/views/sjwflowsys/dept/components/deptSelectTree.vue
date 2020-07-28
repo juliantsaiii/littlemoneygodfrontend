@@ -14,17 +14,27 @@ import { LOAD_CHILDREN_OPTIONS } from "@riophae/vue-treeselect";
 import { listDept, getDeptTree } from "@/api/sjwflowsys/dept";
 export default {
   components: { Treeselect },
-  props: ["pid", "type", "selectID", "selectName"],
+  props: ["pid", "label", "type", "selectID", "selectName"],
   data() {
     return {
       value: this.pid,
+      sellabel: this.label,
       deptOptions: [],
       queryType: this.type == "dept" ? false : true,
-      queryParams: { pid: undefined, type: this.type, selectTree: "select" }
+      queryParams: { pid: undefined, type: this.type, selectTree: "select" },
+      childinit: { id: this.pid, label: this.label }
     };
   },
   created() {
     this.getTreeselect();
+  },
+  watch: {
+    /** 更换默认值 */
+    pid(val) {
+      this.value = val;
+      this.deptOptions.splice(0, 1, { id: val, label: this.label });
+      console.log(val, this.label);
+    }
   },
   methods: {
     getTreeselect() {
@@ -33,6 +43,7 @@ export default {
         listDept(this.queryParams).then(response => {
           let pNode = response.data[0];
           this.deptOptions = [
+            this.childinit,
             { id: pNode.id, label: pNode.name, children: null }
           ];
         });

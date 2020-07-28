@@ -27,30 +27,51 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="paizhusubleadername"    column="PaiZhuSubLeaderName"    />
         <result property="paizhumainleaderid"    column="PaiZhuMainLeaderID"    />
         <result property="paizhumainleadername"    column="PaiZhuMainLeaderName"    />
+        <result property="parentName"    column="parentName"    />
     </resultMap>
 
     <sql id="selectDeptVo">
         select ID, PID, Name, HasChild,Category, SortCode, SerialNumber, Deleted, FlowInfoType, DeptType, XSCode, PaiZhuArea, ChargePersonID, ChargePersonName, ChargeLeaderID, ChargeLeaderName, MainLeaderID, MainLeaderName, PaiZhuSubLeaderID, PaiZhuSubLeaderName, PaiZhuMainLeaderID, PaiZhuMainLeaderName from dept
     </sql>
 
+    <!--<select id="selectDeptList" parameterType="Dept" resultMap="DeptResult">-->
+        <!--<include refid="selectDeptVo"/>-->
+        <!--<where>  -->
+            <!--<if test="pid != null  and pid != ''"> and PID = #{pid}</if>-->
+            <!--<if test="name != null  and name != ''"> and Name like concat('%', #{name}, '%')</if>-->
+            <!--<if test="depttype != null  and depttype != ''"> and DeptType = #{depttype}</if>-->
+            <!--<if test="chargepersonname != null  and chargepersonname != ''"> and ChargePersonName like concat('%', #{chargepersonname}, '%')</if>-->
+            <!--<if test="chargeleadername != null  and chargeleadername != ''"> and ChargeLeaderName like concat('%', #{chargeleadername}, '%')</if>-->
+            <!--<if test="mainleadername != null  and mainleadername != ''"> and MainLeaderName like concat('%', #{mainleadername}, '%')</if>-->
+            <!--<if test="paizhusubleadername != null  and paizhusubleadername != ''"> and PaiZhuSubLeaderName like concat('%', #{paizhusubleadername}, '%')</if>-->
+            <!--<if test="paizhumainleadername != null  and paizhumainleadername != ''"> and PaiZhuMainLeaderName like concat('%', #{paizhumainleadername}, '%')</if>-->
+        <!--</where>-->
+        <!--order by sortcode-->
+    <!--</select>-->
+
     <select id="selectDeptList" parameterType="Dept" resultMap="DeptResult">
-        <include refid="selectDeptVo"/>
-        <where>  
-            <if test="pid != null  and pid != ''"> and PID = #{pid}</if>
-            <if test="name != null  and name != ''"> and Name like concat('%', #{name}, '%')</if>
-            <if test="depttype != null  and depttype != ''"> and DeptType = #{depttype}</if>
-            <if test="chargepersonname != null  and chargepersonname != ''"> and ChargePersonName like concat('%', #{chargepersonname}, '%')</if>
-            <if test="chargeleadername != null  and chargeleadername != ''"> and ChargeLeaderName like concat('%', #{chargeleadername}, '%')</if>
-            <if test="mainleadername != null  and mainleadername != ''"> and MainLeaderName like concat('%', #{mainleadername}, '%')</if>
-            <if test="paizhusubleadername != null  and paizhusubleadername != ''"> and PaiZhuSubLeaderName like concat('%', #{paizhusubleadername}, '%')</if>
-            <if test="paizhumainleadername != null  and paizhumainleadername != ''"> and PaiZhuMainLeaderName like concat('%', #{paizhumainleadername}, '%')</if>
+        select d1.ID, d1.PID, d1.Name, d1.HasChild,d1.Category, d1.SortCode, d1.SerialNumber, d1.Deleted, d1.FlowInfoType, d1.DeptType, d1.XSCode, d1.PaiZhuArea, d1.ChargePersonID, d1.ChargePersonName, d1.ChargeLeaderID, d1.ChargeLeaderName, d1.MainLeaderID, d1.MainLeaderName, d1.PaiZhuSubLeaderID, d1.PaiZhuSubLeaderName, d1.PaiZhuMainLeaderID,d1.PaiZhuMainLeaderName,d2.name as parentName from dept d1 left join
+        dept d2 on d1.pid = d2.id
+        <where>
+            <if test="pid != null  and pid != ''"> and d1.PID = #{pid}</if>
+            <if test="name != null  and name != ''"> and d1.Name like concat('%', #{name}, '%')</if>
+            <if test="depttype != null  and depttype != ''"> and d1.DeptType = #{depttype}</if>
+            <if test="chargepersonname != null  and chargepersonname != ''"> and d1.ChargePersonName like concat('%', #{chargepersonname}, '%')</if>
+            <if test="chargeleadername != null  and chargeleadername != ''"> and d1.ChargeLeaderName like concat('%', #{chargeleadername}, '%')</if>
+            <if test="mainleadername != null  and mainleadername != ''"> and d1.MainLeaderName like concat('%', #{mainleadername}, '%')</if>
+            <if test="paizhusubleadername != null  and paizhusubleadername != ''"> and d1.PaiZhuSubLeaderName like concat('%', #{paizhusubleadername}, '%')</if>
+            <if test="paizhumainleadername != null  and paizhumainleadername != ''"> and d1.PaiZhuMainLeaderName like concat('%', #{paizhumainleadername}, '%')</if>
         </where>
         order by sortcode
     </select>
+
+
+
     
     <select id="selectDeptById" parameterType="String" resultMap="DeptResult">
-        <include refid="selectDeptVo"/>
-        where ID = #{id}
+         select d1.ID, d1.PID, d1.Name, d1.HasChild,d1.Category, d1.SortCode, d1.SerialNumber, d1.Deleted, d1.FlowInfoType, d1.DeptType, d1.XSCode, d1.PaiZhuArea, d1.ChargePersonID, d1.ChargePersonName, d1.ChargeLeaderID, d1.ChargeLeaderName, d1.MainLeaderID, d1.MainLeaderName, d1.PaiZhuSubLeaderID, d1.PaiZhuSubLeaderName, d1.PaiZhuMainLeaderID,d1.PaiZhuMainLeaderName,d2.name as parentName from dept d1 left join
+        dept d2 on d1.pid = d2.id
+        where d1.ID = #{id}
     </select>
         
     <insert id="insertDept" parameterType="Dept">

@@ -52,6 +52,7 @@
         <el-form-item label="上级部门" prop="pid">
           <dept-select-tree
             :pid="form.pid"
+            :label="form.parentName"
             @selectterm="updatepSelectTreeValue"
             :type="'dept'"
             :selectID="'pid'"
@@ -101,7 +102,8 @@
         </el-form-item>
         <el-form-item label="分管常委" prop="chargepersonid">
           <dept-select-tree
-            :pid="form.pid"
+            :pid="form.chargepersonid"
+            :label="form.chargepersonname"
             :type="'user'"
             @selectterm="updatepSelectTreeValue"
             :selectID="'chargepersonid'"
@@ -110,7 +112,8 @@
         </el-form-item>
         <el-form-item label="分管副书记" prop="chargeleadername">
           <dept-select-tree
-            :pid="form.pid"
+            :pid="form.chargeleaderid"
+            :label="form.chargeleadername"
             :type="'user'"
             @selectterm="updatepSelectTreeValue"
             :selectID="'chargeleaderid'"
@@ -119,7 +122,8 @@
         </el-form-item>
         <el-form-item label="书记" prop="mainleaderid">
           <dept-select-tree
-            :pid="form.pid"
+            :pid="form.mainleaderid"
+            :label="form.mainleadername"
             :type="'user'"
             @selectterm="updatepSelectTreeValue"
             :selectID="'mainleaderid'"
@@ -128,7 +132,8 @@
         </el-form-item>
         <el-form-item label="派驻副组长" prop="paizhusubleaderid">
           <dept-select-tree
-            :pid="form.pid"
+            :pid="form.paizhusubleaderid"
+            :label="form.paizhusubleadername"
             :type="'user'"
             @selectterm="updatepSelectTreeValue"
             :selectID="'paizhusubleaderid'"
@@ -137,7 +142,8 @@
         </el-form-item>
         <el-form-item label="派驻组长" prop="paizhumainleaderid">
           <dept-select-tree
-            :pid="form.pid"
+            :pid="form.paizhumainleaderid"
+            :label="form.paizhumainleadername"
             :type="'user'"
             @selectterm="updatepSelectTreeValue"
             :selectID="'paizhumainleaderid'"
@@ -323,7 +329,8 @@ export default {
         paizhusubleaderid: undefined,
         paizhusubleadername: undefined,
         paizhumainleaderid: undefined,
-        paizhumainleadername: undefined
+        paizhumainleadername: undefined,
+        parentName: undefined
       };
       this.resetForm("form");
     },
