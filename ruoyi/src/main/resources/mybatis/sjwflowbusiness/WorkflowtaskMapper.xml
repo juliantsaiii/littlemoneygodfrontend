@@ -64,7 +64,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="clueid != null  and clueid != ''"> and ClueID = #{clueid}</if>
             <if test="receivename != null  and receivename != ''"> and receivename like concat('%',#{receivename},'%')</if>
+            <if test="receiveid != null  and receiveid != ''"> and receiveid = #{receiveid}</if>
             <if test="instanceid != null  and instanceid != ''"> and instanceid = #{instanceid}</if>
+            <if test="status == 0 or status == 1"> and status in (0,1)</if>
+            <if test="isdeleted != null"> and isdeleted = #{isdeleted}</if>
         </where>
         order by sendertime desc
     </select>

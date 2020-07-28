@@ -262,6 +262,7 @@ import {
   exportUser,
   resetPassword
 } from "@/api/sjwflowsys/user";
+import { listWorkflowtask } from "@/api/sjwflowbusiness/workflowtask";
 import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
 import { getDeptTree } from "@/api/sjwflowsys/dept";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -316,6 +317,7 @@ export default {
         type: "dept",
         selectType: "tree"
       },
+      oldDeptID: "",
       // 表单参数
       form: {},
       // 表单校验
@@ -342,6 +344,13 @@ export default {
       treeheight: {
         height: this.$store.getters.clientHeight - 100 + "px",
         overflow: "auto"
+      },
+      tasksParams: {
+        pageNum: 1,
+        pageSize: 1,
+        receiveid: undefined,
+        status: 1,
+        isdeleted: false
       }
     };
   },
@@ -437,24 +446,51 @@ export default {
       const id = row.id || this.ids;
       getUser(id).then(response => {
         this.form = response.data;
+        this.tasksParams.receiveid = this.form.id;
+        this.oldDeptID = this.form.deptid;
         this.open = true;
         this.title = "修改业务平台用户";
       });
     },
     /** 提交按钮 */
     submitForm: function() {
-      console.log(this.form);
       this.$refs["form"].validate(valid => {
         if (valid) {
-          console.log(this.form);
           if (this.form.id != undefined) {
-            updateUser(this.form).then(response => {
-              if (response.code === 200) {
-                this.msgSuccess("修改成功");
-                this.open = false;
-                this.getList();
-              }
-            });
+            // 判断是否更换部门
+            if (this.form.deptid != this.oldDeptID) {
+              // 当前人员是否有待办事项
+              this.haveWaitlist().then(data => {
+                if (data) {
+                  this.$confirm(
+                    "当前用户存在未完成待办事项，若更换部门需要转交待办事项，是否进入转交界面？",
+                    "提示"
+                  ).then(() => {
+                    this.$router.push({
+                      path: "/sjwflowbusiness/workflowtask",
+                      query: { id: "123123-12312312-123132" }
+                    });
+                  });
+                } else {
+                  // 无待办事项则更换承办部门
+                  updateUser(this.form).then(response => {
+                    if (response.code === 200) {
+                      this.msgSuccess("修改成功");
+                      this.open = false;
+                      this.getList();
+                    }
+                  });
+                }
+              });
+            } else {
+              updateUser(this.form).then(response => {
+                if (response.code === 200) {
+                  this.msgSuccess("修改成功");
+                  this.open = false;
+                  this.getList();
+                }
+              });
+            }
           } else {
             addUser(this.form).then(response => {
               if (response.code === 200) {
@@ -537,11 +573,22 @@ export default {
       this.form[id] = node.id;
       label != undefined && [(this.form[label] = node.label)];
     },
+    /** 重置密码 */
     resetpassword() {
       this.$confirm("是否确认重置密码？", "提示", {}).then(() => {
         resetPassword(this.form.id).then(response => {
           if (response.code === 200) {
             this.msgSuccess("密码已重置");
+          }
+        });
+      });
+    },
+    /** 查询该员是否有待办事项 */
+    haveWaitlist() {
+      return new Promise((resolve, reject) => {
+        listWorkflowtask(this.tasksParams).then(response => {
+          if (response.total > 0) {
+            resolve(true);
           }
         });
       });

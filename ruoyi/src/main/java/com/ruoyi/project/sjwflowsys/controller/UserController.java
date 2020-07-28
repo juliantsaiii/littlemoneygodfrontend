@@ -4,9 +4,11 @@ import java.security.DigestException;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -98,12 +100,35 @@ public class UserController extends BaseController
     /**
      * 修改业务平台用户管理
      */
+    @Transactional
     @PreAuthorize("@ss.hasPermi('sjwflowsys:user:edit')")
     @Log(title = "业务平台用户管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody User user)
     {
-        return toAjax(userService.updateUser(user));
+        User oldUser = userService.selectUserById(user.getId());
+        if(oldUser == null){
+            return AjaxResult.error("用户不存在！");
+        }
+        //判断部门是否相同，若更换部门，则将该用户设为未激活并且添加新用户
+        if(!user.getDeptid().equals(oldUser.getDeptid()))
+        {
+            User userNew = new User();
+            BeanUtils.copyProperties(oldUser,userNew);
+            userNew.setId(UUID.randomUUID().toString());
+            userService.insertUser(userNew);
+
+            oldUser.setActivated("0");
+            userService.updateUser(oldUser);
+
+            user.setId(userNew.getId());
+            return toAjax(userService.updateUser(user));
+        }
+        else
+        {
+            return toAjax(userService.updateUser(user));
+        }
+
     }
 
     /**

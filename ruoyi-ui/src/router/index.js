@@ -125,6 +125,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'workflowtask/:id(\\d+)',
+        // path: 'workflowtask',
         component: (resolve) => require(['@/views/sjwflowbusiness/workflowtask'], resolve),
         name: 'Workflowtask',
         meta: { title: '步骤详情', icon: '' }
