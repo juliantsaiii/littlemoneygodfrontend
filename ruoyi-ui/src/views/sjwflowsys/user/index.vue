@@ -99,6 +99,21 @@
           <el-table-column label="姓名" align="center" prop="fullname" />
           <el-table-column label="机构名" align="center" prop="companyname" />
           <el-table-column label="人员类型" align="center" prop="usertype" :formatter="usertypeFormat" />
+          <el-table-column label="签名" align="center" prop="imageUrl">
+            <template slot-scope="scope">
+              <el-upload
+                class="avatar-uploader"
+                :action="uploadImgUrl"
+                :headers="headers"
+                :show-file-list="false"
+                :on-success="(response, file, fileList) => handleAvatarSuccess(response, file, fileList, scope.row)"
+                :before-upload="beforeAvatarUpload"
+              >
+                <img v-if="scope.row.imageUrl" :src="scope.row.imageUrl" class="avatar" />
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </template>
+          </el-table-column>
           <el-table-column label="激活" align="center" prop="activated">
             <template slot-scope="scope">
               <el-switch
@@ -252,6 +267,7 @@
 </template>
 
 <script>
+import { getToken } from "@/utils/auth";
 import {
   listUser,
   getUser,
@@ -350,6 +366,11 @@ export default {
         receiveid: undefined,
         status: 1,
         isdeleted: false,
+      },
+      //图片地址
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      headers: {
+        Authorization: "Bearer " + getToken(),
       },
     };
   },
@@ -594,6 +615,12 @@ export default {
         });
       });
     },
+    /** 附件上传成功事件 */
+    handleAvatarSuccess(res, file, filelist, row) {
+      row.imageUrl = res.url;
+    },
+    /** 签名上传前事件 */
+    beforeAvatarUpload() {},
   },
 };
 </script>
@@ -601,5 +628,28 @@ export default {
 .el-tree-node__label {
   font-size: 17px;
   font-weight: bold;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 8px;
+  color: #8c939d;
+  width: 80px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+}
+.avatar {
+  width: 80px;
+  height: 40px;
+  display: block;
 }
 </style>
