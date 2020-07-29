@@ -177,6 +177,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="personunit != null  and personunit != ''"> and PersonUnit = #{personunit}</if>
             <if test="cluesource != null  and cluesource != ''"> and ClueSource = #{cluesource}</if>
             <if test="clueno != null  and clueno != ''"> and ClueNo = #{clueno}</if>
+            <if test="createcompanyid != null and createcompanyid != ''"> and createcompanyid in (SELECT id FROM dept WHERE ( id = #{createcompanyid} OR pid = #{createcompanyid} ) AND Category = '单位')</if>
         </where>
     </select>
     

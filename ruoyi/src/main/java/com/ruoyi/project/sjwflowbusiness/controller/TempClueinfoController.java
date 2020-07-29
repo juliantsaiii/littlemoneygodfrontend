@@ -1,6 +1,10 @@
 package com.ruoyi.project.sjwflowbusiness.controller;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.ServletUtils;
+import com.ruoyi.framework.security.LoginUser;
+import com.ruoyi.framework.security.service.TokenService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +37,9 @@ public class TempClueinfoController extends BaseController
     @Autowired
     private ITempClueinfoService tempClueinfoService;
 
+    @Autowired
+    private TokenService tokenService;
+
     /**
      * 查询线索操作列表
      */
@@ -41,6 +48,10 @@ public class TempClueinfoController extends BaseController
     public TableDataInfo list(TempClueinfo tempClueinfo)
     {
         startPage();
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if(!loginUser.getUser().getArea().contains("00000000-0000-1000-0000-000000000000")){
+            tempClueinfo.setCreatecompanyid(loginUser.getUser().getArea());
+        }
         List<TempClueinfo> list = tempClueinfoService.selectTempClueinfoList(tempClueinfo);
         return getDataTable(list);
     }

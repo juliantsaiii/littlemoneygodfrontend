@@ -153,7 +153,13 @@
             prop="dept.deptName"
             :show-overflow-tooltip="true"
           />
-          <el-table-column label="手机号码" align="center" prop="phonenumber" width="120" />
+          <el-table-column
+            label="地区"
+            align="center"
+            prop="area"
+            width="120"
+            :formatter="areaFormat"
+          />
           <el-table-column label="状态" align="center">
             <template slot-scope="scope">
               <el-switch
@@ -240,8 +246,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="邮箱" prop="email">
-              <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
+            <el-form-item label="管辖区域" prop="area">
+              <el-select v-model="form.area" placeholder="请选择">
+                <el-option
+                  v-for="dict in areaOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictLabel"
+                  :value="dict.remark"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -407,6 +420,8 @@ export default {
       statusOptions: [],
       // 性别状态字典
       sexOptions: [],
+      // 管辖区域字典
+      areaOptions: [],
       // 岗位选项
       postOptions: [],
       // 角色选项
@@ -455,13 +470,8 @@ export default {
         password: [
           { required: true, message: "用户密码不能为空", trigger: "blur" }
         ],
-        email: [
-          { required: true, message: "邮箱地址不能为空", trigger: "blur" },
-          {
-            type: "email",
-            message: "'请输入正确的邮箱地址",
-            trigger: ["blur", "change"]
-          }
+        area: [
+          { required: true, message: "管辖区域不能为空", trigger: "blur" }
         ],
         phonenumber: [
           { required: true, message: "手机号码不能为空", trigger: "blur" },
@@ -492,6 +502,9 @@ export default {
     this.getConfigKey("sys.user.initPassword").then(response => {
       this.initPassword = response.msg;
     });
+    this.getDicts("sjwflow_area").then(response => {
+      this.areaOptions = response.data;
+    });
   },
   methods: {
     /** 查询用户列表 */
@@ -504,6 +517,10 @@ export default {
           this.loading = false;
         }
       );
+    },
+    // 地区类型字典翻译
+    areaFormat(row, column) {
+      return this.selectDictLabelRemark(this.areaOptions, row.area);
     },
     /** 查询部门下拉树结构 */
     getTreeselect() {
@@ -557,7 +574,6 @@ export default {
         nickName: undefined,
         password: undefined,
         phonenumber: undefined,
-        email: undefined,
         sex: undefined,
         status: "0",
         remark: undefined,

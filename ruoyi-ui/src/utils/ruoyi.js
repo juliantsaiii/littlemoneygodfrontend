@@ -65,11 +65,23 @@ export function addDateRange(params, dateRange) {
 	return search;
 }
 
-// 回显数据字典
+// 回显数据字典--值
 export function selectDictLabel(datas, value) {
 	var actions = [];
 	Object.keys(datas).map((key) => {
 		if (datas[key].dictValue == ('' + value)) {
+			actions.push(datas[key].dictLabel);
+			return false;
+		}
+	})
+	return actions.join('');
+}
+
+// 回显数据字典--备注
+export function selectDictLabelRemark(datas, value) {
+	var actions = [];
+	Object.keys(datas).map((key) => {
+		if (datas[key].remark == ('' + value)) {
 			actions.push(datas[key].dictLabel);
 			return false;
 		}

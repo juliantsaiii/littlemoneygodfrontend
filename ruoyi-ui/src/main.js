@@ -18,7 +18,7 @@ import './assets/icons' // icon
 import './permission' // permission control
 import { getDicts } from "@/api/system/dict/data";
 import { getConfigKey } from "@/api/system/config";
-import { parseTime, resetForm, addDateRange, selectDictLabel, download, handleTree, downloadbypath, getdownloadbypath } from "@/utils/ruoyi";
+import { parseTime, resetForm, addDateRange, selectDictLabel, download, handleTree, downloadbypath, getdownloadbypath, selectDictLabelRemark } from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";
 import less from 'less'
 //复制到粘贴板插件
@@ -31,6 +31,7 @@ Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm
 Vue.prototype.addDateRange = addDateRange
 Vue.prototype.selectDictLabel = selectDictLabel
+Vue.prototype.selectDictLabelRemark = selectDictLabelRemark
 Vue.prototype.download = download
 Vue.prototype.downloadbypath = downloadbypath
 Vue.prototype.handleTree = handleTree

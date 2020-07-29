@@ -39,9 +39,9 @@ public class SysUser extends BaseEntity
     @Excel(name = "用户名称")
     private String nickName;
 
-    /** 用户邮箱 */
-    @Excel(name = "用户邮箱")
-    private String email;
+    /** 管辖区域 */
+    @Excel(name = "管辖区域")
+    private String area;
 
     /** 手机号码 */
     @Excel(name = "手机号码")
@@ -154,16 +154,15 @@ public class SysUser extends BaseEntity
         this.userName = userName;
     }
 
-    @Email(message = "邮箱格式不正确")
     @Size(min = 0, max = 50, message = "邮箱长度不能超过50个字符")
-    public String getEmail()
+    public String getArea()
     {
-        return email;
+        return area;
     }
 
-    public void setEmail(String email)
+    public void setArea(String area)
     {
-        this.email = email;
+        this.area = area;
     }
 
     @Size(min = 0, max = 11, message = "手机号码长度不能超过11个字符")
@@ -305,7 +304,7 @@ public class SysUser extends BaseEntity
             .append("deptId", getDeptId())
             .append("userName", getUserName())
             .append("nickName", getNickName())
-            .append("email", getEmail())
+            .append("area", getArea())
             .append("phonenumber", getPhonenumber())
             .append("sex", getSex())
             .append("avatar", getAvatar())
