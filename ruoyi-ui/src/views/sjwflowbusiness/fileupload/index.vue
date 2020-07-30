@@ -125,7 +125,7 @@ import {
   addFileupload,
   updateFileupload,
   exportFileupload,
-  getFileDownloadMsg
+  getFileDownloadMsg,
 } from "@/api/sjwflowbusiness/fileupload";
 import { viewFile } from "@/api/monitor/viewfile";
 import fileuploadtask from "@/views/sjwflowbusiness/fileuploadtask/index";
@@ -166,7 +166,7 @@ export default {
         pageSize: 30,
         filename: undefined,
         username: undefined,
-        clueid: this.curclueid
+        clueid: this.curclueid,
       },
       // 表单参数
       form: {},
@@ -176,40 +176,40 @@ export default {
           {
             required: true,
             message: "是否事项报告附件不能为空",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         history: [
           {
             required: true,
             message: "是否事项报告附件不能为空",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         isdeleted: [
           {
             required: true,
             message: "是否事项报告附件不能为空",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         clueid: [
           {
             required: true,
             message: "是否事项报告附件不能为空",
-            trigger: "blur"
-          }
-        ]
+            trigger: "blur",
+          },
+        ],
       },
       tableHeight:
         this.isdialog == true
           ? "600"
-          : this.$store.getters.clientHeight - 200 + "px"
+          : this.$store.getters.clientHeight - 200 + "px",
     };
   },
   created() {
     this.getList();
-    this.getDicts("sjwflow_yes_no_num").then(response => {
+    this.getDicts("sjwflow_yes_no_num").then((response) => {
       this.isofdOptions = response.data;
     });
   },
@@ -217,13 +217,13 @@ export default {
     curclueid(val) {
       this.queryParams.clueid = val;
       this.getList();
-    }
+    },
   },
   methods: {
     /** 查询附件管理列表 */
     getList() {
       this.loading = true;
-      listFileupload(this.queryParams).then(response => {
+      listFileupload(this.queryParams).then((response) => {
         this.fileuploadList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -281,7 +281,7 @@ export default {
         printnum: undefined,
         isofd: undefined,
         isoldspb: "0",
-        isthing: "0"
+        isthing: "0",
       };
       this.resetForm("form");
     },
@@ -297,7 +297,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id);
+      this.ids = selection.map((item) => item.id);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
@@ -307,40 +307,38 @@ export default {
       this.$confirm("是否确认导出所有附件管理数据项?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
-        .then(function() {
+        .then(function () {
           return exportFileupload(queryParams);
         })
-        .then(response => {
+        .then((response) => {
           this.download(response.msg);
         })
-        .catch(function() {});
+        .catch(function () {});
     },
     /** 更新form */
     updateform(data) {
-      updateFileupload(data).then(res => {
+      updateFileupload(data).then((res) => {
         if (res.code == "200") {
           this.msgSuccess("修改成功");
         }
       });
     },
     fileDownload(id) {
-      getFileDownloadMsg(id).then(res => {
+      getFileDownloadMsg(id).then((res) => {
         this.downloadbypath(res.data.filename, res.data.filepath);
       });
     },
     fileView(data) {
-      getFileDownloadMsg(data.id).then(res => {
+      getFileDownloadMsg(data.id).then((res) => {
         const url = this.getdownloadbypath(
           res.data.filename,
           res.data.filepath
         );
-        // this.picmodal = true;
-        // this.picUrl = url;
         viewFile(url, data.fileextend);
       });
-    }
-  }
+    },
+  },
 };
 </script>

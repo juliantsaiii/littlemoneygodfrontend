@@ -5,12 +5,14 @@ import com.ruoyi.common.utils.StringUtils;
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileInputStream;
+import jcifs.smb.SmbFileOutputStream;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 @Component
 public class SambFileUtil {
@@ -61,47 +63,32 @@ public class SambFileUtil {
     }
 
     /**
-     * 拷贝远程文件到本地目录
-     * @param smbFile 远程SmbFile
-     * @param localDirectory 本地存储目录,本地目录不存在时会自动创建,本地目录存在时可自行选择是否清空该目录下的文件,默认为不清空
-     * @return boolean 是否拷贝成功
+     * 上传文件
+     * @param remoteFilepath 共享文件夹路径
+     * @param file 文件
      */
-    public static boolean copyRemoteFile(SmbFile smbFile, String localDirectory) {
-        SmbFileInputStream in = null;
-        FileOutputStream out = null;
-        try {
-            File[] localFiles = new File(localDirectory).listFiles();
-
-            if (null == localFiles) {
-                // 目录不存在的话,就创建目录
-                new File(localDirectory).mkdirs();
-            }
-            in = new SmbFileInputStream(smbFile);
-            out = new FileOutputStream(localDirectory + smbFile.getName());
-            byte[] buffer = new byte[1024];
-            int len = -1;
-            while ((len = in.read(buffer)) != -1) {
-                out.write(buffer, 0, len);
-            }
-            out.flush();
-        } catch (Exception e) {
-            return false;
-        } finally {
-            if (null != out) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (null != in) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+    public String uploadRemoteFile(String remoteFilepath, MultipartFile file) throws Exception  {
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        //MultipartFile转file
+        inputStream = file.getInputStream();
+        SmbFile smbFile = new SmbFile("smb://" + name + ":" + password + "@" + ip + remoteFilepath);
+        smbFile.connect();
+        outputStream = new SmbFileOutputStream(smbFile);
+        byte[] buffer = new byte[4096];
+        int len = 0; // 读取长度
+        while ((len = inputStream.read(buffer, 0, buffer.length)) != -1) {
+            outputStream.write(buffer, 0, len);
         }
-        return true;
+        // 刷新缓冲的输出流
+        outputStream.flush();
+        outputStream.close();
+        inputStream.close();
+        return ip+remoteFilepath;
     }
+
+
+
+
+
 }

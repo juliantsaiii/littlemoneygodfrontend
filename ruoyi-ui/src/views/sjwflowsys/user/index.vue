@@ -108,8 +108,14 @@
                 :show-file-list="false"
                 :on-success="(response, file, fileList) => handleAvatarSuccess(response, file, fileList, scope.row)"
                 :before-upload="beforeAvatarUpload"
+                :data="{'filename':scope.row.id + '.png','path':'/Signature/'}"
               >
-                <img v-if="scope.row.imageUrl" :src="scope.row.imageUrl" class="avatar" />
+                <img
+                  v-if="1"
+                  :src="url + '/common/downloadpath?fileName=' + scope.row.id + '.png&filePath=156.11.1.234/Signature/' + scope.row.id + '.png'"
+                  class="avatar"
+                />
+                <!-- <img v-if="scope.row.imageUrl" :src="scope.row.imageUrl" class="avatar" /> -->
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </template>
@@ -367,8 +373,9 @@ export default {
         status: 1,
         isdeleted: false,
       },
+      url: process.env.VUE_APP_BASE_API,
       //图片地址
-      uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/sambUpload", // 上传的图片服务器地址
       headers: {
         Authorization: "Bearer " + getToken(),
       },
@@ -617,7 +624,12 @@ export default {
     },
     /** 附件上传成功事件 */
     handleAvatarSuccess(res, file, filelist, row) {
-      row.imageUrl = res.url;
+      row.imageUrl =
+        this.url +
+        "/common/downloadpath?fileName=" +
+        res.fileName +
+        "&filePath=" +
+        res.url;
     },
     /** 签名上传前事件 */
     beforeAvatarUpload() {},

@@ -21,7 +21,7 @@ import com.ruoyi.framework.config.RuoYiConfig;
 import com.ruoyi.framework.config.ServerConfig;
 import com.ruoyi.framework.web.domain.AjaxResult;
 
-import java.io.IOException;
+import java.io.*;
 
 /**
  * 通用请求处理
@@ -101,6 +101,27 @@ public class CommonController
                     "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, fileName));
             FileUtils.writeBytes(smbFile,response.getOutputStream());
             return AjaxResult.success("");
+        }
+        catch (Exception e)
+        {
+            return AjaxResult.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 签名文件上传
+     */
+    @PostMapping("/common/sambUpload")
+    public AjaxResult smbfileUpload(MultipartFile file,String filename,String path) throws Exception
+    {
+        try
+        {
+            // 上传并返回路径
+            String url = sambFileUtil.uploadRemoteFile(path + filename,file);
+            AjaxResult ajax = AjaxResult.success();
+            ajax.put("fileName", filename);
+            ajax.put("url", url);
+            return ajax;
         }
         catch (Exception e)
         {
