@@ -132,7 +132,7 @@ import {
   getFileDownloadMsg
 } from "@/api/sjwflowbusiness/fileupload";
 import fileuploadtask from "@/views/sjwflowbusiness/fileuploadtask/index";
-
+import { openNtkoWindow } from "@/api/monitor/viewfile";
 export default {
   name: "Fileupload",
   components: { fileuploadtask },
