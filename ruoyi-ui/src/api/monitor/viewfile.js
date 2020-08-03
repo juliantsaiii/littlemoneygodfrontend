@@ -10,15 +10,16 @@ export function openNtkoWindow(url) {
     }
 }
 
-export function openPicPdfWindow(url) {
-    window.URL.createObjectURL(url)
-}
+// export function openPicPdfWindow(url) {
+//     // document.getElementById("img-view").src = url;
+//     this.$refs.viewer.$viewer.show();
+// }
 
-export function viewFile(url, type) {
-    if (type == ".doc" || type == ".docx") {
-        openNtkoWindow(url);
-    } else {
-        openPicPdfWindow(url);
-    }
+// export function viewFile(url, type) {
+//     if (type == ".doc" || type == ".docx") {
+//         openNtkoWindow(url);
+//     } else {
+//         openPicPdfWindow(url);
+//     }
 
-}
+// }

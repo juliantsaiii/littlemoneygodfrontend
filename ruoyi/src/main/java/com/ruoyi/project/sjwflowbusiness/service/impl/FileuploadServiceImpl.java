@@ -2,6 +2,8 @@ package com.ruoyi.project.sjwflowbusiness.service.impl;
 
 import java.util.List;
 
+import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
+import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
 import com.ruoyi.project.sjwflowbusiness.domain.FileuploadDownload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import com.ruoyi.project.sjwflowbusiness.service.IFileuploadService;
  * @date 2020-07-21
  */
 @Service
+@DataSource(value = DataSourceType.SLAVE)
 public class FileuploadServiceImpl implements IFileuploadService 
 {
     @Autowired

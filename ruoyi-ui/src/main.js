@@ -24,6 +24,17 @@ import less from 'less'
 //复制到粘贴板插件
 import VueClipboard from 'vue-clipboard2'
 
+import Viewer from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
+
+
+Vue.use(Viewer, {
+  defaultOptions: {
+    zIndex: 9999,
+    navbar: false
+  }
+})
+
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
 Vue.prototype.getConfigKey = getConfigKey

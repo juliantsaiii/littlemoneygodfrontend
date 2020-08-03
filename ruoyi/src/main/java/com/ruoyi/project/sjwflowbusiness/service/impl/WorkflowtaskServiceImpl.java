@@ -1,6 +1,9 @@
 package com.ruoyi.project.sjwflowbusiness.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
+import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.sjwflowbusiness.mapper.WorkflowtaskMapper;
@@ -14,6 +17,7 @@ import com.ruoyi.project.sjwflowbusiness.service.IWorkflowtaskService;
  * @date 2020-07-18
  */
 @Service
+@DataSource(value = DataSourceType.SLAVE)
 public class WorkflowtaskServiceImpl implements IWorkflowtaskService 
 {
     @Autowired

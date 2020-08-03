@@ -180,7 +180,7 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-files"
             @click="fileuploaddialog = true;openviewdialog(scope.row.id)"
           >附件</el-button>
           <router-link
@@ -193,7 +193,7 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-location-information"
             @click="infoviewdialog = true;openviewdialog(scope.row.id)"
           >跳转</el-button>
         </template>

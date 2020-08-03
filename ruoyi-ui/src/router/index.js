@@ -144,7 +144,13 @@ export const constantRoutes = [
         meta: { title: '流程跳转' }
       }
     ]
+  },
+  {
+    path: '/pdf',
+    component: (resolve) => require(['@/views/tool/pdf/index'], resolve),
+    hidden: true
   }
+
 ]
 
 export default new Router({

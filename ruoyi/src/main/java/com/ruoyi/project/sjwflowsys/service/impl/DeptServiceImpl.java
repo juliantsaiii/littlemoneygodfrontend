@@ -1,6 +1,9 @@
 package com.ruoyi.project.sjwflowsys.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
+import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.sjwflowsys.mapper.DeptMapper;
@@ -14,7 +17,8 @@ import com.ruoyi.project.sjwflowsys.service.IDeptService;
  * @date 2020-07-06
  */
 @Service
-public class DeptServiceImpl implements IDeptService 
+@DataSource(value = DataSourceType.SLAVE)
+public class DeptServiceImpl implements IDeptService
 {
     @Autowired
     private DeptMapper deptMapper;
