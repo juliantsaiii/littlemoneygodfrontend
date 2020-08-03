@@ -149,7 +149,13 @@
       @pagination="getList"
     />
     <!-- 预览界面 -->
-    <el-dialog :title="preview.title" :visible.sync="preview.open" width="80%" top="5vh" append-to-body>
+    <el-dialog
+      :title="preview.title"
+      :visible.sync="preview.open"
+      width="80%"
+      top="5vh"
+      append-to-body
+    >
       <el-tabs v-model="preview.activeName">
         <el-tab-pane
           v-for="(value, key) in preview.data"
@@ -195,17 +201,17 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 30,
         tableName: undefined,
-        tableComment: undefined
+        tableComment: undefined,
       },
       // 预览参数
       preview: {
         open: false,
         title: "代码预览",
         data: {},
-        activeName: "domain.java"
-      }
+        activeName: "domain.java",
+      },
     };
   },
   created() {
@@ -222,7 +228,8 @@ export default {
     /** 查询表集合 */
     getList() {
       this.loading = true;
-      listTable(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+      listTable(this.addDateRange(this.queryParams, this.dateRange)).then(
+        (response) => {
           this.tableList = response.rows;
           this.total = response.total;
           this.loading = false;
@@ -241,7 +248,10 @@ export default {
         this.msgError("请选择要生成的数据");
         return;
       }
-      downLoadZip("/tool/gen/batchGenCode?tables=" + tableNames, "littlemoneygod");
+      downLoadZip(
+        "/tool/gen/batchGenCode?tables=" + tableNames,
+        "littlemoneygod"
+      );
     },
     /** 打开导入表弹窗 */
     openImportTable() {
@@ -255,15 +265,15 @@ export default {
     },
     /** 预览按钮 */
     handlePreview(row) {
-      previewTable(row.tableId).then(response => {
+      previewTable(row.tableId).then((response) => {
         this.preview.data = response.data;
         this.preview.open = true;
       });
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.tableId);
-      this.tableNames = selection.map(item => item.tableName);
+      this.ids = selection.map((item) => item.tableId);
+      this.tableNames = selection.map((item) => item.tableName);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
@@ -278,14 +288,17 @@ export default {
       this.$confirm('是否确认删除表编号为"' + tableIds + '"的数据项?', "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
-      }).then(function() {
+        type: "warning",
+      })
+        .then(function () {
           return delTable(tableIds);
-      }).then(() => {
+        })
+        .then(() => {
           this.getList();
           this.msgSuccess("删除成功");
-      }).catch(function() {});
-    }
-  }
+        })
+        .catch(function () {});
+    },
+  },
 };
 </script>

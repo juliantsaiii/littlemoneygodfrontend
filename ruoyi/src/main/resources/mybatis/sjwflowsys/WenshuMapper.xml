@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowsys.mapper.WenshuMapper">
+    
+    <resultMap type="Wenshu" id="WenshuResult">
+        <result property="id"    column="ID"    />
+        <result property="name"    column="Name"    />
+        <result property="designation"    column="Designation"    />
+        <result property="process"    column="Process"    />
+        <result property="url"    column="Url"    />
+        <result property="sort"    column="Sort"    />
+        <result property="type"    column="Type"    />
+        <result property="qianzhang"    column="qianzhang"    />
+        <result property="hascode"    column="HasCode"    />
+        <result property="infotype"    column="InfoType"    />
+        <result property="basetype"    column="BaseType"    />
+        <result property="secretaries"    column="Secretaries"    />
+        <result property="format"    column="Format"    />
+        <result property="describe"    column="Describe"    />
+        <result property="docabbreviation"    column="DocAbbreviation"    />
+    </resultMap>
+
+    <sql id="selectWenshuVo">
+        select ID, Name, Designation, Process, Url, Sort, Type, qianzhang, HasCode, InfoType, BaseType, Secretaries, Format, Describe, DocAbbreviation from wenshu
+    </sql>
+
+    <select id="selectWenshuList" parameterType="Wenshu" resultMap="WenshuResult">
+        <include refid="selectWenshuVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and Name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectWenshuById" parameterType="String" resultMap="WenshuResult">
+        <include refid="selectWenshuVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertWenshu" parameterType="Wenshu">
+        insert into wenshu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="name != null">Name,</if>
+            <if test="designation != null">Designation,</if>
+            <if test="process != null">Process,</if>
+            <if test="url != null">Url,</if>
+            <if test="sort != null">Sort,</if>
+            <if test="type != null">Type,</if>
+            <if test="qianzhang != null">qianzhang,</if>
+            <if test="hascode != null">HasCode,</if>
+            <if test="infotype != null">InfoType,</if>
+            <if test="basetype != null">BaseType,</if>
+            <if test="secretaries != null">Secretaries,</if>
+            <if test="format != null">Format,</if>
+            <if test="describe != null">Describe,</if>
+            <if test="docabbreviation != null and docabbreviation != ''">DocAbbreviation,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="designation != null">#{designation},</if>
+            <if test="process != null">#{process},</if>
+            <if test="url != null">#{url},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="type != null">#{type},</if>
+            <if test="qianzhang != null">#{qianzhang},</if>
+            <if test="hascode != null">#{hascode},</if>
+            <if test="infotype != null">#{infotype},</if>
+            <if test="basetype != null">#{basetype},</if>
+            <if test="secretaries != null">#{secretaries},</if>
+            <if test="format != null">#{format},</if>
+            <if test="describe != null">#{describe},</if>
+            <if test="docabbreviation != null and docabbreviation != ''">#{docabbreviation},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWenshu" parameterType="Wenshu">
+        update wenshu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">Name = #{name},</if>
+            <if test="designation != null">Designation = #{designation},</if>
+            <if test="process != null">Process = #{process},</if>
+            <if test="url != null">Url = #{url},</if>
+            <if test="sort != null">Sort = #{sort},</if>
+            <if test="type != null">Type = #{type},</if>
+            <if test="qianzhang != null">qianzhang = #{qianzhang},</if>
+            <if test="hascode != null">HasCode = #{hascode},</if>
+            <if test="infotype != null">InfoType = #{infotype},</if>
+            <if test="basetype != null">BaseType = #{basetype},</if>
+            <if test="secretaries != null">Secretaries = #{secretaries},</if>
+            <if test="format != null">Format = #{format},</if>
+            <if test="describe != null">Describe = #{describe},</if>
+            <if test="docabbreviation != null and docabbreviation != ''">DocAbbreviation = #{docabbreviation},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteWenshuById" parameterType="String">
+        delete from wenshu where ID = #{id}
+    </delete>
+
+    <delete id="deleteWenshuByIds" parameterType="String">
+        delete from wenshu where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
