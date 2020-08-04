@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowsys.mapper.WorkflowinfoMapper">
+    
+    <resultMap type="Workflowinfo" id="WorkflowinfoResult">
+        <result property="id"    column="ID"    />
+        <result property="name"    column="Name"    />
+        <result property="type"    column="Type"    />
+        <result property="manager"    column="Manager"    />
+        <result property="instancemanager"    column="InstanceManager"    />
+        <result property="createdate"    column="CreateDate"    />
+        <result property="createuserid"    column="CreateUserID"    />
+        <result property="designjson"    column="DesignJSON"    />
+        <result property="installdate"    column="InstallDate"    />
+        <result property="installuserid"    column="InstallUserID"    />
+        <result property="runjson"    column="RunJSON"    />
+        <result property="status"    column="Status"    />
+        <result property="infoname"    column="InfoName"    />
+        <result property="infotype"    column="InfoType"    />
+    </resultMap>
+
+    <sql id="selectWorkflowinfoVo">
+        select ID, Name, Type, Manager, InstanceManager, CreateDate, CreateUserID, DesignJSON, InstallDate, InstallUserID, RunJSON, Status, InfoName, InfoType from workflowinfo
+    </sql>
+
+    <select id="selectWorkflowinfoList" parameterType="Workflowinfo" resultMap="WorkflowinfoResult">
+        <include refid="selectWorkflowinfoVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and Name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectWorkflowinfoById" parameterType="String" resultMap="WorkflowinfoResult">
+        <include refid="selectWorkflowinfoVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertWorkflowinfo" parameterType="Workflowinfo">
+        insert into workflowinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="name != null">Name,</if>
+            <if test="type != null">Type,</if>
+            <if test="manager != null">Manager,</if>
+            <if test="instancemanager != null">InstanceManager,</if>
+            <if test="createdate != null">CreateDate,</if>
+            <if test="createuserid != null">CreateUserID,</if>
+            <if test="designjson != null">DesignJSON,</if>
+            <if test="installdate != null">InstallDate,</if>
+            <if test="installuserid != null">InstallUserID,</if>
+            <if test="runjson != null">RunJSON,</if>
+            <if test="status != null">Status,</if>
+            <if test="infoname != null">InfoName,</if>
+            <if test="infotype != null">InfoType,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="type != null">#{type},</if>
+            <if test="manager != null">#{manager},</if>
+            <if test="instancemanager != null">#{instancemanager},</if>
+            <if test="createdate != null">#{createdate},</if>
+            <if test="createuserid != null">#{createuserid},</if>
+            <if test="designjson != null">#{designjson},</if>
+            <if test="installdate != null">#{installdate},</if>
+            <if test="installuserid != null">#{installuserid},</if>
+            <if test="runjson != null">#{runjson},</if>
+            <if test="status != null">#{status},</if>
+            <if test="infoname != null">#{infoname},</if>
+            <if test="infotype != null">#{infotype},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWorkflowinfo" parameterType="Workflowinfo">
+        update workflowinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">Name = #{name},</if>
+            <if test="type != null">Type = #{type},</if>
+            <if test="manager != null">Manager = #{manager},</if>
+            <if test="instancemanager != null">InstanceManager = #{instancemanager},</if>
+            <if test="createdate != null">CreateDate = #{createdate},</if>
+            <if test="createuserid != null">CreateUserID = #{createuserid},</if>
+            <if test="designjson != null">DesignJSON = #{designjson},</if>
+            <if test="installdate != null">InstallDate = #{installdate},</if>
+            <if test="installuserid != null">InstallUserID = #{installuserid},</if>
+            <if test="runjson != null">RunJSON = #{runjson},</if>
+            <if test="status != null">Status = #{status},</if>
+            <if test="infoname != null">InfoName = #{infoname},</if>
+            <if test="infotype != null">InfoType = #{infotype},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteWorkflowinfoById" parameterType="String">
+        delete from workflowinfo where ID = #{id}
+    </delete>
+
+    <delete id="deleteWorkflowinfoByIds" parameterType="String">
+        delete from workflowinfo where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
