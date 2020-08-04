@@ -1,6 +1,9 @@
 package com.ruoyi.project.sjwflowsys.service;
 
 import java.util.List;
+
+import com.ruoyi.framework.web.domain.TreeEntityStr;
+import com.ruoyi.framework.web.domain.TreeSelect;
 import com.ruoyi.project.sjwflowsys.domain.Workflowinfo;
 
 /**
@@ -58,4 +61,12 @@ public interface IWorkflowinfoService
      * @return 结果
      */
     public int deleteWorkflowinfoById(String id);
+
+    /**
+     * 构建流程树
+     * @param infos
+     * @return
+     */
+    public List<TreeEntityStr> buildWorkflowInfoTreeSelect(List<Workflowinfo> infos);
+
 }

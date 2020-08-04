@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectWenshuVo">
-        select ID, Name, Designation, Process, Url, Sort, Type, qianzhang, HasCode, InfoType, BaseType, Secretaries, Format, Describe, DocAbbreviation from wenshu
+        select ID, Name, Designation, Process, Url, Sort, Type, qianzhang, HasCode, InfoType, BaseType, Secretaries, `Format`, `Describe`, DocAbbreviation from wenshu
     </sql>
 
     <select id="selectWenshuList" parameterType="Wenshu" resultMap="WenshuResult">
@@ -53,8 +53,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="infotype != null">InfoType,</if>
             <if test="basetype != null">BaseType,</if>
             <if test="secretaries != null">Secretaries,</if>
-            <if test="format != null">Format,</if>
-            <if test="describe != null">Describe,</if>
+            <if test="format != null">`Format`,</if>
+            <if test="describe != null">`Describe`,</if>
             <if test="docabbreviation != null and docabbreviation != ''">DocAbbreviation,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -90,8 +90,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="infotype != null">InfoType = #{infotype},</if>
             <if test="basetype != null">BaseType = #{basetype},</if>
             <if test="secretaries != null">Secretaries = #{secretaries},</if>
-            <if test="format != null">Format = #{format},</if>
-            <if test="describe != null">Describe = #{describe},</if>
+            <if test="format != null">`Format` = #{format},</if>
+            <if test="describe != null">`Describe` = #{describe},</if>
             <if test="docabbreviation != null and docabbreviation != ''">DocAbbreviation = #{docabbreviation},</if>
         </trim>
         where ID = #{id}
