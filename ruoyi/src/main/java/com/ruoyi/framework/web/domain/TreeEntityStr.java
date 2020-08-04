@@ -1,6 +1,7 @@
 package com.ruoyi.framework.web.domain;
 
 import com.ruoyi.project.sjwflowsys.domain.Dict;
+import com.ruoyi.project.sjwflowsys.domain.Workflowinfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,12 @@ public class TreeEntityStr extends BaseEntity
         this.parentName = dict.getTitle();
         this.children = dict.getChildren();
     }
+
+    public TreeEntityStr(Workflowinfo info){
+        this.parentId = info.getId();
+        this.parentName = info.getName();
+        this.remark = info.getInfoname();
+    }
     /** 父菜单名称 */
     private String parentName;
 
@@ -41,7 +48,18 @@ public class TreeEntityStr extends BaseEntity
 
     /** 是否有子部门 */
     private Boolean hasChildren;
+    /** 备注 */
+    private String remark;
 
+    public String getRemark()
+    {
+        return remark;
+    }
+
+    public void setRemark(String remark)
+    {
+        this.remark = remark;
+    }
     public String getParentName()
     {
         return parentName;

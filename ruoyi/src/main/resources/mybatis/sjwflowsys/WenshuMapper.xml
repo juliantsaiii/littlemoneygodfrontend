@@ -30,6 +30,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectWenshuVo"/>
         <where>  
             <if test="name != null  and name != ''"> and Name like concat('%', #{name}, '%')</if>
+            <if test="infotype != null  and infotype != ''"> and infotype = #{infotype}</if>
+            <if test="process != null  and process != ''"> and process like concat('%', #{process}, '%')</if>
         </where>
     </select>
     

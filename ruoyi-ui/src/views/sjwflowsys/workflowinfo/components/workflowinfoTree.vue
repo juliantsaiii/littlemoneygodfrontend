@@ -1,16 +1,33 @@
 <template>
-  <div>
-    <el-tree :data="deptList" :props="props"></el-tree>
-  </div>
+  <el-tree :data="infotree" :props="props" @node-click="treeClick"></el-tree>
 </template>
 
 <script>
+import { getWorkflowinfoTree } from "@/api/sjwflowsys/workflowinfo";
 export default {
   name: "workflowinfotree",
   data() {
-    return {};
+    return {
+      props: {
+        children: "children",
+        label: "parentName",
+      },
+      infotree: [],
+    };
   },
-  method: {}
+  created() {
+    this.initTree();
+  },
+  methods: {
+    initTree() {
+      getWorkflowinfoTree().then((response) => {
+        this.infotree = response.data;
+      });
+    },
+    treeClick(data) {
+      this.$emit("changevalue", data.parentId, data.remark);
+    },
+  },
 };
 </script>
 

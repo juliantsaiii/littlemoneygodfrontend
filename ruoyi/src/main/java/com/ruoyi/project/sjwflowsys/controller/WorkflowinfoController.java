@@ -100,4 +100,15 @@ public class WorkflowinfoController extends BaseController
     {
         return toAjax(workflowinfoService.deleteWorkflowinfoByIds(ids));
     }
+
+    /**
+     * 生成流程树
+     * @return
+     */
+    @GetMapping("/gettree")
+    public AjaxResult getWorkflowinfoTree(){
+        Workflowinfo info = new Workflowinfo();
+        List<Workflowinfo> list = workflowinfoService.selectWorkflowinfoList(info);
+        return AjaxResult.success(workflowinfoService.buildWorkflowInfoTreeSelect(list));
+    }
 }

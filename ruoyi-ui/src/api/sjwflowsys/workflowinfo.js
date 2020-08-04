@@ -51,3 +51,11 @@ export function exportWorkflowinfo(query) {
     params: query
   })
 }
+
+// 查询流程树
+export function getWorkflowinfoTree() {
+  return request({
+    url: '/sjwflowsys/workflowinfo/gettree',
+    method: "get"
+  })
+}

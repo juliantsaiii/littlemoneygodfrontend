@@ -116,7 +116,8 @@ public class WorkflowinfoServiceImpl implements IWorkflowinfoService
         treeEntities = dicts.stream().map(TreeEntityStr::new).collect(Collectors.toList());
         for(TreeEntityStr ts : treeEntities){
             List<Workflowinfo> ifs = infos.stream().filter(item -> item.getType().equals(ts.getParentId())).collect(Collectors.toList());
-            ts.setChildren(ifs);
+            List<TreeEntityStr> infoEntities = ifs.stream().map(TreeEntityStr::new).collect(Collectors.toList());
+            ts.setChildren(infoEntities);
         }
         return treeEntities;
     }

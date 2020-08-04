@@ -22,8 +22,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectWorkflowinfoVo">
-        select ID, Name, Type, Manager, InstanceManager, CreateDate, CreateUserID, DesignJSON, InstallDate, InstallUserID, RunJSON, Status, InfoName, InfoType from workflowinfo
+        select ID, Name, Type, Manager, InstanceManager, CreateDate, CreateUserID, InstallDate, InstallUserID, Status, InfoName, InfoType from workflowinfo
     </sql>
+
+
 
     <select id="selectWorkflowinfoList" parameterType="Workflowinfo" resultMap="WorkflowinfoResult">
         <include refid="selectWorkflowinfoVo"/>
