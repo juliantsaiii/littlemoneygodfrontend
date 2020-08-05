@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
     <el-row :gutter="20">
-      <el-col :span="4">
+      <el-col :span="6">
         <div :style="treeheight">
           <workflowinfoTree @changevalue="changevalue"></workflowinfoTree>
         </div>
       </el-col>
-      <el-col :span="20">
+      <el-col :span="18">
         <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="100px">
           <el-form-item label="文书号缩写" prop="name">
             <el-input
@@ -41,13 +41,15 @@
               <el-switch v-model="scope.row.hascode" @change="changeCode(scope.row)"></el-switch>
             </template>
           </el-table-column>
-          <el-table-column
-            label="操作"
-            align="center"
-            class-name="small-padding fixed-width"
-            fixed="right"
-          >
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-notebook-2"
+                @click="openWenshu(scope.row)"
+                v-hasPermi="['sjwflowsys:wenshu:remove']"
+              >书签</el-button>
               <el-button
                 size="mini"
                 type="text"
@@ -55,13 +57,6 @@
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['sjwflowsys:wenshu:edit']"
               >修改</el-button>
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-delete"
-                @click="openWenshu(scope.row.url)"
-                v-hasPermi="['sjwflowsys:wenshu:remove']"
-              >书签</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -316,10 +311,18 @@ export default {
         }
       });
     },
-    openWenshu(path) {
-      path = process.env.VUE_APP_FileServer_Path + path;
-      const url = this.getdownloadbypath("", path);
-      openNtkoWindow(url);
+    openWenshu(data) {
+      const savepath = process.env.VUE_APP_FileServer_Path + data.url;
+      const filePath = data.url.replace(data.designation + ".doc", "");
+      const params =
+        "&saveName=" + data.designation + ".doc" + "&savePath=" + filePath;
+      const url = this.getdownloadbypath(
+        data.designation + ".doc",
+        savepath,
+        params
+      );
+
+      openNtkoWindow(url, false);
     }
   }
 };

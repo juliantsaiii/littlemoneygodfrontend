@@ -100,8 +100,8 @@ export function downloadbypath(fileName, filePath) {
 }
 
 // 拼接下载方法路径
-export function getdownloadbypath(fileName, filePath) {
-	return baseURL + "/common/downloadpath?fileName=" + encodeURI(fileName) + "&filePath=" + encodeURI(filePath);
+export function getdownloadbypath(fileName, filePath, params) {
+	return baseURL + "/common/downloadpath?fileName=" + encodeURI(fileName) + "&filePath=" + encodeURI(filePath) + params;
 }
 
 // 字符串格式化(%s )

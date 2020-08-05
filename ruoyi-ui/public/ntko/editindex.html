@@ -8,72 +8,71 @@
     <script type="text/javascript" src="ntko.js"></script>
     <script type="text/javascript">
         var ntkourl;	//命令类型
+        var isReadonly;
+        var params = "filename=" + GetQueryValue1("saveName") + "&path=" + GetQueryValue1("savePath");
 
         function getQueryString() {
             var query = location.search.substring(1);
-            ntkourl = query.split("ntkourl=")[1];
+            ntkourl = query.split("&isReadonly=")[0].replace("ntkourl=", "");
+            isReadonly = GetQueryValue1("isReadonly");
         }
 
-        function CurentTime() {
-            var now = new Date();
-
-            var year = now.getFullYear();       //年
-            var month = now.getMonth() + 1;     //月
-            var day = now.getDate();            //日
-
-            var hh = now.getHours();            //时
-            var mm = now.getMinutes();          //分
-            var ss = now.getSeconds();          //分
-
-            var clock = year + "-";
-
-            if (month < 10)
-                clock += "0";
-
-            clock += month + "-";
-
-            if (day < 10)
-                clock += "0";
-
-            clock += day + " ";
-
-            if (hh < 10)
-                clock += "0";
-
-            clock += hh + ":";
-            if (mm < 10) clock += '0';
-            clock += mm + ":";
-            if (ss < 10) clock += '0';
-            clock += ss;
-            return (clock);
+        /**
+         * [通过参数名获取url中的参数值]
+         * 示例URL:http://htmlJsTest/getrequest.html?uid=admin&rid=1&fid=2&name=小明
+         * @param  {[string]} queryName [参数名]
+         * @return {[string]}           [参数值]
+         */
+        function GetQueryValue1(queryName) {
+            var reg = new RegExp("(^|&)" + queryName + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return decodeURI(r[2]);
+            } else {
+                return null;
+            }
+        }
+        //读取cookies
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return unescape(arr[2]);
+            else
+                return null;
         }
 
-        //在子页面定义的向父页面回传值的方法，方法名可以自定义
-        function ntkoSendDataToParentPage(cmd) {
-            var varData = new Array();
-            varData.push(ntko.docsize);
-            varData.push(CurentTime());
-            ntkoBrowser.ntkoSetReturnValueToParentPage("OnData", varData);
-
+    </script>
+    <script language="JScript" for="TANGER_OCX" event="OnCustomButtonOnMenuCmd(btnPos,btnCaption,btnCmdid)">
+        if (0 == btnCmdid) {
+            var token = getCookie("Admin-Token")
+            var urlPre = GetQueryValue1("urlPre");
+            ntko.AddHTTPHeader("Authorization: " + token);
+            ntko.SaveToURL(urlPre + "/common/sambUpload", "file", params, "", 0);
         }
-        function ntkoDataToChild(data) {
-            document.getElementById("DataToChild").innerHTML = "获取到父页面的值为:" + data;
+        else if (1 == btnCmdid) {
+            ntko.PrintPreview();
         }
-        function ntkoGetParentData(data) {
-            ntkoDataToChild(data);
+        else if (2 == btnCmdid) {
+            ntko.PrintOut(true);
+        }
+        else if (3 == btnCmdid) {
+            window.opener = null;
+            window.open('', '_self');
+            window.close();
+            window.parent.ntkoCloseEvent();
         }
     </script>
 
-
 </head>
 
-<body onload="getQueryString();init(ntkourl);">
+<body onload="getQueryString();init(ntkourl,isReadonly);">
     <div id="DataToChild" class="divBody" style="color:red;text-align:left;">
     </div>
     <div class="divBody">
 
         <script type="text/javascript" src="ntkoofficecontrol.min.js"></script>
     </div>
+
 </body>
 
 </html>

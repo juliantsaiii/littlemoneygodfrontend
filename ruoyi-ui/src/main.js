@@ -19,6 +19,7 @@ import './permission' // permission control
 import { getDicts } from "@/api/system/dict/data";
 import { getConfigKey } from "@/api/system/config";
 import { parseTime, resetForm, addDateRange, selectDictLabel, download, handleTree, downloadbypath, getdownloadbypath, selectDictLabelRemark } from "@/utils/ruoyi";
+import { getToken } from "@/utils/auth";
 import Pagination from "@/components/Pagination";
 import less from 'less'
 //复制到粘贴板插件
@@ -47,6 +48,7 @@ Vue.prototype.download = download
 Vue.prototype.downloadbypath = downloadbypath
 Vue.prototype.handleTree = handleTree
 Vue.prototype.getdownloadbypath = getdownloadbypath
+Vue.prototype.getToken = getToken
 
 Vue.prototype.msgSuccess = function (msg) {
   this.$message({ showClose: true, message: msg, type: "success" });

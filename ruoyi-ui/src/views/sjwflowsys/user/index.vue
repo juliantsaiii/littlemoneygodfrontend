@@ -115,7 +115,6 @@
                   :src="url + '/common/downloadpath?fileName=' + scope.row.id + '.png&filePath=156.11.1.234/Signature/' + scope.row.id + '.png' + '?radomn=' + scope.row.imageUrl"
                   class="avatar"
                 />
-                <!-- <img v-if="scope.row.imageUrl" :src="scope.row.imageUrl" class="avatar" /> -->
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </template>

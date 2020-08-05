@@ -341,7 +341,7 @@ export default {
           res.data.filepath
         );
         if (data.fileextend == ".doc" || data.fileextend == ".docx") {
-          openNtkoWindow(url);
+          openNtkoWindow(url, true);
         } else if (data.fileextend == ".pdf") {
           this.openPdf(url);
         } else {

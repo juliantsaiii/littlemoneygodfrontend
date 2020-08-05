@@ -109,7 +109,7 @@ public class CommonController
     }
 
     /**
-     * 签名文件上传
+     * smb文件上传
      */
     @PostMapping("/common/sambUpload")
     public AjaxResult smbfileUpload(MultipartFile file,String filename,String path) throws Exception
