@@ -58,4 +58,11 @@ public interface ITempClueinfoService
      * @return 结果
      */
     public int deleteTempClueinfoById(String id);
+
+    /**
+     * 批量假删除线索
+     * @param ids
+     * @return
+     */
+    public int fakeDelteByIds(String[] ids);
 }

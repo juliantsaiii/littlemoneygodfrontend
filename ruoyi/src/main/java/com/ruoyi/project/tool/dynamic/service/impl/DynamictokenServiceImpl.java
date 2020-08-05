@@ -1,6 +1,9 @@
 package com.ruoyi.project.tool.dynamic.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
+import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.tool.dynamic.mapper.DynamictokenMapper;
@@ -14,6 +17,7 @@ import com.ruoyi.project.tool.dynamic.service.IDynamictokenService;
  * @date 2020-07-22
  */
 @Service
+@DataSource(value = DataSourceType.SLAVE)
 public class DynamictokenServiceImpl implements IDynamictokenService 
 {
     @Autowired

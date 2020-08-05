@@ -78,7 +78,18 @@
           size="mini"
           :disabled="multiple"
           v-hasPermi="['sjwflowbusiness:tempclueinfo:remove']"
+          @click="deleteBatch"
         >删除</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          icon="el-icon-s-promotion"
+          size="mini"
+          :disabled="multiple"
+          v-hasPermi="['sjwflowbusiness:tempclueinfo:remove']"
+          @click="dialogTreeVisible=true"
+        >转交</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -219,6 +230,14 @@
         <fileupload :curclueid="currentclueid" :isdialog="true"></fileupload>
       </template>
     </el-dialog>
+
+    <el-dialog title="选择转交人" :visible.sync="dialogTreeVisible">
+      <dept-select-tree @selectterm="getReceiverMsg" :type="'user'"></dept-select-tree>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogTreeVisible = false">取 消</el-button>
+        <el-button type="primary" @click="changeReceiver" :disabled="receiveSubmit">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -229,12 +248,14 @@ import {
   delTempclueinfo,
   addTempclueinfo,
   updateTempclueinfo,
-  exportTempclueinfo
+  exportTempclueinfo,
+  fakedelclueinfo
 } from "@/api/sjwflowbusiness/tempclueinfo";
+import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
 import displayview from "@/views/tool/go/displayview";
 import fileupload from "@/views/sjwflowbusiness/fileupload/index";
 export default {
-  components: { displayview, fileupload },
+  components: { displayview, fileupload, deptSelectTree },
   name: "Tempclueinfo",
   data() {
     return {
@@ -242,6 +263,8 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      //选中人名
+      personnames: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -276,7 +299,15 @@ export default {
       //附件框
       fileuploaddialog: false,
       //选中clueid
-      currentclueid: undefined
+      currentclueid: undefined,
+      //选人树
+      dialogTreeVisible: false,
+      //更换人确认按钮
+      receiveSubmit: true,
+      //更换接收人ID
+      receiveID: undefined,
+      //更换接收人name
+      receiveName: undefined
     };
   },
   created() {
@@ -474,6 +505,7 @@ export default {
       this.ids = selection.map(item => item.id);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
+      this.personnames = selection.map(item => item.personname);
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -502,7 +534,61 @@ export default {
     /** 打开流程图框 */
     openviewdialog(id) {
       this.currentclueid = id;
+    },
+    /** 批量删除 */
+    deleteBatch() {
+      this.$confirm(
+        "是否确认删除被反映人为<span class='el-tag el-tag--success'>" +
+          this.personnames +
+          "</span>的线索"
+      ).then(() => {
+        fakedelclueinfo(this.ids).then(response => {
+          if (response.code == "200") {
+            this.msgSuccess("删除成功");
+            this.getList();
+            this.ids = "";
+            this.personnames = "";
+          }
+        });
+      });
+    },
+    //批量换承办人
+    getReceiverMsg(node) {
+      this.receiveID = node.id;
+      this.receiveName = node.label;
+      receiveSubmit = false;
+    },
+    changeReceiver() {
+      this.$confirm(
+        "是否确认将被反映人为<span class='el-tag el-tag--success'>" +
+          this.personnames +
+          '</span>的线索转交给<span class="el-tag">' +
+          this.receiveName +
+          "</span>",
+        { dangerouslyUseHTMLString: true }
+      ).then(() => {});
     }
   }
 };
 </script>
+<style scoped>
+.el-tag {
+  background-color: #ecf5ff;
+  display: inline-block;
+  height: 32px;
+  padding: 0 10px;
+  line-height: 30px;
+  font-size: 12px;
+  color: #409eff;
+  border: 1px solid #d9ecff;
+  border-radius: 4px;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.el-tag.el-tag--success {
+  background-color: #f0f9eb;
+  border-color: #e1f3d8;
+  color: #67c23a;
+}
+</style>

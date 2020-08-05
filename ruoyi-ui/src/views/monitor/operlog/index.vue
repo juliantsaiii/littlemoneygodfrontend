@@ -72,7 +72,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="danger"
           icon="el-icon-delete"
@@ -90,7 +90,7 @@
           @click="handleClean"
           v-hasPermi="['monitor:operlog:remove']"
         >清空</el-button>
-      </el-col>
+      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -109,8 +109,19 @@
       <el-table-column label="操作类型" align="center" prop="businessType" :formatter="typeFormat" />
       <el-table-column label="请求方式" align="center" prop="requestMethod" />
       <el-table-column label="操作人员" align="center" prop="operName" />
-      <el-table-column label="主机" align="center" prop="operIp" width="130" :show-overflow-tooltip="true" />
-      <el-table-column label="操作地点" align="center" prop="operLocation" :show-overflow-tooltip="true" />
+      <el-table-column
+        label="主机"
+        align="center"
+        prop="operIp"
+        width="130"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="操作地点"
+        align="center"
+        prop="operLocation"
+        :show-overflow-tooltip="true"
+      />
       <el-table-column label="操作状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="操作日期" align="center" prop="operTime" width="180">
         <template slot-scope="scope">
@@ -183,7 +194,12 @@
 </template>
 
 <script>
-import { list, delOperlog, cleanOperlog, exportOperlog } from "@/api/monitor/operlog";
+import {
+  list,
+  delOperlog,
+  cleanOperlog,
+  exportOperlog
+} from "@/api/monitor/operlog";
 
 export default {
   name: "Operlog",
@@ -233,7 +249,8 @@ export default {
     /** 查询登录日志 */
     getList() {
       this.loading = true;
-      list(this.addDateRange(this.queryParams, this.dateRange)).then( response => {
+      list(this.addDateRange(this.queryParams, this.dateRange)).then(
+        response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;
@@ -261,8 +278,8 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.operId)
-      this.multiple = !selection.length
+      this.ids = selection.map(item => item.operId);
+      this.multiple = !selection.length;
     },
     /** 详细按钮操作 */
     handleView(row) {
@@ -272,42 +289,55 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const operIds = row.operId || this.ids;
-      this.$confirm('是否确认删除日志编号为"' + operIds + '"的数据项?', "警告", {
+      this.$confirm(
+        '是否确认删除日志编号为"' + operIds + '"的数据项?',
+        "警告",
+        {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(function() {
+        }
+      )
+        .then(function() {
           return delOperlog(operIds);
-        }).then(() => {
+        })
+        .then(() => {
           this.getList();
           this.msgSuccess("删除成功");
-        }).catch(function() {});
+        })
+        .catch(function() {});
     },
     /** 清空按钮操作 */
     handleClean() {
-        this.$confirm('是否确认清空所有操作日志数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
+      this.$confirm("是否确认清空所有操作日志数据项?", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(function() {
           return cleanOperlog();
-        }).then(() => {
+        })
+        .then(() => {
           this.getList();
           this.msgSuccess("清空成功");
-        }).catch(function() {});
+        })
+        .catch(function() {});
     },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有操作日志数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
+      this.$confirm("是否确认导出所有操作日志数据项?", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(function() {
           return exportOperlog(queryParams);
-        }).then(response => {
+        })
+        .then(response => {
           this.download(response.msg);
-        }).catch(function() {});
+        })
+        .catch(function() {});
     }
   }
 };

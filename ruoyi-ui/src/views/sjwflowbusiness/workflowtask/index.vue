@@ -141,6 +141,7 @@
     <el-dialog title="更换接收人" :visible.sync="dialogTreeVisible">
       <dept-select-tree
         :pid="form.receiveid"
+        :label="form.receivename"
         @selectterm="updatepSelectTreeValue"
         :type="'user'"
         :selectID="'receiveid'"
@@ -161,7 +162,7 @@ import {
   delWorkflowtask,
   addWorkflowtask,
   updateWorkflowtask,
-  exportWorkflowtask,
+  exportWorkflowtask
 } from "@/api/sjwflowbusiness/workflowtask";
 import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -195,7 +196,7 @@ export default {
         receivename: undefined,
         instanceid: undefined,
         receiveid: undefined,
-        status: undefined,
+        status: undefined
       },
       statusOptions: [],
       // 表单参数
@@ -206,12 +207,12 @@ export default {
           {
             required: true,
             message: "调换科室原接收人所在步骤不能为空",
-            trigger: "blur",
-          },
-        ],
+            trigger: "blur"
+          }
+        ]
       },
       tableHeight: this.$store.getters.clientHeight - 200 + "px",
-      dialogTreeVisible: false,
+      dialogTreeVisible: false
     };
   },
   created() {
@@ -222,7 +223,7 @@ export default {
       this.$route.params && this.$route.query.receiveid && 1;
     this.queryParams.isdeleted =
       this.$route.params && this.$route.query.receiveid && 0;
-    this.getDicts("sjwflow_task_status").then((response) => {
+    this.getDicts("sjwflow_task_status").then(response => {
       this.statusOptions = response.data;
     });
     this.getList(this.queryParams);
@@ -231,7 +232,7 @@ export default {
     /** 查询流程记录列表 */
     getList() {
       this.loading = true;
-      listWorkflowtask(this.queryParams).then((response) => {
+      listWorkflowtask(this.queryParams).then(response => {
         this.workflowtaskList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -291,7 +292,7 @@ export default {
         infotype: undefined,
         isdeleted: "0",
         spbid: undefined,
-        isdeletd: "0",
+        isdeletd: "0"
       };
       this.resetForm("form");
     },
@@ -307,7 +308,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map((item) => item.id);
+      this.ids = selection.map(item => item.id);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
@@ -317,19 +318,19 @@ export default {
       this.$confirm("是否确认导出所有流程记录数据项?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
-        .then(function () {
+        .then(function() {
           return exportWorkflowtask(queryParams);
         })
-        .then((response) => {
+        .then(response => {
           this.download(response.msg);
         })
-        .catch(function () {});
+        .catch(function() {});
     },
     /** 更新form */
     updateform(data) {
-      updateWorkflowtask(data).then((res) => {
+      updateWorkflowtask(data).then(res => {
         if (res.code == "200") {
           this.msgSuccess("修改成功");
         }
@@ -349,7 +350,7 @@ export default {
       this.updateform(this.form);
       this.dialogTreeVisible = false;
       this.getList();
-    },
-  },
+    }
+  }
 };
 </script>

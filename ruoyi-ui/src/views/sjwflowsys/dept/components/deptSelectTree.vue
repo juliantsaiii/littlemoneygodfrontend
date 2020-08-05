@@ -9,6 +9,7 @@
   />
 </template>
 <script>
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import Treeselect from "@riophae/vue-treeselect";
 import { LOAD_CHILDREN_OPTIONS } from "@riophae/vue-treeselect";
 import { listDept, getDeptTree } from "@/api/sjwflowsys/dept";
@@ -23,7 +24,7 @@ export default {
       deptOptions: [],
       queryType: this.type == "dept" ? false : true,
       queryParams: { pid: undefined, type: this.type, selectTree: "select" },
-      childinit: {},
+      childinit: {}
     };
   },
   created() {
@@ -35,20 +36,20 @@ export default {
     /** 更换默认值 */
     pid(val) {
       this.value = val;
-      if (val === this.initvalue) {
+      if (val != this.initvalue) {
         this.deptOptions.splice(0, 1, { id: val, label: this.label });
       }
-    },
+    }
   },
   methods: {
     getTreeselect() {
-      listDept().then((response) => {
+      listDept().then(response => {
         this.queryParams.pid = "-1";
-        listDept(this.queryParams).then((response) => {
+        listDept(this.queryParams).then(response => {
           let pNode = response.data[0];
           this.deptOptions = [
             this.childinit,
-            { id: pNode.id, label: pNode.name, children: null },
+            { id: pNode.id, label: pNode.name, children: null }
           ];
         });
       });
@@ -56,10 +57,10 @@ export default {
     loadOptions({ action, parentNode, callback }) {
       if (action === LOAD_CHILDREN_OPTIONS) {
         this.queryParams.pid = parentNode.id;
-        getDeptTree(this.queryParams).then((response) => {
+        getDeptTree(this.queryParams).then(response => {
           let resData = response.data;
           let arr = [];
-          resData.forEach((item) => {
+          resData.forEach(item => {
             let objData = {};
             objData.id = item.id;
             objData.label = item.name;
@@ -80,7 +81,7 @@ export default {
       }
       this.value = node.id;
       this.$emit("selectterm", node, this.selectID, this.selectName);
-    },
-  },
+    }
+  }
 };
 </script>

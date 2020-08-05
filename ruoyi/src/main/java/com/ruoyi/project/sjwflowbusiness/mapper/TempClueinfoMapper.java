@@ -58,4 +58,10 @@ public interface TempClueinfoMapper
      * @return 结果
      */
     public int deleteTempClueinfoByIds(String[] ids);
+    /**
+     * 批量假删除线索
+     * @param ids
+     * @return
+     */
+    public int fakeDelteByIds(String[] ids);
 }

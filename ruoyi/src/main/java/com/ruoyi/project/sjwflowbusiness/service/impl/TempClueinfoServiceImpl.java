@@ -94,4 +94,13 @@ public class TempClueinfoServiceImpl implements ITempClueinfoService
     {
         return tempClueinfoMapper.deleteTempClueinfoById(id);
     }
+
+    /**
+     * 批量假删除线索
+     * @param ids
+     * @return
+     */
+    public int fakeDelteByIds(String[] ids){
+        return tempClueinfoMapper.fakeDelteByIds(ids);
+    }
 }

@@ -56,7 +56,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="danger"
           icon="el-icon-delete"
@@ -74,7 +74,7 @@
           @click="handleClean"
           v-hasPermi="['monitor:logininfor:remove']"
         >清空</el-button>
-      </el-col>
+      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -90,8 +90,19 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="访问编号" align="center" prop="infoId" />
       <el-table-column label="用户名称" align="center" prop="userName" />
-      <el-table-column label="登录地址" align="center" prop="ipaddr" width="130" :show-overflow-tooltip="true" />
-      <el-table-column label="登录地点" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
+      <el-table-column
+        label="登录地址"
+        align="center"
+        prop="ipaddr"
+        width="130"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="登录地点"
+        align="center"
+        prop="loginLocation"
+        :show-overflow-tooltip="true"
+      />
       <el-table-column label="浏览器" align="center" prop="browser" />
       <el-table-column label="操作系统" align="center" prop="os" />
       <el-table-column label="登录状态" align="center" prop="status" :formatter="statusFormat" />
@@ -114,7 +125,12 @@
 </template>
 
 <script>
-import { list, delLogininfor, cleanLogininfor, exportLogininfor } from "@/api/monitor/logininfor";
+import {
+  list,
+  delLogininfor,
+  cleanLogininfor,
+  exportLogininfor
+} from "@/api/monitor/logininfor";
 
 export default {
   name: "Logininfor",
@@ -154,7 +170,8 @@ export default {
     /** 查询登录日志列表 */
     getList() {
       this.loading = true;
-      list(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+      list(this.addDateRange(this.queryParams, this.dateRange)).then(
+        response => {
           this.list = response.rows;
           this.total = response.total;
           this.loading = false;
@@ -178,48 +195,61 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.infoId)
-      this.multiple = !selection.length
+      this.ids = selection.map(item => item.infoId);
+      this.multiple = !selection.length;
     },
     /** 删除按钮操作 */
     handleDelete(row) {
       const infoIds = row.infoId || this.ids;
-      this.$confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?', "警告", {
+      this.$confirm(
+        '是否确认删除访问编号为"' + infoIds + '"的数据项?',
+        "警告",
+        {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(function() {
+        }
+      )
+        .then(function() {
           return delLogininfor(infoIds);
-        }).then(() => {
+        })
+        .then(() => {
           this.getList();
           this.msgSuccess("删除成功");
-        }).catch(function() {});
+        })
+        .catch(function() {});
     },
     /** 清空按钮操作 */
     handleClean() {
-        this.$confirm('是否确认清空所有登录日志数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
+      this.$confirm("是否确认清空所有登录日志数据项?", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(function() {
           return cleanLogininfor();
-        }).then(() => {
+        })
+        .then(() => {
           this.getList();
           this.msgSuccess("清空成功");
-        }).catch(function() {});
+        })
+        .catch(function() {});
     },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有操作日志数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
+      this.$confirm("是否确认导出所有操作日志数据项?", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(function() {
           return exportLogininfor(queryParams);
-        }).then(response => {
+        })
+        .then(response => {
           this.download(response.msg);
-        }).catch(function() {});
+        })
+        .catch(function() {});
     }
   }
 };

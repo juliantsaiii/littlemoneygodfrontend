@@ -111,4 +111,16 @@ public class TempClueinfoController extends BaseController
     {
         return toAjax(tempClueinfoService.deleteTempClueinfoByIds(ids));
     }
+
+    /**
+     * 删除线索假删除
+     */
+    @PreAuthorize("@ss.hasPermi('sjwflowbusiness:tempclueinfo:remove')")
+    @Log(title = "线索操作", businessType = BusinessType.DELETE)
+    @PostMapping("/fakeDelete/{ids}")
+    public AjaxResult fakeDelete(@PathVariable String[] ids)
+    {
+        return toAjax(tempClueinfoService.fakeDelteByIds(ids));
+    }
+
 }

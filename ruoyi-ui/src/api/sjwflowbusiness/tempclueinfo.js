@@ -51,3 +51,10 @@ export function exportTempclueinfo(query) {
     params: query
   })
 }
+
+export function fakedelclueinfo(id) {
+  return request({
+    url: "/sjwflowbusiness/tempclueinfo/fakeDelete/" + id,
+    method: 'post',
+  })
+}
