@@ -1,6 +1,7 @@
 package com.ruoyi.project.sjwflowbusiness.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
 import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
@@ -105,4 +106,9 @@ public class WorkflowtaskServiceImpl implements IWorkflowtaskService
     {
         return workflowtaskMapper.selectWorkflowtaskSteps(id);
     };
+
+    public int changeRecever(Map<String,Object> map){
+        return workflowtaskMapper.changeRecever(map);
+    }
+
 }

@@ -60,3 +60,10 @@ export function getCurrentSteps(clueid) {
   })
 }
 
+export function changeClueReceiver(params) {
+  return request({
+    url: "/sjwflowbusiness/workflowtask/changeRecever",
+    method: 'post',
+    data: params
+  })
+}

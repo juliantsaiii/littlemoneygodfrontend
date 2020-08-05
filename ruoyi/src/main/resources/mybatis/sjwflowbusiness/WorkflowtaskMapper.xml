@@ -248,5 +248,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
+    <update id="changeRecever" parameterType="map">
+        update workflowtask set receiveid = #{params.receiveid},receivename = #{params.receivename} where clueid in
+        <foreach collection="params.ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        and status in (0,1)
+    </update>
 
 </mapper>

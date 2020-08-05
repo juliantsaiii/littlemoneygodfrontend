@@ -231,7 +231,7 @@
       </template>
     </el-dialog>
 
-    <el-dialog title="选择转交人" :visible.sync="dialogTreeVisible">
+    <el-dialog title="选择转交人" :visible.sync="dialogTreeVisible" :close-on-click-modal="false">
       <dept-select-tree @selectterm="getReceiverMsg" :type="'user'"></dept-select-tree>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogTreeVisible = false">取 消</el-button>
@@ -249,11 +249,12 @@ import {
   addTempclueinfo,
   updateTempclueinfo,
   exportTempclueinfo,
-  fakedelclueinfo
+  fakedelclueinfo,
 } from "@/api/sjwflowbusiness/tempclueinfo";
 import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
 import displayview from "@/views/tool/go/displayview";
 import fileupload from "@/views/sjwflowbusiness/fileupload/index";
+import { changeClueReceiver } from "@/api/sjwflowbusiness/workflowtask";
 export default {
   components: { displayview, fileupload, deptSelectTree },
   name: "Tempclueinfo",
@@ -287,7 +288,7 @@ export default {
         personname: undefined,
         personunit: undefined,
         cluesource: undefined,
-        clueno: undefined
+        clueno: undefined,
       },
       // 表单参数
       form: {},
@@ -307,7 +308,7 @@ export default {
       //更换接收人ID
       receiveID: undefined,
       //更换接收人name
-      receiveName: undefined
+      receiveName: undefined,
     };
   },
   created() {
@@ -317,7 +318,7 @@ export default {
     /** 查询线索操作列表 */
     getList() {
       this.loading = true;
-      listTempclueinfo(this.queryParams).then(response => {
+      listTempclueinfo(this.queryParams).then((response) => {
         this.tempclueinfoList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -486,7 +487,7 @@ export default {
         yuqistatus: "0",
         isexport: undefined,
         handlerequire: undefined,
-        cadreauthority: undefined
+        cadreauthority: undefined,
       };
       this.resetForm("form");
     },
@@ -502,10 +503,10 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id);
+      this.ids = selection.map((item) => item.id);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
-      this.personnames = selection.map(item => item.personname);
+      this.personnames = selection.map((item) => item.personname);
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -513,19 +514,19 @@ export default {
       this.$confirm("是否确认导出所有线索操作数据项?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
-        .then(function() {
+        .then(function () {
           return exportTempclueinfo(queryParams);
         })
-        .then(response => {
+        .then((response) => {
           this.download(response.msg);
         })
-        .catch(function() {});
+        .catch(function () {});
     },
     /** 更新form */
     updateform(data) {
-      updateTempclueinfo(data).then(res => {
+      updateTempclueinfo(data).then((res) => {
         if (res.code == "200") {
           this.msgSuccess("修改成功");
         }
@@ -537,12 +538,10 @@ export default {
     },
     /** 批量删除 */
     deleteBatch() {
-      this.$confirm(
-        "是否确认删除被反映人为<span class='el-tag el-tag--success'>" +
-          this.personnames +
-          "</span>的线索"
-      ).then(() => {
-        fakedelclueinfo(this.ids).then(response => {
+      this.$confirm("是否确认删除以下线索<h3>" + this.personnames + "</h3>", {
+        dangerouslyUseHTMLString: true,
+      }).then(() => {
+        fakedelclueinfo(this.ids).then((response) => {
           if (response.code == "200") {
             this.msgSuccess("删除成功");
             this.getList();
@@ -556,19 +555,33 @@ export default {
     getReceiverMsg(node) {
       this.receiveID = node.id;
       this.receiveName = node.label;
-      receiveSubmit = false;
+      this.receiveSubmit = false;
     },
     changeReceiver() {
       this.$confirm(
-        "是否确认将被反映人为<span class='el-tag el-tag--success'>" +
+        "是否确认将被反映人为<h3>" +
           this.personnames +
-          '</span>的线索转交给<span class="el-tag">' +
+          '</h3>的线索转交给<span class="el-tag">' +
           this.receiveName +
           "</span>",
         { dangerouslyUseHTMLString: true }
-      ).then(() => {});
-    }
-  }
+      ).then(() => {
+        const params = new FormData();
+        params.append("ids", this.ids);
+        params.append("receiveid", this.receiveID);
+        params.append("receivename", this.receiveName);
+        changeClueReceiver(params).then((response) => {
+          if (response.code == "200") {
+            this.msgSuccess("转交成功");
+            this.dialogTreeVisible = false;
+            this.receiveID = "";
+            this.receiveName = "";
+            this.receiveSubmit = true;
+          }
+        });
+      });
+    },
+  },
 };
 </script>
 <style scoped>
@@ -583,7 +596,6 @@ export default {
   border: 1px solid #d9ecff;
   border-radius: 4px;
   box-sizing: border-box;
-  white-space: nowrap;
 }
 
 .el-tag.el-tag--success {

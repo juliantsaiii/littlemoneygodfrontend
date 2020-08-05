@@ -1,7 +1,10 @@
 package com.ruoyi.project.sjwflowbusiness.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.project.sjwflowbusiness.domain.Workflowtask;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 流程记录Service接口
@@ -65,4 +68,6 @@ public interface IWorkflowtaskService
      * @return
      */
     public List<Workflowtask> selectWorkflowtaskSteps(String id);
+
+    public int changeRecever(Map<String,Object> map);
 }

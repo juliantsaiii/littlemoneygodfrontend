@@ -132,4 +132,13 @@ public class WorkflowtaskController extends BaseController
         return AjaxResult.success(reMap);
     }
 
+    @PostMapping("/changeRecever")
+    public AjaxResult changeRecever(@RequestParam String[] ids,@RequestParam String receiveid,@RequestParam String receivename){
+        Map<String,Object> map = new HashMap<>();
+        map.put("receiveid",receiveid);
+        map.put("receivename",receivename);
+        map.put("ids",ids);
+        return toAjax(workflowtaskService.changeRecever(map));
+    }
+
 }
