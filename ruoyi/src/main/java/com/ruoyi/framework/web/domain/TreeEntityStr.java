@@ -27,7 +27,7 @@ public class TreeEntityStr extends BaseEntity
     }
 
     public TreeEntityStr(Workflowinfo info){
-        this.parentId = info.getId();
+        this.parentId = info.getType();
         this.parentName = info.getName();
         this.remark = info.getInfoname();
     }

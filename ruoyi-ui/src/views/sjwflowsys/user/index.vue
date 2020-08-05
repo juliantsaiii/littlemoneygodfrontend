@@ -631,7 +631,7 @@ export default {
   }
 };
 </script>
-<style >
+<style scoped>
 .el-tree-node__label {
   font-size: 17px;
   font-weight: bold;
