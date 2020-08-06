@@ -226,6 +226,10 @@
     />
 
     <el-dialog title="流程" :visible.sync="infoviewdialog" width="80%">
+      <template slot="title">
+        <span>流程</span>
+        <span class="tips">(1.跳转条件：改线索存在待办事项。2.操作方式：双击步骤跳转，此跳转为新增步骤，若要删除中间步骤，请使用步骤按钮删除步骤)</span>
+      </template>
       <template>
         <displayview :curclueid="currentclueid" :isOpen="infoviewdialog"></displayview>
       </template>
@@ -632,6 +636,11 @@ export default {
   background-color: #f0f9eb;
   border-color: #e1f3d8;
   color: #67c23a;
+}
+.tips {
+  font-size: 12px;
+  color: grey;
+  margin-left: 20px;
 }
 </style>
 <style>

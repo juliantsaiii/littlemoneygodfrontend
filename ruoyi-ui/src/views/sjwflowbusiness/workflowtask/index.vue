@@ -47,6 +47,11 @@
       :height="tableHeight"
     >
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="是否删除" align="center">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.isdeleted" @change="updateform(scope.row)"></el-switch>
+        </template>
+      </el-table-column>
       <el-table-column
         label="id"
         align="center"
@@ -106,11 +111,7 @@
       <el-table-column label="步骤阶段" align="center" prop="stepstate" />
       <el-table-column label="databasename" align="center" prop="databasename" min-width="150" />
       <el-table-column label="infotype" align="center" prop="infotype" />
-      <el-table-column label="是否删除" align="center">
-        <template slot-scope="scope">
-          <el-switch v-model="scope.row.isdeleted" @change="updateform(scope.row)"></el-switch>
-        </template>
-      </el-table-column>
+
       <el-table-column
         label="操作"
         align="center"
