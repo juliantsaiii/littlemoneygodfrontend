@@ -1,7 +1,8 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">安夏业务平台运维操作系统</h3>
+      <img class="logo" src="@/assets/logo/logo2.png" />
+      <h1 class="title">安夏业务平台运维系统</h1>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
@@ -32,14 +33,15 @@
           <img :src="codeUrl" @click="getCode" />
         </div>
       </el-form-item>-->
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
+      <!-- <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox> -->
       <el-form-item style="width:100%;">
         <el-button
           :loading="loading"
           size="medium"
           type="primary"
-          style="width:100%;"
+          style="width:300px;"
           @click.native.prevent="handleLogin"
+          class="loginbtn"
         >
           <span v-if="!loading">登 录</span>
           <span v-else>登 录 中...</span>
@@ -155,17 +157,19 @@ export default {
   background-size: cover;
 }
 .title {
-  margin: 0px auto 30px auto;
+  margin: 0px auto 80px auto;
   text-align: center;
-  color: #707070;
+  color: white;
+  font-size: 50px;
 }
 
 .login-form {
   border-radius: 6px;
-  background: #ffffff;
-  width: 400px;
+  text-align: center;
+  width: 600px;
   padding: 25px 25px 5px 25px;
   .el-input {
+    width: 300px;
     height: 38px;
     input {
       height: 38px;
@@ -202,5 +206,17 @@ export default {
   font-family: Arial;
   font-size: 12px;
   letter-spacing: 1px;
+}
+.logo {
+  width: 100px;
+  margin-bottom: 50px;
+}
+.loginbtn {
+  border: none;
+  background-image: linear-gradient(to right, red, yellow);
+}
+.loginbtn:hover {
+  box-shadow: 0px 0px 10px 5px #926e6e;
+  background-image: linear-gradient(to right, red, yellow);
 }
 </style>
