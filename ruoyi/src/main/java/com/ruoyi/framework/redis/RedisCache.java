@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.BoundSetOperations;
@@ -82,16 +84,26 @@ public class RedisCache
     }
 
     /**
-     * 根据database删除单个对象
+     * 根据database模糊删除单个对象
      * @param key
      * @param index
      */
-    public void deleteObject(String key,int index){
+    public boolean deleteObject(String key,int index){
+        setDatabase(index);
+        key += "**";
+        Set<String> keys = redisTemplate.keys(key);
+        if (CollectionUtils.isNotEmpty(keys)) {
+            redisTemplate.delete(keys);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void setDatabase(int index){
         LettuceConnectionFactory jedisConnectionFactory = (LettuceConnectionFactory) redisTemplate.getConnectionFactory();
         jedisConnectionFactory.setDatabase(index);
         redisTemplate.setConnectionFactory(jedisConnectionFactory);
-        jedisConnectionFactory.resetConnection();
-        redisTemplate.delete(key);
     }
 
 

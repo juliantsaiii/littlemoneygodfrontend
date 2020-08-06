@@ -42,7 +42,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectProblemlistList" parameterType="Problemlist" resultMap="ProblemlistResult">
         <include refid="selectProblemlistVo"/>
-        <where>  
+        <where>
+            <if test="createuserid != null"> createuserid = #{createuserid}</if>
         </where>
         order by createdate desc
     </select>

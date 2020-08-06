@@ -2,19 +2,15 @@ package com.ruoyi.project.sjwflowbusiness.controller;
 
 import java.util.*;
 
+import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.framework.redis.RedisCache;
+import com.ruoyi.framework.security.LoginUser;
+import com.ruoyi.framework.security.service.TokenService;
 import com.ruoyi.project.sjwflowbusiness.domain.CountMapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.project.sjwflowbusiness.domain.Problemlist;
@@ -39,6 +35,8 @@ public class ProblemlistController extends BaseController
 
     @Autowired
     private RedisCache redisCache;
+    @Autowired
+    private TokenService tokenService;
 
     /**
      * 查询运维记录列表
@@ -48,6 +46,10 @@ public class ProblemlistController extends BaseController
     public TableDataInfo list(Problemlist problemlist)
     {
         startPage();
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        if(!loginUser.getUser().isAdmin()){
+            problemlist.setCreateuserid(loginUser.getUser().getUserId().toString());
+        }
         List<Problemlist> list = problemlistService.selectProblemlistList(problemlist);
         return getDataTable(list);
     }
@@ -109,11 +111,15 @@ public class ProblemlistController extends BaseController
         return toAjax(problemlistService.deleteProblemlistByIds(ids));
     }
 
-    @PostMapping("/deleteRedis/{id}")
-    public AjaxResult removeRedis(@PathVariable("id") String id)
+    @PostMapping("/deleteRedis")
+    public AjaxResult removeRedis( int dbindex, String refreshid)
     {
-        redisCache.deleteObject(id,1);
-        return toAjax(1);
+        boolean result = redisCache.deleteObject(refreshid,dbindex);
+        redisCache.setDatabase(0);
+        if(result)
+            return AjaxResult.success();
+        else
+            return AjaxResult.error("没有该缓存");
     }
 
     @PostMapping("/selectServiceTypeCount")

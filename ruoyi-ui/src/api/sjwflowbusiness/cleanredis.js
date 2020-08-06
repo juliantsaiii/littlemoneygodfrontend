@@ -3,9 +3,10 @@ import request from '@/utils/request'
 /**
  * 清除用户登录缓存
  */
-export function refreshLoginRedis(id) {
+export function refreshLoginRedis(params) {
     return request({
-        url: '/sjwflowbusiness/problemlist/deleteRedis/' + id,
-        method: 'post'
+        url: '/sjwflowbusiness/problemlist/deleteRedis',
+        method: 'post',
+        data: params
     });
 }

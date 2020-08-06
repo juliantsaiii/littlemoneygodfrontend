@@ -2,10 +2,25 @@
   <el-row :gutter="40" class="panel-group">
     <el-col :span="8">
       <el-card class="box-card">
-        <h3>刷新登录缓存</h3>
-        <el-input v-model="refreshuserid" placeholder="请输入用户ID">
-          <el-button slot="append" icon="el-icon-refresh" @click="refreshRedis"></el-button>
-        </el-input>
+        <div style="margin-bottom: 1em;">
+          <h3 style="display:inline">刷新缓存</h3>
+          <span style="font-size: 12px; color: grey; margin-left: 10px;">(db2:用户/部门/角色,db1:流程)</span>
+        </div>
+        <el-col :span="5" class="no-padding">
+          <el-select v-model="dbindex">
+            <el-option
+              v-for="(item,index) in redisTypes"
+              :key="index"
+              :value="item.value"
+              :label="item.lable"
+            ></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="19" class="no-padding">
+          <el-input v-model="refreshid" placeholder="请输入对应ID">
+            <el-button slot="append" icon="el-icon-refresh" @click="refreshRedis"></el-button>
+          </el-input>
+        </el-col>
       </el-card>
     </el-col>
     <el-col :span="8">
@@ -112,8 +127,13 @@ export default {
       ],
       code: "",
       timer: undefined,
-      refreshuserid: undefined,
-      clueid: undefined
+      clueid: undefined,
+      redisTypes: [
+        { lable: "db2", value: 2 },
+        { lable: "db1", value: 1 }
+      ],
+      dbindex: 2,
+      refreshid: undefined
     };
   },
   mounted() {
@@ -181,10 +201,13 @@ export default {
         );
       });
     },
-    /** 刷新用户缓存 */
+    /** 刷新缓存 */
     refreshRedis() {
-      if (!!this.refreshuserid) {
-        refreshLoginRedis(this.refreshuserid).then(response => {
+      if (!!this.refreshid) {
+        const form = new FormData();
+        form.append("refreshid", this.refreshid);
+        form.append("dbindex", this.dbindex);
+        refreshLoginRedis(form).then(response => {
           this.msgSuccess("刷新完成");
         });
       }
@@ -283,5 +306,11 @@ export default {
 }
 .box-card {
   height: 130px;
+}
+h3 {
+  margin-top: 0;
+}
+.no-padding {
+  padding: 0;
 }
 </style>
