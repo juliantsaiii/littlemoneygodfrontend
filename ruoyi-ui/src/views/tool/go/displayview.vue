@@ -1,7 +1,7 @@
 <template>
   <div id="wrap">
     <div id="chart-wrap">
-      <div id="chart-diagram" style="border: none;width:100%; height: 70vh"></div>
+      <div id="chart-diagram" style="border: none;width:100%; height: 70vh" v-loading="loading"></div>
     </div>
   </div>
 </template>
@@ -18,7 +18,8 @@ export default {
   data() {
     return {
       loadFlow: undefined,
-      animateFlowPath: undefined
+      animateFlowPath: undefined,
+      loading: true
     };
   },
   mounted() {
@@ -508,6 +509,7 @@ export default {
   watch: {
     isOpen(val) {
       if (val) {
+        this.loading = true;
         this.initWorkflowinfoview(this.curclueid);
       }
     }
@@ -519,6 +521,7 @@ export default {
           if (response.code == "200") {
             this.loadFlow(response.data.stepjson);
             this.animateFlowPath(response.data.stepIds);
+            this.loading = false;
           }
         })
         .catch(() => {
@@ -528,6 +531,7 @@ export default {
                   "nodeDataArray": [],
                   "linkDataArray": []}`;
           this.loadFlow(aa);
+          this.loading = false;
         });
     },
     jumpStep(node) {
