@@ -60,6 +60,7 @@ export function getCurrentSteps(clueid) {
   })
 }
 
+// 更换承办人
 export function changeClueReceiver(params) {
   return request({
     url: "/sjwflowbusiness/workflowtask/changeRecever",
@@ -67,3 +68,13 @@ export function changeClueReceiver(params) {
     data: params
   })
 }
+
+//跳转步骤
+export function changeTaskStep(params) {
+  return request({
+    url: "/sjwflowbusiness/workflowtask/changeStep",
+    method: 'post',
+    data: params
+  })
+}
+

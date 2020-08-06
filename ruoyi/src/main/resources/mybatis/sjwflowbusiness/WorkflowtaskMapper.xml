@@ -74,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectWorkflowtaskSteps" parameterType="Workflowtask" resultMap="WorkflowtaskResult">
       select flowid,stepid from workflowtask where InstanceID in (select InstanceID from (
-      select InstanceID from workflowtask where clueid = #{id} and isdeleted = 0 order by sendertime desc limit 1)a)
+      select InstanceID from workflowtask where clueid = #{id} and isdeleted = 0 order by sendertime desc limit 1)a) and isdeleted = 0
     </select>
     
     <select id="selectWorkflowtaskById" parameterType="String" resultMap="WorkflowtaskResult">
@@ -255,5 +255,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
         and status in (0,1)
     </update>
+
+    <select id="getWaitTaskByClueID" parameterType="String"  resultMap="WorkflowtaskResult">
+        <include refid="selectWorkflowtaskVo"/>
+        where clueid = #{id} and status in (0,1)
+    </select>
 
 </mapper>

@@ -391,12 +391,12 @@ public class Workflowtask extends BaseEntity
     {
         return issign;
     }
-    public void setStatus(Long status) 
+    public void setStatus(Long status)
     {
         this.status = status;
     }
 
-    public Long getStatus() 
+    public Long getStatus()
     {
         return status;
     }

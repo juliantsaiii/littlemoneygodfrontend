@@ -136,7 +136,7 @@ import { openNtkoWindow } from "@/api/monitor/viewfile";
 export default {
   name: "Fileupload",
   components: { fileuploadtask },
-  props: ["curclueid", "isdialog"],
+  props: ["curclueid", "isdialog", "isOpen"],
   data() {
     return {
       imgsrc: "@/assets/logo/logo.png",
@@ -220,7 +220,11 @@ export default {
   watch: {
     curclueid(val) {
       this.queryParams.clueid = val;
-      this.getList();
+    },
+    isOpen(val) {
+      if (val) {
+        this.getList();
+      }
     }
   },
   methods: {

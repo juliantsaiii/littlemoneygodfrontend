@@ -6,12 +6,15 @@
   </div>
 </template>
 <script>
-import { getCurrentSteps } from "@/api/sjwflowbusiness/workflowtask";
+import {
+  getCurrentSteps,
+  changeTaskStep
+} from "@/api/sjwflowbusiness/workflowtask";
 import go from "gojs";
 const MAKE = go.GraphObject.make;
 export default {
   name: "displayview",
-  props: ["curclueid"],
+  props: ["curclueid", "isOpen"],
   data() {
     return {
       loadFlow: undefined,
@@ -503,18 +506,29 @@ export default {
     this.initWorkflowinfoview(this.curclueid);
   },
   watch: {
-    curclueid(val) {
-      this.initWorkflowinfoview(val);
+    isOpen(val) {
+      if (val) {
+        this.initWorkflowinfoview(this.curclueid);
+      }
     }
   },
   methods: {
     initWorkflowinfoview(id) {
-      getCurrentSteps(id).then(response => {
-        if (response.code == "200") {
-          this.loadFlow(response.data.stepjson);
-          this.animateFlowPath(response.data.stepIds);
-        }
-      });
+      getCurrentSteps(id)
+        .then(response => {
+          if (response.code == "200") {
+            this.loadFlow(response.data.stepjson);
+            this.animateFlowPath(response.data.stepIds);
+          }
+        })
+        .catch(() => {
+          var aa = `  { "class": "go.GraphLinksModel",
+                "linkFromPortIdProperty": "fromPort",
+                "linkToPortIdProperty": "toPort",
+                  "nodeDataArray": [],
+                  "linkDataArray": []}`;
+          this.loadFlow(aa);
+        });
     },
     jumpStep(node) {
       if (node instanceof go.Node && node.data.figure === "circle") {
@@ -529,7 +543,16 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.msgSuccess("success");
+          const params = new FormData();
+          params.append("clueid", this.curclueid);
+          params.append("stepid", stepid);
+          params.append("stepname", stpename);
+          changeTaskStep(params).then(response => {
+            if (response.code == "200") {
+              this.msgSuccess("跳转成功");
+              this.initWorkflowinfoview(this.curclueid);
+            }
+          });
         })
         .catch(() => {});
     }

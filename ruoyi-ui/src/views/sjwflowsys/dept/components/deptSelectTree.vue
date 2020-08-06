@@ -4,7 +4,7 @@
     :options="deptOptions"
     :load-options="loadOptions"
     placeholder="请选择父级ID"
-    @select="changeValue"
+    @input="changeValue"
     :disable-branch-nodes="queryType"
   />
 </template>
@@ -48,9 +48,11 @@ export default {
         listDept(this.queryParams).then(response => {
           let pNode = response.data[0];
           this.deptOptions = [
-            this.childinit,
             { id: pNode.id, label: pNode.name, children: null }
           ];
+          if (this.childinit.id != undefined) {
+            this.deptOptions.unshift(this.childinit);
+          }
         });
       });
     },
@@ -75,12 +77,25 @@ export default {
         });
       }
     },
+    //input框监听输入值
     changeValue(node) {
-      if (this.deptOptions.length > 1 && this.pid != node.id) {
-        this.deptOptions.splice(0, 1);
+      //如果值不为空传值过去
+      if (node != undefined) {
+        if (this.deptOptions.length > 1 && this.pid != node.id) {
+          this.deptOptions.splice(0, 1);
+        }
+        this.value = node.id;
+        this.$emit("selectterm", node, this.selectID, this.selectName);
+        if (this.deptOptions.length > 1 && this.pid != node.id) {
+          this.deptOptions.splice(0, 1);
+        }
+        this.value = node.id;
+        this.$emit("selectterm", node, this.selectID, this.selectName);
       }
-      this.value = node.id;
-      this.$emit("selectterm", node, this.selectID, this.selectName);
+      //为空则传空值
+      else {
+        this.$emit("selectterm", null);
+      }
     }
   }
 };

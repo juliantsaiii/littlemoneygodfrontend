@@ -1,17 +1,18 @@
 package com.ruoyi.project.sjwflowbusiness.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
 import com.ruoyi.project.tool.workflowinfoview.domain.Workflowinfoview;
 import com.ruoyi.project.tool.workflowinfoview.service.IWorkflowinfoviewService;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.ResultMap;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
@@ -114,6 +115,9 @@ public class WorkflowtaskController extends BaseController
     public AjaxResult getCurrentSteps(@PathVariable String clueid)
     {
         List<Workflowtask> list = workflowtaskService.selectWorkflowtaskSteps(clueid);
+        if(list.isEmpty()){
+            return AjaxResult.error("该线索无流程记录");
+        }
         String stepIds = "";
         String flowid = "";
         for(Workflowtask wk : list)
@@ -141,4 +145,25 @@ public class WorkflowtaskController extends BaseController
         return toAjax(workflowtaskService.changeRecever(map));
     }
 
+    @PostMapping("/changeStep")
+    @Log(title = "跳转步骤", businessType = BusinessType.UPDATE)
+    public AjaxResult changeStep(@RequestParam String clueid,@RequestParam String stepid,@RequestParam String stepname){
+        Workflowtask wk = workflowtaskService.getWaitTaskByClueID(clueid);
+        if(wk==null){
+            return AjaxResult.error("未找到该线索待办事项");
+        }
+        Workflowtask newWk = new Workflowtask();
+        BeanUtils.copyProperties(wk,newWk);
+        newWk.setId(UUID.randomUUID().toString());
+        newWk.setPrevid(wk.getId());
+        newWk.setPrevstepid(wk.getStepid());
+        newWk.setStepid(stepid);
+        newWk.setStepname(stepname);
+        newWk.setSendertime(new Date());
+        newWk.setReceivetime(new Date());
+        workflowtaskService.insertWorkflowtask(newWk);
+        wk.setStatus((long)2);
+        workflowtaskService.updateWorkflowtask(wk);
+        return AjaxResult.success();
+    }
 }

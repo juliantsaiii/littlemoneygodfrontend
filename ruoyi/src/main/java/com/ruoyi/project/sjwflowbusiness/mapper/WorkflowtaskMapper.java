@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruoyi.project.sjwflowbusiness.domain.Workflowtask;
+import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -69,5 +70,17 @@ public interface WorkflowtaskMapper
      */
     public List<Workflowtask> selectWorkflowtaskSteps(String id);
 
+    /**
+     * 更换承办人
+     * @param map
+     * @return
+     */
     public int changeRecever(@Param("params") Map<String,Object> map);
+
+    /**
+     * 根据clueid获取待办事项
+     * @param id
+     * @return
+     */
+    public Workflowtask getWaitTaskByClueID(String id);
 }

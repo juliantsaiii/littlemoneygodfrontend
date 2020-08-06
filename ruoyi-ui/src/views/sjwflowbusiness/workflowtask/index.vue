@@ -138,7 +138,7 @@
       @pagination="getList"
     />
 
-    <el-dialog title="更换接收人" :visible.sync="dialogTreeVisible">
+    <el-dialog title="更换接收人" :visible.sync="dialogTreeVisible" append-to-body>
       <dept-select-tree
         :pid="form.receiveid"
         :label="form.receivename"
@@ -170,6 +170,7 @@ import Treeselect from "@riophae/vue-treeselect";
 export default {
   name: "Workflowtask",
   components: { Treeselect, deptSelectTree },
+  props: ["curclueid", "isdialog", "isOpen"],
   data() {
     return {
       // 遮罩层
@@ -192,7 +193,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 30,
-        clueid: undefined,
+        clueid: this.curclueid,
         receivename: undefined,
         instanceid: undefined,
         receiveid: undefined,
@@ -211,18 +212,31 @@ export default {
           }
         ]
       },
-      tableHeight: this.$store.getters.clientHeight - 200 + "px",
+      tableHeight:
+        this.isdialog == true
+          ? "600"
+          : this.$store.getters.clientHeight - 200 + "px",
       dialogTreeVisible: false
     };
   },
+  watch: {
+    curclueid(val) {
+      this.queryParams.clueid = val;
+    },
+    isOpen(val) {
+      if (val) {
+        this.getList(this.queryParams);
+      }
+    }
+  },
   created() {
-    this.queryParams.clueid = this.$route.params && this.$route.query.id;
-    this.queryParams.receiveid =
-      this.$route.params && this.$route.query.receiveid;
-    this.queryParams.status =
-      this.$route.params && this.$route.query.receiveid && 1;
-    this.queryParams.isdeleted =
-      this.$route.params && this.$route.query.receiveid && 0;
+    // this.queryParams.clueid = this.$route.params && this.$route.query.id;
+    // this.queryParams.receiveid =
+    //   this.$route.params && this.$route.query.receiveid;
+    // this.queryParams.status =
+    //   this.$route.params && this.$route.query.receiveid && 1;
+    // this.queryParams.isdeleted =
+    //   this.$route.params && this.$route.query.receiveid && 0;
     this.getDicts("sjwflow_task_status").then(response => {
       this.statusOptions = response.data;
     });
@@ -270,7 +284,7 @@ export default {
         completedtime1: undefined,
         comment: undefined,
         issign: undefined,
-        status: "0",
+        status: undefined,
         note: undefined,
         sort: undefined,
         subflowgroupid: undefined,
