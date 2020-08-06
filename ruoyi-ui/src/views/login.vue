@@ -50,7 +50,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2020 Littlemoneygod All Rights Reserved.</span>
+      <span>Copyright © 2020 Anshare All Rights Reserved.</span>
     </div>
   </div>
 </template>
@@ -67,30 +67,32 @@ export default {
       codeUrl: "",
       cookiePassword: "",
       loginForm: {
-        username: "admin",
-        password: "admin123",
+        username: "",
+        password: "",
         rememberMe: false,
         code: "",
-        uuid: ""
+        uuid: "",
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", message: "用户名不能为空" }
+          { required: true, trigger: "blur", message: "用户名不能为空" },
         ],
-        password: [{ required: true, trigger: "blur", message: "密码不能为空" }]
+        password: [
+          { required: true, trigger: "blur", message: "密码不能为空" },
+        ],
         // code: [{ required: true, trigger: "change", message: "验证码不能为空" }]
       },
       loading: false,
-      redirect: undefined
+      redirect: undefined,
     };
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect;
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   created() {
     // this.getCode();
@@ -98,7 +100,7 @@ export default {
   },
   methods: {
     getCode() {
-      getCodeImg().then(res => {
+      getCodeImg().then((res) => {
         this.codeUrl = "data:image/gif;base64," + res.img;
         this.loginForm.uuid = res.uuid;
       });
@@ -111,20 +113,20 @@ export default {
         username: username === undefined ? this.loginForm.username : username,
         password:
           password === undefined ? this.loginForm.password : decrypt(password),
-        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
+        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
       };
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;
           if (this.loginForm.rememberMe) {
             Cookies.set("username", this.loginForm.username, { expires: 30 });
             Cookies.set("password", encrypt(this.loginForm.password), {
-              expires: 30
+              expires: 30,
             });
             Cookies.set("rememberMe", this.loginForm.rememberMe, {
-              expires: 30
+              expires: 30,
             });
           } else {
             Cookies.remove("username");
@@ -142,8 +144,8 @@ export default {
             });
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
