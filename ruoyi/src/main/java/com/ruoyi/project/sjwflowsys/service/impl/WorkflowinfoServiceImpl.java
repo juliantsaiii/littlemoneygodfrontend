@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
+import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
 import com.ruoyi.framework.web.domain.TreeEntity;
 import com.ruoyi.framework.web.domain.TreeEntityStr;
 import com.ruoyi.framework.web.domain.TreeSelect;
@@ -24,6 +26,7 @@ import com.ruoyi.project.sjwflowsys.service.IWorkflowinfoService;
  * @date 2020-08-04
  */
 @Service
+@DataSource(value = DataSourceType.SLAVE)
 public class WorkflowinfoServiceImpl implements IWorkflowinfoService 
 {
     @Autowired

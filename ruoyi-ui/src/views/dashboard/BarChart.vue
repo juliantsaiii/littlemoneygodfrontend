@@ -38,7 +38,8 @@ export default {
     this.$nextTick(() => {
       this.getDicts("sjwflow_area").then(response => {
         for (let i = 0; i < response.data.length; i++) {
-          this.month.push(response.data[i].dictLabel);
+          if (response.data[i].dictLabel != "江苏省")
+            this.month.push(response.data[i].dictLabel);
         }
         pareaServiceType().then(response => {
           this.count = response.data;
