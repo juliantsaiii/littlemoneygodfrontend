@@ -5,22 +5,23 @@ ruoyi:
   # 版本
   version: 2.3.0
   # 版权年份
-  copyrightYear: 2019
+  copyrightYear: 2020
   # 实例演示开关
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
-  profile: D:/ruoyi/uploadPath
+  profile: D:/anxiayunwei/uploadPath
+#  profile: /home/anshareoperation/uploadPath
   # 获取ip地址开关
   addressEnabled: false
 
 # 文件服务器配置
 samba:
   # ip地址
-  ip: 156.11.1.234
+  ip: 156.11.1.198
   # 文件夹路径
-  url: 156.11.1.234/share
+  url: 156.11.1.198/share
   # 账号
-  name: administrator
+  name: root
   # 密码
   password: Anshare.cc
   # path
@@ -29,7 +30,7 @@ samba:
 # 业务配置
 sjwflowbusiness:
   # 初始密码
-  initpwd: jssjw@12345
+  initpwd: 123
 
 # 开发环境配置
 server:
@@ -75,7 +76,8 @@ spring:
   # redis 配置
   redis:
     # 地址
-    host: 127.0.0.1
+    host: 156.11.1.200
+#    host: localhost
     # 端口，默认为6379
     port: 6379
     # 密码

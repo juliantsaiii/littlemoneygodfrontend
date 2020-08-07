@@ -112,7 +112,7 @@
               >
                 <img
                   v-if="1"
-                  :src="url + '/common/downloadpath?fileName=' + scope.row.id + '.png&filePath=156.11.1.234/Signature/' + scope.row.id + '.png' + '?radomn=' + scope.row.imageUrl"
+                  :src="url + '/common/downloadpath?fileName=' + scope.row.id + '.png&filePath=' + preurl +'/Signature/' + scope.row.id + '.png' + '?radomn=' + scope.row.imageUrl"
                   class="avatar"
                 />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -377,7 +377,8 @@ export default {
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/sambUpload", // 上传的图片服务器地址
       headers: {
         Authorization: "Bearer " + getToken()
-      }
+      },
+      preurl: process.env.VUE_APP_FileServer_Path
     };
   },
   created() {

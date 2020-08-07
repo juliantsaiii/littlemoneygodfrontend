@@ -32,15 +32,15 @@ module.exports = {
     port: port,
     proxy: {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
-      // [process.env.VUE_APP_BASE_API]: {
-      //   target: 'http://localhost:8020',
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     ['^' + process.env.VUE_APP_BASE_API]: ''
-      //   }
-      // },
+      [process.env.VUE_APP_BASE_API]: {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_BASE_API]: ''
+        }
+      },
       "/refresh": {
-        target: 'http://156.11.1.234:9993/',
+        target: 'http://156.11.1.197:9991/',
         changeOrigin: true,
         pathRewrite: {
           '^refresh': ''

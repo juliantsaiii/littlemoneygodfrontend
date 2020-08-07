@@ -68,7 +68,6 @@ public class DynamictokenController extends BaseController
     /**
      * 获取口令详细信息
      */
-    @PreAuthorize("@ss.hasPermi('tool:dynamictoken:query')")
     @GetMapping
     public AjaxResult getInfo()
     {

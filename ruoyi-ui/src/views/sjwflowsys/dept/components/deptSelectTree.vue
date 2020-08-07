@@ -4,7 +4,8 @@
     :options="deptOptions"
     :load-options="loadOptions"
     placeholder="请选择父级ID"
-    @input="changeValue"
+    @select="changeValue"
+    @input="changeInput"
     :disable-branch-nodes="queryType"
   />
 </template>
@@ -36,7 +37,7 @@ export default {
     /** 更换默认值 */
     pid(val) {
       this.value = val;
-      if (val != this.initvalue) {
+      if (this.label != undefined) {
         this.deptOptions.splice(0, 1, { id: val, label: this.label });
       }
     }
@@ -94,6 +95,11 @@ export default {
       }
       //为空则传空值
       else {
+        this.$emit("selectterm", null);
+      }
+    },
+    changeInput(val) {
+      if (val == undefined || val == "") {
         this.$emit("selectterm", null);
       }
     }

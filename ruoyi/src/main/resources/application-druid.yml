@@ -6,16 +6,24 @@ spring:
         druid:
             # 主库数据源
             master:
-                url: jdbc:mysql://www.littlemoneygod.com:53306/Sjwflow_Operation?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+#                url: jdbc:mysql://www.littlemoneygod.com:53306/Sjwflow_Operation?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+#                username: root
+#                password: Anshare.817
+                url: jdbc:mysql://156.11.1.199/Sjwflow_Operation?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+#                url: jdbc:mysql://156.11.1.195/sjwflow_operation?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
                 username: root
-                password: Anshare.817
+                password: Anshare.SQL
             # 从库数据源
             slave:
                 # 从数据源开关/默认关闭
                 enabled: true
-                url: jdbc:mysql://www.littlemoneygod.com:53306/Sjwflow_js?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+#                url: jdbc:mysql://www.littlemoneygod.com:53306/Sjwflow_js?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+#                username: root
+#                password: Anshare.817
+                url: jdbc:mysql://156.11.1.199/sjwflow_80?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+#                url: jdbc:mysql://156.11.1.195/sjwflow_test0916?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
                 username: root
-                password: Anshare.817
+                password: Anshare.SQL
             # 初始连接数
             initialSize: 5
             # 最小连接池数量
