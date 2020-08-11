@@ -10,17 +10,18 @@ ruoyi:
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
   profile: D:/ruoyi/uploadPath
+#  profile: /home/anshareoperation/uploadPath
   # 获取ip地址开关
   addressEnabled: false
 
 # 文件服务器配置
 samba:
   # ip地址
-  ip: 156.11.1.254
+  ip: 156.11.1.198
   # 文件夹路径
-  url: 156.11.1.254/share
+  url: 156.11.1.198/share
   # 账号
-  name: administrator
+  name: root
   # 密码
   password: Anshare.cc
   # path
@@ -58,9 +59,8 @@ spring:
   messages:
     # 国际化资源文件路径
     basename: i18n/messages
-  # 环境 dev:开发环境|prod:生产环境
   profiles: 
-    active: dev
+    active: druid
   # 文件上传
   servlet:
      multipart:
@@ -76,7 +76,8 @@ spring:
   # redis 配置
   redis:
     # 地址
-    host: localhost
+    host: 156.11.1.200
+#    host: localhost
     # 端口，默认为6379
     port: 6379
     # 密码
@@ -99,16 +100,24 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://www.littlemoneygod.com:53306/Sjwflow_Operation?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        #                url: jdbc:mysql://www.littlemoneygod.com:53306/Sjwflow_Operation?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        #                username: root
+        #                password: Anshare.817
+        url: jdbc:mysql://156.11.1.199/Sjwflow_Operation?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        #                url: jdbc:mysql://156.11.1.195/sjwflow_operation?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: root
-        password: Anshare.817
+        password: Anshare.SQL
       # 从库数据源
       slave:
         # 从数据源开关/默认关闭
         enabled: true
-        url: jdbc:mysql://www.littlemoneygod.com:53306/Sjwflow_js?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        #                url: jdbc:mysql://www.littlemoneygod.com:53306/Sjwflow_js?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        #                username: root
+        #                password: Anshare.817
+        url: jdbc:mysql://156.11.1.199/sjwflow_80?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        #                url: jdbc:mysql://156.11.1.195/sjwflow_test0916?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: root
-        password: Anshare.817
+        password: Anshare.SQL
       # 初始连接数
       initialSize: 5
       # 最小连接池数量
