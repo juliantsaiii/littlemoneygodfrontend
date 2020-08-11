@@ -100,7 +100,6 @@ public class UserController extends BaseController
     /**
      * 修改业务平台用户管理
      */
-    @Transactional
     @PreAuthorize("@ss.hasPermi('sjwflowsys:user:edit')")
     @Log(title = "业务平台用户管理", businessType = BusinessType.UPDATE)
     @PutMapping

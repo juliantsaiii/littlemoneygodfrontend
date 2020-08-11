@@ -262,6 +262,16 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row v-show="showCarry">
+          <el-col :span="12">
+            <el-form-item label="携带待办">
+              <el-radio-group v-model="form.carrywaitlist">
+                <el-radio label="1">是</el-radio>
+                <el-radio label="0" checked>否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -372,6 +382,7 @@ export default {
         status: 1,
         isdeleted: false
       },
+      showCarry: false,
       url: process.env.VUE_APP_BASE_API,
       //图片地址
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/sambUpload", // 上传的图片服务器地址
@@ -473,6 +484,7 @@ export default {
       const id = row.id || this.ids;
       getUser(id).then(response => {
         this.form = response.data;
+        this.form.carrywaitlist = "0";
         this.tasksParams.receiveid = this.form.id;
         this.oldDeptID = this.form.deptid;
         this.open = true;
@@ -601,6 +613,14 @@ export default {
     updatepSelectTreeValue(node, id, label) {
       this.form[id] = node.id;
       label != undefined && [(this.form[label] = node.label)];
+
+      if ((this.id = "deptid")) {
+        if (this.form.deptid != this.oldDeptID) {
+          this.showCarry = true;
+        } else {
+          this.showCarry = false;
+        }
+      }
     },
     /** 重置密码 */
     resetpassword() {
@@ -618,6 +638,8 @@ export default {
         listWorkflowtask(this.tasksParams).then(response => {
           if (response.total > 0) {
             resolve(true);
+          } else {
+            resolve(false);
           }
         });
       });

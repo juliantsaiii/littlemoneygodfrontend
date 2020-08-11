@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryParams" :inline="true" label-width="80px">
+    <el-form :model="queryParams" ref="queryParams" :inline="true" label-width="100px">
       <el-form-item label="接收人" prop="receivename">
         <el-input
           v-model="queryParams.receivename"
@@ -127,6 +127,12 @@
             @click="openUpdateDialog(scope.row)"
             v-hasPermi="['sjwflowbusiness:workflowtask:edit']"
           >更换用户</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="openEditDialog(scope.row)"
+          >编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -151,6 +157,69 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogTreeVisible = false">取 消</el-button>
         <el-button type="primary" @click="updateReceiver">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      :title="title"
+      :visible.sync="open"
+      width="1000px"
+      height="900px"
+      :close-on-click-modal="false"
+    >
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="流程名称" prop="title">
+              <el-input v-model="form.title" placeholder="请输入流程名" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="flowid" prop="flowid">
+              <el-input v-model="form.flowid" placeholder="请输入flowid" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="步骤名称" prop="stepname">
+              <el-input v-model="form.stepname" placeholder="请输入步骤名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="stepid" prop="stepid">
+              <el-input v-model="form.stepid" placeholder="请输入stepid" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="步骤阶段" prop="stepstate">
+              <el-input-number v-model="form.stepstate" placeholder="请输入步骤阶段" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="接收时间" prop="receivetime">
+              <el-date-picker v-model="form.receivetime" type="datetime" placeholder="选择接收时间"></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="databasename" prop="databasename">
+              <el-input v-model="form.databasename" placeholder="请输入databasename" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="infotype" prop="infotype">
+              <el-input v-model="form.infotype" placeholder="请输入infotype" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确定</el-button>
+        <el-button @click="cancel">取消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -187,7 +256,7 @@ export default {
       // 流程记录表格数据
       workflowtaskList: [],
       // 弹出层标题
-      title: "",
+      title: "修改task",
       // 是否显示弹出层
       open: false,
       // 查询参数
@@ -205,12 +274,26 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        rolltime: [
-          {
-            required: true,
-            message: "调换科室原接收人所在步骤不能为空",
-            trigger: "blur"
-          }
+        title: [{ required: true, message: "请输入流程名称", trigger: "blur" }],
+        flowid: [{ required: true, message: "请输入流程id", trigger: "blur" }],
+        stepname: [
+          { required: true, message: "请输入步骤名称", trigger: "blur" }
+        ],
+        stepid: [{ required: true, message: "请输入步骤id", trigger: "blur" }],
+        stepstate: [
+          { required: true, message: "请输入步骤阶段", trigger: "blur" }
+        ],
+        receivetime: [
+          { required: true, message: "请选择接收时间", trigger: "blur" }
+        ],
+        databasename: [
+          { required: true, message: "请输入databasename", trigger: "blur" }
+        ],
+        stepstate: [
+          { required: true, message: "请输入stepstate", trigger: "blur" }
+        ],
+        infotype: [
+          { required: true, message: "请输入infotype", trigger: "blur" }
         ]
       },
       tableHeight:
@@ -365,6 +448,25 @@ export default {
       this.updateform(this.form);
       this.dialogTreeVisible = false;
       this.getList();
+    },
+    /** 更换task基本信息 */
+    openEditDialog(data) {
+      this.form = data;
+      this.open = true;
+    },
+    /** 提交修改 */
+    submitForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          updateWorkflowtask(this.form).then(response => {
+            if (response.code === 200) {
+              this.msgSuccess("修改成功");
+              this.open = false;
+              this.getList();
+            }
+          });
+        }
+      });
     }
   }
 };

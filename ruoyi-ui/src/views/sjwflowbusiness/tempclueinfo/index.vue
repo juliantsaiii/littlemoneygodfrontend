@@ -184,7 +184,7 @@
         align="center"
         class-name="small-padding fixed-width"
         fixed="right"
-        :min-width="200"
+        :min-width="250"
       >
         <template slot-scope="scope">
           <el-button
@@ -213,6 +213,13 @@
             icon="el-icon-location-information"
             @click="infoviewdialog = true;openviewdialog(scope.row.id)"
           >跳转</el-button>
+
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-refresh"
+            @click="refreshclue(scope.row.id)"
+          >刷新</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -258,6 +265,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import {
   listTempclueinfo,
   getTempclueinfo,
@@ -614,6 +622,14 @@ export default {
         return "delete-row";
       }
       return "";
+    },
+    //刷新core表
+    refreshclue(id) {
+      if (!!id) {
+        axios.get("/refresh?clueid=" + id).then(() => {
+          this.msgSuccess("刷新完成");
+        });
+      }
     }
   }
 };

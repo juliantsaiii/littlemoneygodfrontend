@@ -40,7 +40,7 @@ module.exports = {
         }
       },
       "/refresh": {
-        target: 'http://156.11.1.197:9991/',
+        target: 'http://' + process.env.VUE_APP_WINHTTP_URL + ':9991/',
         changeOrigin: true,
         pathRewrite: {
           '^refresh': ''

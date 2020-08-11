@@ -105,7 +105,7 @@ spring:
       slave:
         # 从数据源开关/默认关闭
         enabled: true
-        url: jdbc:mysql://156.11.1.233/Sjwflow_opinion?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        url: jdbc:mysql://156.11.1.233/Sjwflow_80_opinion?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: root
         password: Anshare.SQL
       # 初始连接数
