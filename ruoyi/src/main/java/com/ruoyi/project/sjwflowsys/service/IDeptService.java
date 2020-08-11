@@ -1,6 +1,8 @@
 package com.ruoyi.project.sjwflowsys.service;
 
 import java.util.List;
+
+import com.ruoyi.framework.web.domain.TreeSelectStr;
 import com.ruoyi.project.sjwflowsys.domain.Dept;
 
 /**
@@ -58,4 +60,13 @@ public interface IDeptService
      * @return 结果
      */
     public int deleteDeptById(String id);
+
+    /**
+     * 根据当前节点递归获取部门树
+     * @param Pid
+     * @param ID
+     * @param list
+     * @return
+     */
+    public TreeSelectStr getDeptTree(String Pid, String ID, List<TreeSelectStr> list);
 }

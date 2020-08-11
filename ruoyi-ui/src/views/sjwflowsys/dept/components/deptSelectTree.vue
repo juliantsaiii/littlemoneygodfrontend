@@ -13,7 +13,11 @@
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import Treeselect from "@riophae/vue-treeselect";
 import { LOAD_CHILDREN_OPTIONS } from "@riophae/vue-treeselect";
-import { listDept, getDeptTree } from "@/api/sjwflowsys/dept";
+import {
+  listDept,
+  getDeptTree,
+  getDeptTreebyNode,
+} from "@/api/sjwflowsys/dept";
 export default {
   components: { Treeselect },
   props: ["pid", "label", "type", "selectID", "selectName"],
@@ -24,8 +28,13 @@ export default {
       sellabel: undefined,
       deptOptions: [],
       queryType: this.type == "dept" ? false : true,
-      queryParams: { pid: undefined, type: this.type, selectTree: "select" },
-      childinit: {}
+      queryParams: {
+        pid: undefined,
+        type: this.type,
+        selectTree: "select",
+        childID: this.pid,
+      },
+      childinit: {},
     };
   },
   created() {
@@ -40,30 +49,41 @@ export default {
       if (this.label != undefined) {
         this.deptOptions.splice(0, 1, { id: val, label: this.label });
       }
-    }
+    },
   },
   methods: {
     getTreeselect() {
-      listDept().then(response => {
-        this.queryParams.pid = "-1";
-        listDept(this.queryParams).then(response => {
-          let pNode = response.data[0];
-          this.deptOptions = [
-            { id: pNode.id, label: pNode.name, children: null }
-          ];
-          if (this.childinit.id != undefined) {
-            this.deptOptions.unshift(this.childinit);
-          }
-        });
+      listDept().then((response) => {
+        if (!!this.pid) {
+          getDeptTreebyNode(this.queryParams).then((response) => {
+            // this.deptOptions = [{ id: "1", label: "2", children: null }];
+            this.deptOptions = response.data;
+            if (this.deptOptions.children == undefined)
+              this.deptOptions[0].children = null;
+            console.log(this.deptOptions);
+          });
+        } else {
+          this.queryParams.pid = "-1";
+          listDept(this.queryParams).then((response) => {
+            console.log(response);
+            // let pNode = response.data[0];
+            // this.deptOptions = [
+            //   { id: pNode.id, label: pNode.name, children: null },
+            // ];
+            // if (this.childinit.id != undefined) {
+            //   this.deptOptions.unshift(this.childinit);
+            // }
+          });
+        }
       });
     },
     loadOptions({ action, parentNode, callback }) {
       if (action === LOAD_CHILDREN_OPTIONS) {
         this.queryParams.pid = parentNode.id;
-        getDeptTree(this.queryParams).then(response => {
+        getDeptTree(this.queryParams).then((response) => {
           let resData = response.data;
           let arr = [];
-          resData.forEach(item => {
+          resData.forEach((item) => {
             let objData = {};
             objData.id = item.id;
             objData.label = item.name;
@@ -102,7 +122,7 @@ export default {
       if (val == undefined || val == "") {
         this.$emit("selectterm", null);
       }
-    }
-  }
+    },
+  },
 };
 </script>

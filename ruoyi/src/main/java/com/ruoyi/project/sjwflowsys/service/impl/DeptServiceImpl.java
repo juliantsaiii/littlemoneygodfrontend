@@ -1,9 +1,13 @@
 package com.ruoyi.project.sjwflowsys.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
 import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
+import com.ruoyi.framework.web.domain.TreeSelect;
+import com.ruoyi.framework.web.domain.TreeSelectStr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.sjwflowsys.mapper.DeptMapper;
@@ -98,5 +102,40 @@ public class DeptServiceImpl implements IDeptService
     public int deleteDeptById(String id)
     {
         return deptMapper.deleteDeptById(id);
+    }
+
+    /**
+     * 根据当前节点递归获取部门树
+     * @param Pid
+     * @param ID
+     * @param list
+     * @return
+     */
+    public TreeSelectStr getDeptTree(String Pid,String ID,List<TreeSelectStr> list){
+        if(ID.equals("-1"))
+            ID = "00000000-0000-1000-0000-000000000000";
+        Dept dept = deptMapper.selectDeptById(ID);
+
+        while (!dept.getPid().equals("-1"))
+        {
+            Dept query = new Dept();
+            query.setPid(Pid);
+            List<TreeSelectStr> trees = new ArrayList<>();
+            List<Dept> depts = deptMapper.selectDeptList(query);
+            for (Dept d:depts)
+            {
+                TreeSelectStr ts = new TreeSelectStr();
+                ts.setId(d.getId());
+                ts.setLabel(d.getName());
+                if(d.getId().equals(ID)){
+                    d.setChildren(list);
+                    d.setHasChildren(true);
+                }
+                trees.add(ts);
+            }
+            getDeptTree(dept.getPid(),dept.getId(),trees);
+        }
+        TreeSelectStr tsMain = new TreeSelectStr(dept,list);
+        return tsMain;
     }
 }

@@ -1,10 +1,12 @@
 package com.ruoyi.project.sjwflowsys.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.web.domain.TreeEntity;
+import com.ruoyi.framework.web.domain.TreeSelectStr;
 import com.ruoyi.framework.web.page.TableDataInfo;
 import com.ruoyi.project.sjwflowsys.domain.User;
 import com.ruoyi.project.sjwflowsys.service.IUserService;
@@ -50,6 +52,18 @@ public class DeptController extends BaseController
             dept.setPid("-1");
         }
         List<Dept> list = deptService.selectDeptList(dept);
+        return AjaxResult.success(list);
+    }
+
+    /**
+     * 查询部门树带节点
+     */
+    @GetMapping("/listTreeNode")
+    public AjaxResult listTreeNode(@RequestParam String type,@RequestParam String childID)
+    {
+        TreeSelectStr ts =  deptService.getDeptTree("",childID,null);
+        List<TreeSelectStr>  list = new ArrayList<>();
+        list.add(ts);
         return AjaxResult.success(list);
     }
 

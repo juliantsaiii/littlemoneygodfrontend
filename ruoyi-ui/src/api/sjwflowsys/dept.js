@@ -60,3 +60,13 @@ export function getDeptTree(query) {
     params: query
   })
 }
+
+// 根据节点查询部门树
+export function getDeptTreebyNode(query) {
+  return request({
+    url: '/sjwflowsys/dept/listTreeNode',
+    method: 'get',
+    params: query
+  })
+}
+
