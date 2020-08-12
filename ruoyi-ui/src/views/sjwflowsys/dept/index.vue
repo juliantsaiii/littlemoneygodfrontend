@@ -52,6 +52,7 @@
         <el-form-item label="上级部门" prop="pid">
           <dept-select-tree
             :pid="form.pid"
+            :id="form.id"
             :label="form.parentName"
             @selectterm="updatepSelectTreeValue"
             :type="'dept'"
@@ -100,7 +101,7 @@
         <el-form-item label="派驻地点" prop="paizhuarea">
           <el-input v-model="form.paizhuarea" placeholder="用于市级派驻文书生成标题" />
         </el-form-item>
-        <el-form-item label="分管常委" prop="chargepersonid">
+        <!-- <el-form-item label="分管常委" prop="chargepersonid">
           <dept-select-tree
             :pid="form.chargepersonid"
             :label="form.chargepersonname"
@@ -149,7 +150,7 @@
             :selectID="'paizhumainleaderid'"
             :selectName="'paizhumainleadername'"
           ></dept-select-tree>
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>

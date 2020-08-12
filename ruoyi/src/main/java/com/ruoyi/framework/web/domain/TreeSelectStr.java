@@ -23,7 +23,6 @@ public class TreeSelectStr implements Serializable
     private String label;
 
     /** 子节点 */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<TreeSelectStr> children;
 
     public TreeSelectStr()

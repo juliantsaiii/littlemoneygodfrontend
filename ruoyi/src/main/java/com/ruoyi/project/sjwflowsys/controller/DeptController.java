@@ -61,7 +61,7 @@ public class DeptController extends BaseController
     @GetMapping("/listTreeNode")
     public AjaxResult listTreeNode(@RequestParam String type,@RequestParam String childID)
     {
-        TreeSelectStr ts =  deptService.getDeptTree("",childID,null);
+        TreeSelectStr ts =  deptService.getDeptTree(childID,null);
         List<TreeSelectStr>  list = new ArrayList<>();
         list.add(ts);
         return AjaxResult.success(list);

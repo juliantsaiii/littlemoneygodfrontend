@@ -16,15 +16,15 @@ import { LOAD_CHILDREN_OPTIONS } from "@riophae/vue-treeselect";
 import {
   listDept,
   getDeptTree,
-  getDeptTreebyNode,
+  getDeptTreebyNode
 } from "@/api/sjwflowsys/dept";
 export default {
   components: { Treeselect },
-  props: ["pid", "label", "type", "selectID", "selectName"],
+  props: ["pid", "label", "type", "selectID", "selectName", "id"],
   data() {
     return {
       initvalue: this.pid,
-      value: undefined,
+      value: this.pid,
       sellabel: undefined,
       deptOptions: [],
       queryType: this.type == "dept" ? false : true,
@@ -32,58 +32,40 @@ export default {
         pid: undefined,
         type: this.type,
         selectTree: "select",
-        childID: this.pid,
+        childID: this.id
       },
-      childinit: {},
+      childinit: {}
     };
   },
   created() {
-    (this.childinit = { id: this.pid, label: this.label }),
-      (this.value = this.pid);
     this.getTreeselect();
   },
   watch: {
-    /** 更换默认值 */
-    pid(val) {
-      this.value = val;
-      if (this.label != undefined) {
-        this.deptOptions.splice(0, 1, { id: val, label: this.label });
+    id(val) {
+      this.queryParams.childID = val;
+      if (!!val) {
+        this.getTreeselect();
       }
     },
+    pid(val) {
+      this.value = val;
+    }
   },
   methods: {
     getTreeselect() {
-      listDept().then((response) => {
-        if (!!this.pid) {
-          getDeptTreebyNode(this.queryParams).then((response) => {
-            // this.deptOptions = [{ id: "1", label: "2", children: null }];
-            this.deptOptions = response.data;
-            if (this.deptOptions.children == undefined)
-              this.deptOptions[0].children = null;
-            console.log(this.deptOptions);
-          });
-        } else {
-          this.queryParams.pid = "-1";
-          listDept(this.queryParams).then((response) => {
-            console.log(response);
-            // let pNode = response.data[0];
-            // this.deptOptions = [
-            //   { id: pNode.id, label: pNode.name, children: null },
-            // ];
-            // if (this.childinit.id != undefined) {
-            //   this.deptOptions.unshift(this.childinit);
-            // }
-          });
-        }
+      listDept().then(response => {
+        getDeptTreebyNode(this.queryParams).then(response => {
+          this.deptOptions = response.data;
+        });
       });
     },
     loadOptions({ action, parentNode, callback }) {
       if (action === LOAD_CHILDREN_OPTIONS) {
         this.queryParams.pid = parentNode.id;
-        getDeptTree(this.queryParams).then((response) => {
+        getDeptTree(this.queryParams).then(response => {
           let resData = response.data;
           let arr = [];
-          resData.forEach((item) => {
+          resData.forEach(item => {
             let objData = {};
             objData.id = item.id;
             objData.label = item.name;
@@ -101,15 +83,7 @@ export default {
     //input框监听输入值
     changeValue(node) {
       //如果值不为空传值过去
-      if (node != undefined) {
-        if (this.deptOptions.length > 1 && this.pid != node.id) {
-          this.deptOptions.splice(0, 1);
-        }
-        this.value = node.id;
-        this.$emit("selectterm", node, this.selectID, this.selectName);
-        if (this.deptOptions.length > 1 && this.pid != node.id) {
-          this.deptOptions.splice(0, 1);
-        }
+      if (!!node) {
         this.value = node.id;
         this.$emit("selectterm", node, this.selectID, this.selectName);
       }
@@ -122,7 +96,7 @@ export default {
       if (val == undefined || val == "") {
         this.$emit("selectterm", null);
       }
-    },
-  },
+    }
+  }
 };
 </script>

@@ -104,6 +104,8 @@ public class DeptServiceImpl implements IDeptService
         return deptMapper.deleteDeptById(id);
     }
 
+    private boolean isover = true;
+
     /**
      * 根据当前节点递归获取部门树
      * @param Pid
@@ -111,15 +113,17 @@ public class DeptServiceImpl implements IDeptService
      * @param list
      * @return
      */
-    public TreeSelectStr getDeptTree(String Pid,String ID,List<TreeSelectStr> list){
-        if(ID.equals("-1"))
-            ID = "00000000-0000-1000-0000-000000000000";
+    public TreeSelectStr getDeptTree(String ID,List<TreeSelectStr> list){
         Dept dept = deptMapper.selectDeptById(ID);
-
-        while (!dept.getPid().equals("-1"))
+        TreeSelectStr tsMain = new TreeSelectStr();
+        if(dept.getPid().equals("-1"))
+        {
+            tsMain = new TreeSelectStr(dept,list);
+        }
+        else
         {
             Dept query = new Dept();
-            query.setPid(Pid);
+            query.setPid(dept.getPid());
             List<TreeSelectStr> trees = new ArrayList<>();
             List<Dept> depts = deptMapper.selectDeptList(query);
             for (Dept d:depts)
@@ -128,14 +132,14 @@ public class DeptServiceImpl implements IDeptService
                 ts.setId(d.getId());
                 ts.setLabel(d.getName());
                 if(d.getId().equals(ID)){
-                    d.setChildren(list);
-                    d.setHasChildren(true);
+                    ts.setChildren(list);
+                }else{
+                    ts.setChildren(null);
                 }
                 trees.add(ts);
             }
-            getDeptTree(dept.getPid(),dept.getId(),trees);
+            tsMain = getDeptTree(dept.getPid(),trees);
         }
-        TreeSelectStr tsMain = new TreeSelectStr(dept,list);
         return tsMain;
     }
 }

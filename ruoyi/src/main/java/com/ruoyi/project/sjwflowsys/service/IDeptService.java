@@ -63,10 +63,9 @@ public interface IDeptService
 
     /**
      * 根据当前节点递归获取部门树
-     * @param Pid
      * @param ID
      * @param list
      * @return
      */
-    public TreeSelectStr getDeptTree(String Pid, String ID, List<TreeSelectStr> list);
+    public TreeSelectStr getDeptTree(String ID, List<TreeSelectStr> list);
 }
