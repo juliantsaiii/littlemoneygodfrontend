@@ -3,6 +3,7 @@ package com.ruoyi.project.sjwflowsys.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.web.domain.TreeEntity;
@@ -59,9 +60,21 @@ public class DeptController extends BaseController
      * 查询部门树带节点
      */
     @GetMapping("/listTreeNode")
-    public AjaxResult listTreeNode(@RequestParam String type,@RequestParam String childID)
+    public AjaxResult listTreeNode(@RequestParam(defaultValue = "dept") String type,@RequestParam String childID)
     {
-        TreeSelectStr ts =  deptService.getDeptTree(childID,null);
+        TreeSelectStr ts = new TreeSelectStr();
+        if(type.equals("user"))
+        {
+            User user = userService.selectUserById(childID);
+            User query = new User();
+            query.setDeptid(user.getDeptid());
+            List<User> userList = userService.selectUserList(query);
+            List<TreeSelectStr> usertrees = userList.stream().map(TreeSelectStr::new).collect(Collectors.toList());
+            ts = deptService.getDeptTree(user.getDeptid(),usertrees);
+        }else{
+            ts =  deptService.getDeptTree(childID,new ArrayList<>());
+        }
+
         List<TreeSelectStr>  list = new ArrayList<>();
         list.add(ts);
         return AjaxResult.success(list);

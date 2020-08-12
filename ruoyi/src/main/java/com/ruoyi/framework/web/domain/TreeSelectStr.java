@@ -2,6 +2,8 @@ package com.ruoyi.framework.web.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ruoyi.project.sjwflowsys.domain.Dept;
+import com.ruoyi.project.sjwflowsys.domain.User;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,6 +25,7 @@ public class TreeSelectStr implements Serializable
     private String label;
 
     /** 子节点 */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private List<TreeSelectStr> children;
 
     public TreeSelectStr()
@@ -35,6 +38,12 @@ public class TreeSelectStr implements Serializable
         this.id = dept.getId();
         this.label = dept.getName();
         this.children = tree;
+    }
+
+    public TreeSelectStr(User user)
+    {
+        this.id = user.getId();
+        this.label = user.getFullname();
     }
 
 

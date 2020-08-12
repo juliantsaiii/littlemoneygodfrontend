@@ -101,9 +101,10 @@
         <el-form-item label="派驻地点" prop="paizhuarea">
           <el-input v-model="form.paizhuarea" placeholder="用于市级派驻文书生成标题" />
         </el-form-item>
-        <!-- <el-form-item label="分管常委" prop="chargepersonid">
+        <el-form-item label="分管常委" prop="chargepersonid">
           <dept-select-tree
             :pid="form.chargepersonid"
+            :id="form.chargepersonid"
             :label="form.chargepersonname"
             :type="'user'"
             @selectterm="updatepSelectTreeValue"
@@ -114,6 +115,7 @@
         <el-form-item label="分管副书记" prop="chargeleadername">
           <dept-select-tree
             :pid="form.chargeleaderid"
+            :id="form.chargeleaderid"
             :label="form.chargeleadername"
             :type="'user'"
             @selectterm="updatepSelectTreeValue"
@@ -124,6 +126,7 @@
         <el-form-item label="书记" prop="mainleaderid">
           <dept-select-tree
             :pid="form.mainleaderid"
+            :id="form.mainleaderid"
             :label="form.mainleadername"
             :type="'user'"
             @selectterm="updatepSelectTreeValue"
@@ -134,6 +137,7 @@
         <el-form-item label="派驻副组长" prop="paizhusubleaderid">
           <dept-select-tree
             :pid="form.paizhusubleaderid"
+            :id="form.paizhusubleaderid"
             :label="form.paizhusubleadername"
             :type="'user'"
             @selectterm="updatepSelectTreeValue"
@@ -144,13 +148,14 @@
         <el-form-item label="派驻组长" prop="paizhumainleaderid">
           <dept-select-tree
             :pid="form.paizhumainleaderid"
+            :id="form.paizhumainleaderid"
             :label="form.paizhumainleadername"
             :type="'user'"
             @selectterm="updatepSelectTreeValue"
             :selectID="'paizhumainleaderid'"
             :selectName="'paizhumainleadername'"
           ></dept-select-tree>
-        </el-form-item>-->
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -167,13 +172,13 @@ import {
   delDept,
   addDept,
   updateDept,
-  exportDept
+  exportDept,
 } from "@/api/sjwflowsys/dept";
 import Treeselect from "@riophae/vue-treeselect";
 import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
 import { LOAD_CHILDREN_OPTIONS } from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-const simulateAsyncOperation = fn => {
+const simulateAsyncOperation = (fn) => {
   setTimeout(fn, 2000);
 };
 export default {
@@ -205,27 +210,27 @@ export default {
         chargeleadername: undefined,
         mainleadername: undefined,
         paizhusubleadername: undefined,
-        paizhumainleadername: undefined
+        paizhumainleadername: undefined,
       },
       loadNodeMap: new Map(),
       // 部门属性字典
       categoryOptions: [
         {
           value: "区域",
-          label: "区域"
+          label: "区域",
         },
         {
           value: "单位",
-          label: "单位"
+          label: "单位",
         },
         {
           value: "部门",
-          label: "部门"
+          label: "部门",
         },
         {
           value: "工作组",
-          label: "工作组"
-        }
+          label: "工作组",
+        },
       ],
       // 表单参数
       form: {},
@@ -233,29 +238,29 @@ export default {
       rules: {
         pid: [{ required: true, message: "上级部门不能为空", trigger: "blur" }],
         name: [
-          { required: true, message: "部门名称不能为空", trigger: "blur" }
+          { required: true, message: "部门名称不能为空", trigger: "blur" },
         ],
         category: [
-          { required: true, message: "部门分类不能为空", trigger: "blur" }
+          { required: true, message: "部门分类不能为空", trigger: "blur" },
         ],
         sortcode: [
-          { required: true, message: "排序不能为空", trigger: "blur" }
+          { required: true, message: "排序不能为空", trigger: "blur" },
         ],
         infotype: [
-          { required: true, message: "流程类型不能为空", trigger: "blur" }
+          { required: true, message: "流程类型不能为空", trigger: "blur" },
         ],
         depttype: [
-          { required: true, message: "部门类型不能为空", trigger: "blur" }
-        ]
-      }
+          { required: true, message: "部门类型不能为空", trigger: "blur" },
+        ],
+      },
     };
   },
   created() {
     this.getList();
-    this.getDicts("sjwflow_dept_flowinfotype").then(response => {
+    this.getDicts("sjwflow_dept_flowinfotype").then((response) => {
       this.flowinfotypeOptions = response.data;
     });
-    this.getDicts("sjwflow_dept_type").then(response => {
+    this.getDicts("sjwflow_dept_type").then((response) => {
       this.depttypeOptions = response.data;
     });
   },
@@ -263,7 +268,7 @@ export default {
     /** 查询部门列表 */
     getList() {
       this.loading = true;
-      listDept(this.queryParams).then(response => {
+      listDept(this.queryParams).then((response) => {
         this.deptList = this.handleTree(
           response.data,
           "id",
@@ -279,7 +284,7 @@ export default {
     load(tree, treeNode, resolve) {
       this.loadNodeMap.set(tree.id, { tree, treeNode, resolve });
       this.queryParams.pid = tree.id;
-      listDept(this.queryParams).then(response => {
+      listDept(this.queryParams).then((response) => {
         resolve(response.data);
       });
     },
@@ -291,7 +296,7 @@ export default {
       return {
         id: node.id,
         label: node.name,
-        children: node.children
+        children: node.children,
       };
     },
     // 流程类型字典翻译
@@ -331,7 +336,7 @@ export default {
         paizhusubleadername: undefined,
         paizhumainleaderid: undefined,
         paizhumainleadername: undefined,
-        parentName: undefined
+        parentName: undefined,
       };
       this.resetForm("form");
     },
@@ -358,18 +363,18 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      getDept(row.id).then(response => {
+      getDept(row.id).then((response) => {
         this.form = response.data;
         this.open = true;
         this.title = "修改部门";
       });
     },
     /** 提交按钮 */
-    submitForm: function() {
-      this.$refs["form"].validate(valid => {
+    submitForm: function () {
+      this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateDept(this.form).then(response => {
+            updateDept(this.form).then((response) => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
@@ -377,7 +382,7 @@ export default {
               }
             });
           } else {
-            addDept(this.form).then(response => {
+            addDept(this.form).then((response) => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -400,23 +405,23 @@ export default {
       this.$confirm('是否确认删除-"' + row.name + '"-的数据项?', "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
-        .then(function() {
+        .then(function () {
           return delDept(row.id);
         })
         .then(() => {
           this.refreshNode(row.pid);
           this.msgSuccess("删除成功");
         })
-        .catch(function() {});
+        .catch(function () {});
     },
     /** 刷新子节点 */
     refreshNode(id) {
       const { tree, treeNode, resolve } = this.loadNodeMap.get(id);
       this.$set(this.$refs.table.store.states.lazyTreeNodeMap, id, []);
       this.queryParams.pid = id;
-      listDept(this.queryParams).then(response => {
+      listDept(this.queryParams).then((response) => {
         resolve(response.data);
       });
     },
@@ -424,7 +429,7 @@ export default {
     updatepSelectTreeValue(node, id, label) {
       this.form[id] = node.id;
       label != undefined && [(this.form[label] = node.label)];
-    }
-  }
+    },
+  },
 };
 </script>

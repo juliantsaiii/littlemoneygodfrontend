@@ -108,7 +108,6 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 根据当前节点递归获取部门树
-     * @param Pid
      * @param ID
      * @param list
      * @return
@@ -134,7 +133,7 @@ public class DeptServiceImpl implements IDeptService
                 if(d.getId().equals(ID)){
                     ts.setChildren(list);
                 }else{
-                    ts.setChildren(null);
+                    ts.setChildren(new ArrayList<>());
                 }
                 trees.add(ts);
             }
