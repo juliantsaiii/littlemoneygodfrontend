@@ -455,4 +455,13 @@ public class SysUserServiceImpl implements ISysUserService
         return successMsg.toString();
     }
 
+
+    /**
+     * 状态置为已读更新日志
+     * @param id
+     * @return
+     */
+    public int updateUserReadStatus(Long id){
+        return userMapper.updateUserReadStatus(id);
+    }
 }

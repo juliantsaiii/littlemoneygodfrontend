@@ -89,4 +89,12 @@ public class SysNoticeServiceImpl implements ISysNoticeService
     {
         return noticeMapper.deleteNoticeByIds(noticeIds);
     }
+
+    /**
+     * 查询最新公告
+     * @return
+     */
+    public String selectLatestNotice(){
+        return noticeMapper.selectLatestNotice();
+    }
 }

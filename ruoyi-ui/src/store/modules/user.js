@@ -6,6 +6,7 @@ const user = {
     token: getToken(),
     name: '',
     avatar: '',
+    readUpdateMsg: '',
     roles: [],
     permissions: []
   },
@@ -26,6 +27,14 @@ const user = {
     SET_PERMISSIONS: (state, permissions) => {
       state.permissions = permissions
     }
+    ,
+    SET_READUPDATEMSG: (state, readUpdateMsg) => {
+      state.readUpdateMsg = readUpdateMsg
+    }
+  },
+
+  getters: {
+    getReadUpdateMsg: state => state.readUpdateMsg
   },
 
   actions: {
@@ -60,13 +69,14 @@ const user = {
           }
           commit('SET_NAME', user.userName)
           commit('SET_AVATAR', avatar)
+          commit('SET_READUPDATEMSG', user.readUpdateMsg)
           resolve(res)
         }).catch(error => {
           reject(error)
         })
       })
     },
-    
+
     // 退出系统
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {

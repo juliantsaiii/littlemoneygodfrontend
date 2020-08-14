@@ -27,18 +27,12 @@
       </el-col>
     </el-row>
 
-    <!-- <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="10">
-        <div class="chart-wrapper">
-          <pie-chart />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="14">
-        <div class="chart-wrapper">
-          <line-chart />
-        </div>
-      </el-col>
-    </el-row>-->
+    <el-dialog title="更新内容" :visible.sync="showUpdateMsgDialog" width="600px">
+      <p v-html="msg" id="updateform"></p>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="updateUserReadStatus">我知道了</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -48,6 +42,8 @@ import LineChart from "./dashboard/LineChart";
 import RaddarChart from "./dashboard/RaddarChart";
 import PieChart from "./dashboard/PieChart";
 import BarChart from "./dashboard/BarChart";
+import { listLatestNotice } from "@/api/system/notice";
+import { UpdateReadStatus } from "@/api/system/user";
 
 export default {
   name: "Index",
@@ -59,9 +55,29 @@ export default {
     BarChart
   },
   data() {
-    return {};
+    return {
+      showUpdateMsgDialog: true,
+      msg: ""
+    };
   },
-  methods: {}
+  methods: {
+    getLatesdUpdateMsg() {
+      listLatestNotice().then(response => {
+        this.msg = response.msg;
+      });
+    },
+    updateUserReadStatus() {
+      UpdateReadStatus();
+      this.showUpdateMsgDialog = false;
+    }
+  },
+  created() {
+    this.showUpdateMsgDialog =
+      this.$store.getters.getReadUpdateMsg == "0" ? true : false;
+    if (this.showUpdateMsgDialog) {
+      this.getLatesdUpdateMsg();
+    }
+  }
 };
 </script>
 
@@ -81,5 +97,14 @@ export default {
   .chart-wrapper {
     padding: 8px;
   }
+}
+</style>
+<style lang="scss">
+#updateform >>> li {
+  margin-top: 10px;
+}
+#updateform >>> p {
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>
