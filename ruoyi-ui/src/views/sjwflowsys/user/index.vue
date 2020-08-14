@@ -193,6 +193,7 @@
             <el-form-item label="机构" prop="companyid">
               <dept-select-tree
                 :pid="form.companyid"
+                :id="form.companyid"
                 :label="form.companyname"
                 @selectterm="updatepSelectTreeValue"
                 :type="'dept'"
@@ -207,6 +208,7 @@
             <el-form-item label="部门" prop="deptid">
               <dept-select-tree
                 :pid="form.deptid"
+                :id="form.deptid"
                 :label="form.deptname"
                 @selectterm="updatepSelectTreeValue"
                 :type="'dept'"

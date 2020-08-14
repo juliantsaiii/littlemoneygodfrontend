@@ -133,7 +133,7 @@ public class DeptServiceImpl implements IDeptService
                 if(d.getId().equals(ID)){
                     ts.setChildren(list);
                 }else{
-                    ts.setChildren(new ArrayList<>());
+                    ts.setChildren(null);
                 }
                 trees.add(ts);
             }
