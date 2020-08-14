@@ -96,11 +96,12 @@ export function download(fileName) {
 
 // 通用下载方法
 export function downloadbypath(fileName, filePath) {
-	window.location.href = getdownloadbypath(fileName, filePath);
+	window.open(getdownloadbypath(fileName, filePath));
 }
 
 // 拼接下载方法路径
 export function getdownloadbypath(fileName, filePath, params) {
+	params = params == undefined ? "" : params;
 	return baseURL + "/common/downloadpath?fileName=" + encodeURI(fileName) + "&filePath=" + encodeURI(filePath) + params;
 }
 
