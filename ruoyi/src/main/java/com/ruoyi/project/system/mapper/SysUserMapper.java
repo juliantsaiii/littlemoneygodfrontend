@@ -110,4 +110,13 @@ public interface SysUserMapper
      * @return 结果
      */
     public SysUser checkEmailUnique(String email);
+
+    /**
+     * 状态置为已读更新日志
+     * @param id
+     * @return
+     */
+    public int updateUserReadStatus(Long id);
+
+
 }

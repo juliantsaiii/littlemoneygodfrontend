@@ -198,4 +198,15 @@ public class SysUserController extends BaseController
         user.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(userService.updateUserStatus(user));
     }
+
+    /**
+     * 读更新日志状态改为已读
+     * @return
+     */
+    @GetMapping("/UpdateReadStatus")
+    public AjaxResult UpdateReadStatus(){
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        return  toAjax(userService.updateUserReadStatus(loginUser.getUser().getUserId()));
+    }
+
 }

@@ -42,3 +42,11 @@ export function delNotice(noticeId) {
     method: 'delete'
   })
 }
+
+// 查询最新公告
+export function listLatestNotice() {
+  return request({
+    url: '/system/notice/getLatestNotice',
+    method: 'get',
+  })
+}

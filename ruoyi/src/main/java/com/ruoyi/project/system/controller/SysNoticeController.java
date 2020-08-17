@@ -89,4 +89,10 @@ public class SysNoticeController extends BaseController
     {
         return toAjax(noticeService.deleteNoticeByIds(noticeIds));
     }
+
+    @GetMapping("/getLatestNotice")
+    public AjaxResult getLatestNotice(){
+        String content = noticeService.selectLatestNotice();
+        return AjaxResult.success(content);
+    }
 }

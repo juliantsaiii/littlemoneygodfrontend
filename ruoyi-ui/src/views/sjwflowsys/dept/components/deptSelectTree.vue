@@ -3,7 +3,7 @@
     v-model="value"
     :options="deptOptions"
     :load-options="loadOptions"
-    placeholder="请选择父级ID"
+    placeholder="请选择"
     @select="changeValue"
     @input="changeInput"
     :disable-branch-nodes="queryType"
@@ -16,7 +16,7 @@ import { LOAD_CHILDREN_OPTIONS } from "@riophae/vue-treeselect";
 import {
   listDept,
   getDeptTree,
-  getDeptTreebyNode,
+  getDeptTreebyNode
 } from "@/api/sjwflowsys/dept";
 export default {
   components: { Treeselect },
@@ -32,9 +32,9 @@ export default {
         pid: undefined,
         type: this.type,
         selectTree: "select",
-        childID: this.id,
+        childID: this.id
       },
-      childinit: {},
+      childinit: {}
     };
   },
   created() {
@@ -42,27 +42,29 @@ export default {
   },
   watch: {
     id(val) {
-      this.queryParams.childID = val;
       if (!!val) {
+        this.queryParams.childID = val;
         this.getTreeselect();
       }
     },
     pid(val) {
-      this.value = val;
-    },
+      if (!!val) {
+        this.value = val;
+      }
+    }
   },
   methods: {
     getTreeselect() {
       if (!!this.value) {
-        getDeptTreebyNode(this.queryParams).then((response) => {
+        getDeptTreebyNode(this.queryParams).then(response => {
           this.deptOptions = response.data;
         });
       } else {
         this.queryParams.pid = "-1";
-        listDept(this.queryParams).then((response) => {
+        listDept(this.queryParams).then(response => {
           let pNode = response.data[0];
           this.deptOptions = [
-            { id: pNode.id, label: pNode.name, children: null },
+            { id: pNode.id, label: pNode.name, children: null }
           ];
         });
       }
@@ -70,10 +72,10 @@ export default {
     loadOptions({ action, parentNode, callback }) {
       if (action === LOAD_CHILDREN_OPTIONS) {
         this.queryParams.pid = parentNode.id;
-        getDeptTree(this.queryParams).then((response) => {
+        getDeptTree(this.queryParams).then(response => {
           let resData = response.data;
           let arr = [];
-          resData.forEach((item) => {
+          resData.forEach(item => {
             let objData = {};
             objData.id = item.id;
             objData.label = item.name;
@@ -104,7 +106,7 @@ export default {
       if (val == undefined || val == "") {
         this.$emit("selectterm", null);
       }
-    },
-  },
+    }
+  }
 };
 </script>

@@ -32,8 +32,7 @@ import com.ruoyi.framework.web.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/sjwflowbusiness/tempclueinfo")
-public class TempClueinfoController extends BaseController
-{
+public class TempClueinfoController extends BaseController {
     @Autowired
     private ITempClueinfoService tempClueinfoService;
 
@@ -45,11 +44,10 @@ public class TempClueinfoController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('sjwflowbusiness:tempclueinfo:list')")
     @GetMapping("/list")
-    public TableDataInfo list(TempClueinfo tempClueinfo)
-    {
+    public TableDataInfo list(TempClueinfo tempClueinfo) {
         startPage();
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if(!loginUser.getUser().getArea().contains("00000000-0000-1000-0000-000000000000")){
+        if (!loginUser.getUser().getArea().contains("00000000-0000-1000-0000-000000000000")) {
             tempClueinfo.setCreatecompanyid(loginUser.getUser().getArea());
         }
         List<TempClueinfo> list = tempClueinfoService.selectTempClueinfoList(tempClueinfo);
@@ -62,8 +60,7 @@ public class TempClueinfoController extends BaseController
     @PreAuthorize("@ss.hasPermi('sjwflowbusiness:tempclueinfo:export')")
     @Log(title = "线索操作", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
-    public AjaxResult export(TempClueinfo tempClueinfo)
-    {
+    public AjaxResult export(TempClueinfo tempClueinfo) {
         List<TempClueinfo> list = tempClueinfoService.selectTempClueinfoList(tempClueinfo);
         ExcelUtil<TempClueinfo> util = new ExcelUtil<TempClueinfo>(TempClueinfo.class);
         return util.exportExcel(list, "tempclueinfo");
@@ -74,8 +71,7 @@ public class TempClueinfoController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('sjwflowbusiness:tempclueinfo:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") String id)
-    {
+    public AjaxResult getInfo(@PathVariable("id") String id) {
         return AjaxResult.success(tempClueinfoService.selectTempClueinfoById(id));
     }
 
@@ -85,8 +81,7 @@ public class TempClueinfoController extends BaseController
     @PreAuthorize("@ss.hasPermi('sjwflowbusiness:tempclueinfo:add')")
     @Log(title = "线索操作", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody TempClueinfo tempClueinfo)
-    {
+    public AjaxResult add(@RequestBody TempClueinfo tempClueinfo) {
         return toAjax(tempClueinfoService.insertTempClueinfo(tempClueinfo));
     }
 
@@ -96,8 +91,7 @@ public class TempClueinfoController extends BaseController
     @PreAuthorize("@ss.hasPermi('sjwflowbusiness:tempclueinfo:edit')")
     @Log(title = "线索操作", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody TempClueinfo tempClueinfo)
-    {
+    public AjaxResult edit(@RequestBody TempClueinfo tempClueinfo) {
         return toAjax(tempClueinfoService.updateTempClueinfo(tempClueinfo));
     }
 
@@ -106,9 +100,8 @@ public class TempClueinfoController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('sjwflowbusiness:tempclueinfo:remove')")
     @Log(title = "线索操作", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable String[] ids)
-    {
+    @DeleteMapping("/{ids}")
+    public AjaxResult remove(@PathVariable String[] ids) {
         return toAjax(tempClueinfoService.deleteTempClueinfoByIds(ids));
     }
 
@@ -118,9 +111,8 @@ public class TempClueinfoController extends BaseController
     @PreAuthorize("@ss.hasPermi('sjwflowbusiness:tempclueinfo:remove')")
     @Log(title = "线索操作", businessType = BusinessType.DELETE)
     @PostMapping("/fakeDelete/{ids}")
-    public AjaxResult fakeDelete(@PathVariable String[] ids)
-    {
+    public AjaxResult fakeDelete(@PathVariable String[] ids) {
         return toAjax(tempClueinfoService.fakeDelteByIds(ids));
     }
-
 }
+

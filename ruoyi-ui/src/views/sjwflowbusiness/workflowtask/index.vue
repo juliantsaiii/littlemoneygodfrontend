@@ -154,6 +154,7 @@
     <el-dialog title="更换接收人" :visible.sync="dialogTreeVisible" append-to-body>
       <dept-select-tree
         :pid="form.receiveid"
+        :id="form.receiveid"
         :label="form.receivename"
         @selectterm="updatepSelectTreeValue"
         :type="'user'"

@@ -125,3 +125,12 @@ export function importTemplate() {
     method: 'get'
   })
 }
+
+// 更新用户状态为已读
+export function UpdateReadStatus() {
+  return request({
+    url: '/system/user/UpdateReadStatus',
+    method: 'get'
+  })
+}
+

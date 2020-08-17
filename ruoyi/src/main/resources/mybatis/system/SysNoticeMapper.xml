@@ -41,6 +41,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</where>
     </select>
+
+    <select  id="selectLatestNotice" resultType="String">
+        select notice_content from sys_notice where status = 0 order by create_time desc limit 1
+    </select>
     
     <insert id="insertNotice" parameterType="SysNotice">
         insert into sys_notice (

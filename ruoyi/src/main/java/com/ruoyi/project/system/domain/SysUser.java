@@ -91,6 +91,9 @@ public class SysUser extends BaseEntity
     /** 岗位组 */
     private Long[] postIds;
 
+    /** 是否阅读过更新日志 */
+    private String readUpdateMsg;
+
     public SysUser()
     {
 
@@ -321,5 +324,13 @@ public class SysUser extends BaseEntity
             .append("remark", getRemark())
             .append("dept", getDept())
             .toString();
+    }
+
+    public String getReadUpdateMsg() {
+        return readUpdateMsg;
+    }
+
+    public void setReadUpdateMsg(String readUpdateMsg) {
+        this.readUpdateMsg = readUpdateMsg;
     }
 }

@@ -164,4 +164,11 @@ public interface ISysUserService
      * @return 结果
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
+
+    /**
+     * 状态置为已读更新日志
+     * @param id
+     * @return
+     */
+    public int updateUserReadStatus(Long id);
 }
