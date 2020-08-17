@@ -133,6 +133,12 @@
             icon="el-icon-edit"
             @click="openEditDialog(scope.row)"
           >编辑</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-refresh"
+            @click="getSessionID(scope.row)"
+          >表单</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -226,13 +232,14 @@
 </template>
 
 <script>
+import axios from "axios";
 import {
   listWorkflowtask,
   getWorkflowtask,
   delWorkflowtask,
   addWorkflowtask,
   updateWorkflowtask,
-  exportWorkflowtask
+  exportWorkflowtask,
 } from "@/api/sjwflowbusiness/workflowtask";
 import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -267,7 +274,7 @@ export default {
         receivename: undefined,
         instanceid: undefined,
         receiveid: undefined,
-        status: undefined
+        status: undefined,
       },
       statusOptions: [],
       // 表单参数
@@ -277,30 +284,30 @@ export default {
         title: [{ required: true, message: "请输入流程名称", trigger: "blur" }],
         flowid: [{ required: true, message: "请输入流程id", trigger: "blur" }],
         stepname: [
-          { required: true, message: "请输入步骤名称", trigger: "blur" }
+          { required: true, message: "请输入步骤名称", trigger: "blur" },
         ],
         stepid: [{ required: true, message: "请输入步骤id", trigger: "blur" }],
         stepstate: [
-          { required: true, message: "请输入步骤阶段", trigger: "blur" }
+          { required: true, message: "请输入步骤阶段", trigger: "blur" },
         ],
         receivetime: [
-          { required: true, message: "请选择接收时间", trigger: "blur" }
+          { required: true, message: "请选择接收时间", trigger: "blur" },
         ],
         databasename: [
-          { required: true, message: "请输入databasename", trigger: "blur" }
+          { required: true, message: "请输入databasename", trigger: "blur" },
         ],
         stepstate: [
-          { required: true, message: "请输入stepstate", trigger: "blur" }
+          { required: true, message: "请输入stepstate", trigger: "blur" },
         ],
         infotype: [
-          { required: true, message: "请输入infotype", trigger: "blur" }
-        ]
+          { required: true, message: "请输入infotype", trigger: "blur" },
+        ],
       },
       tableHeight:
         this.isdialog == true
           ? "600"
           : this.$store.getters.clientHeight - 200 + "px",
-      dialogTreeVisible: false
+      dialogTreeVisible: false,
     };
   },
   watch: {
@@ -311,7 +318,7 @@ export default {
       if (val) {
         this.getList(this.queryParams);
       }
-    }
+    },
   },
   created() {
     // this.queryParams.clueid = this.$route.params && this.$route.query.id;
@@ -321,7 +328,7 @@ export default {
     //   this.$route.params && this.$route.query.receiveid && 1;
     // this.queryParams.isdeleted =
     //   this.$route.params && this.$route.query.receiveid && 0;
-    this.getDicts("sjwflow_task_status").then(response => {
+    this.getDicts("sjwflow_task_status").then((response) => {
       this.statusOptions = response.data;
     });
     this.getList(this.queryParams);
@@ -330,7 +337,7 @@ export default {
     /** 查询流程记录列表 */
     getList() {
       this.loading = true;
-      listWorkflowtask(this.queryParams).then(response => {
+      listWorkflowtask(this.queryParams).then((response) => {
         this.workflowtaskList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -390,7 +397,7 @@ export default {
         infotype: undefined,
         isdeleted: "0",
         spbid: undefined,
-        isdeletd: "0"
+        isdeletd: "0",
       };
       this.resetForm("form");
     },
@@ -406,7 +413,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id);
+      this.ids = selection.map((item) => item.id);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
@@ -416,19 +423,19 @@ export default {
       this.$confirm("是否确认导出所有流程记录数据项?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
-        .then(function() {
+        .then(function () {
           return exportWorkflowtask(queryParams);
         })
-        .then(response => {
+        .then((response) => {
           this.download(response.msg);
         })
-        .catch(function() {});
+        .catch(function () {});
     },
     /** 更新form */
     updateform(data) {
-      updateWorkflowtask(data).then(res => {
+      updateWorkflowtask(data).then((res) => {
         if (res.code == "200") {
           this.msgSuccess("修改成功");
         }
@@ -456,9 +463,9 @@ export default {
     },
     /** 提交修改 */
     submitForm() {
-      this.$refs["form"].validate(valid => {
+      this.$refs["form"].validate((valid) => {
         if (valid) {
-          updateWorkflowtask(this.form).then(response => {
+          updateWorkflowtask(this.form).then((response) => {
             if (response.code === 200) {
               this.msgSuccess("修改成功");
               this.open = false;
@@ -467,7 +474,17 @@ export default {
           });
         }
       });
-    }
-  }
+    },
+    getSessionID(task) {
+      axios
+        .get("/api/exchange/getLoginSession?id=" + task.receiveid)
+        .then((response) => {
+          const cookie = response.data;
+          window.open(
+            `http://localhost:1433/WorkFlow/WorkFlowRun/Index?cookie=TiKuSession=${cookie}"&workStatus=${task.status}&ReceiveID=${task.receiveid}&flowid=${task.flowid}&stepid=${task.stepid}&instanceid=${task.instanceid}&taskid=${task.id}&groupid=${task.groupid}5&clueid=${task.clueid}&isreadonly=0&appid=tab_a5817619-84ba-4606-b1b2-7bc913af35ea&tabid=tab_tab_a5817619-84ba-4606-b1b2-7bc913af35ea`
+          );
+        });
+    },
+  },
 };
 </script>
