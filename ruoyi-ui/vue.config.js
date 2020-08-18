@@ -45,7 +45,21 @@ module.exports = {
         pathRewrite: {
           '^refresh': ''
         }
-      }
+      },
+      "/refresh": {
+        target: 'http://' + process.env.VUE_APP_WINHTTP_URL + ':9991/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^refresh': ''
+        }
+      },
+      "/api": {
+        target: 'http://localhost:1433/',
+        changeOrigin: true,
+        // pathRewrite: {
+        //   '^refresh': ''
+        // }
+      },
     },
     disableHostCheck: true
   },
