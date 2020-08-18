@@ -54,7 +54,7 @@ module.exports = {
         }
       },
       "/api": {
-        target: 'http://localhost:1433/',
+        target: 'http://' + process.env.VUE_APP_Product_URL + '/',
         changeOrigin: true,
         // pathRewrite: {
         //   '^refresh': ''
