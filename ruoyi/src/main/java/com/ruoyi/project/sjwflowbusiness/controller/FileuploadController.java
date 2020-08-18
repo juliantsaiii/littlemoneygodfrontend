@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.project.sjwflowbusiness.domain.FileuploadDownload;
+import com.ruoyi.project.sjwflowsys.domain.Dept;
+import com.ruoyi.project.sjwflowsys.service.IDeptService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,8 @@ public class FileuploadController extends BaseController
 {
     @Autowired
     private IFileuploadService fileuploadService;
+    @Autowired
+    private IDeptService deptService;
     //使用value注入
     @Value("${samba.path}")
     private String basepath;
@@ -117,7 +121,13 @@ public class FileuploadController extends BaseController
         if(fd == null){
            return AjaxResult.error("文件不存在！");
         }else{
-            String path = fileuploadService.selectMapperIPAddress(fd.companyid);
+            String companyid = fd.companyid;
+            //若company不是省纪委则要取父级ID
+            if(!fd.companyid.equals("a6eb2005-3bb0-49b1-9e2e-793ede3c367d")){
+                Dept dept = deptService.selectDeptById(companyid);
+                companyid = dept.getPid();
+            }
+            String path = fileuploadService.selectMapperIPAddress(companyid);
             if(StringUtils.isEmpty(path))
             {
                 return AjaxResult.error("未找到该文件的创建者！");
