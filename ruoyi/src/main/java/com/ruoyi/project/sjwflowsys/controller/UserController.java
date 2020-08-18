@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,9 @@ import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.web.page.TableDataInfo;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import static com.ruoyi.common.utils.security.Md5Utils.hash;
 
@@ -50,10 +54,15 @@ public class UserController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('sjwflowsys:user:list')")
     @GetMapping("/list")
-    public TableDataInfo list(User user)
+    public TableDataInfo list(User user, HttpServletRequest request)
     {
         startPage();
         List<User> list = userService.selectUserList(user);
+        if(list.size()==1)
+        {
+            HttpSession session = request.getSession();
+            session.setAttribute("info",list.get(0));
+        }
         return getDataTable(list);
     }
 

@@ -44,8 +44,18 @@
       :height="tableHeight"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" :min-width="300" />
-      <el-table-column label="名称" align="center" prop="filename" :min-width="200" />
+      <el-table-column label="是否删除" align="center" prop="isdeleted">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.isdeleted" @change="updateform(scope.row)"></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否oldspb" align="center" prop="isoldspb">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.isoldspb" @change="updateform(scope.row)"></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="id" align="center" prop="id" :min-width="100" />
+      <el-table-column label="名称" align="center" prop="filename" :min-width="100" />
       <el-table-column label="后缀" align="center" prop="fileextend" />
       <el-table-column label="上传人" align="center" prop="username" />
       <el-table-column label="签章状态" align="center" prop="applystamp" />
@@ -67,11 +77,7 @@
       <el-table-column label="拟文id" align="center" prop="niwenid" :min-width="300" />
       <el-table-column label="是否ofd" align="center" prop="isofd" :formatter="isofdFormat" />
       <el-table-column label="打印份数" align="center" prop="printnum" />
-      <el-table-column label="是否删除" align="center" prop="isdeleted">
-        <template slot-scope="scope">
-          <el-switch v-model="scope.row.isdeleted" @change="updateform(scope.row)"></el-switch>
-        </template>
-      </el-table-column>
+
       <el-table-column
         label="操作"
         align="center"

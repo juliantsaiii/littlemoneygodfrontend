@@ -167,6 +167,7 @@
       width="1000px"
       height="900px"
       :close-on-click-modal="false"
+      append-to-body
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-row>
