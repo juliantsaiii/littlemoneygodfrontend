@@ -64,16 +64,27 @@ public class DeptController extends BaseController
     public AjaxResult listTreeNode(@RequestParam(defaultValue = "dept") String type,@RequestParam String childID)
     {
         TreeSelectStr ts = new TreeSelectStr();
-        if(type.equals("user"))
-        {
-            User user = userService.selectUserById(childID);
-            User query = new User();
-            query.setDeptid(user.getDeptid());
-            List<User> userList = userService.selectUserList(query);
-            List<TreeSelectStr> usertrees = userList.stream().map(TreeSelectStr::new).collect(Collectors.toList());
-            ts = deptService.getDeptTree(user.getDeptid(),usertrees);
-        }else{
-            ts =  deptService.getDeptTree(childID,new ArrayList<>());
+        switch(type){
+            case "user":
+                User user = userService.selectUserById(childID);
+                User query = new User();
+                query.setDeptid(user.getDeptid());
+                List<User> userList = userService.selectUserList(query);
+                List<TreeSelectStr> usertrees = userList.stream().map(TreeSelectStr::new).collect(Collectors.toList());
+                ts = deptService.getDeptTree(user.getDeptid(),usertrees,false);
+                break;
+            case "dept":
+                ts =  deptService.getDeptTree(childID,new ArrayList<>(),false);
+                break;
+            case "role":
+
+                break;
+            case "company":
+                ts =  deptService.getDeptTree(childID,new ArrayList<>(),true);
+                if(ts.getChildren().size()!=0){
+                    ts.getChildren().get(0).setChildren(new ArrayList<>());
+                }
+                break;
         }
 
         List<TreeSelectStr>  list = new ArrayList<>();
@@ -127,13 +138,14 @@ public class DeptController extends BaseController
                     }
                 }
                 break;
-            case "role":
+            case "company":
+                boolean istree = selectType.equals("tree");
                 for(Dept d : list)
                 {
-                    if(d.getDepttype()==null||d.getDepttype().equals("省纪委")||d.getDepttype().equals("市纪委")||d.getDepttype().equals("县区纪委")){
-                        d.setHasChildren(true);
+                    if(d.getDepttype()==null||deptService.JudgeDeptType(d.getDepttype())){
+                        d.setHasChildren(istree);
                     }else{
-                        d.setHasChildren(false);
+                        d.setHasChildren(!istree);
                     }
                 }
                 break;

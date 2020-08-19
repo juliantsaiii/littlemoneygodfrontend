@@ -196,7 +196,7 @@
                 :id="form.companyid"
                 :label="form.companyname"
                 @selectterm="updatepSelectTreeValue"
-                :type="'dept'"
+                :type="'company'"
                 :selectID="'companyid'"
                 :selectName="'companyname'"
               ></dept-select-tree>
@@ -292,7 +292,7 @@ import {
   addUser,
   updateUser,
   exportUser,
-  resetPassword
+  resetPassword,
 } from "@/api/sjwflowsys/user";
 import { listWorkflowtask } from "@/api/sjwflowbusiness/workflowtask";
 import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
@@ -342,12 +342,12 @@ export default {
         deptid: undefined,
         companyid: undefined,
         pageNum: 1,
-        pageSize: 30
+        pageSize: 30,
       },
       deptQueryParams: {
         pid: "-1",
         type: "dept",
-        selectType: "tree"
+        selectType: "tree",
       },
       oldDeptID: "",
       // 表单参数
@@ -356,50 +356,50 @@ export default {
       rules: {
         name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
         fullname: [
-          { required: true, message: "请输入真实姓名", trigger: "blur" }
+          { required: true, message: "请输入真实姓名", trigger: "blur" },
         ],
         // password: [{ validator: validatePassword, trigger: "blur" }],
         companyid: [
-          { required: true, message: "请选择组织机构", trigger: "blur" }
+          { required: true, message: "请选择组织机构", trigger: "blur" },
         ],
         deptid: [{ required: true, message: "请选择部门", trigger: "blur" }],
         usertype: [
-          { required: true, message: "请选择人员类型", trigger: "blur" }
-        ]
+          { required: true, message: "请选择人员类型", trigger: "blur" },
+        ],
       },
       props: {
         label: "name",
         children: "children",
-        isLeaf: "hasChildren"
+        isLeaf: "hasChildren",
       },
       windowHeight: this.$store.getters.clientHeight,
       treeheight: {
         height: this.$store.getters.clientHeight - 100 + "px",
-        overflow: "auto"
+        overflow: "auto",
       },
       tasksParams: {
         pageNum: 1,
         pageSize: 1,
         receiveid: undefined,
         status: 1,
-        isdeleted: false
+        isdeleted: false,
       },
       showCarry: false,
       url: process.env.VUE_APP_BASE_API,
       //图片地址
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/sambUpload", // 上传的图片服务器地址
       headers: {
-        Authorization: "Bearer " + getToken()
+        Authorization: "Bearer " + getToken(),
       },
-      preurl: process.env.VUE_APP_FileServer_Path
+      preurl: process.env.VUE_APP_FileServer_Path,
     };
   },
   created() {
     this.getList();
-    this.getDicts("sjwflow_user_usertype").then(response => {
+    this.getDicts("sjwflow_user_usertype").then((response) => {
       this.usertypeOptions = response.data;
     });
-    this.getDicts("sjwflow_yes_no_num").then(response => {
+    this.getDicts("sjwflow_yes_no_num").then((response) => {
       this.activatedOptions = response.data;
     });
   },
@@ -407,7 +407,7 @@ export default {
     /** 查询业务平台用户管理列表 */
     getList() {
       this.loading = true;
-      listUser(this.queryParams).then(response => {
+      listUser(this.queryParams).then((response) => {
         this.userList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -451,7 +451,7 @@ export default {
         usertype: undefined,
         activated: "0",
         analysisroot: undefined,
-        isadmin: "0"
+        isadmin: "0",
       };
       this.resetForm("form");
     },
@@ -467,7 +467,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id);
+      this.ids = selection.map((item) => item.id);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
@@ -484,7 +484,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids;
-      getUser(id).then(response => {
+      getUser(id).then((response) => {
         this.form = response.data;
         this.form.carrywaitlist = "0";
         this.tasksParams.receiveid = this.form.id;
@@ -494,14 +494,14 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm: function() {
-      this.$refs["form"].validate(valid => {
+    submitForm: function () {
+      this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.id != undefined) {
             // 判断是否更换部门
             if (this.form.deptid != this.oldDeptID) {
               // 当前人员是否有待办事项
-              this.haveWaitlist().then(data => {
+              this.haveWaitlist().then((data) => {
                 if (data) {
                   this.$confirm(
                     "当前用户存在未完成待办事项，若更换部门需要转交待办事项，是否进入转交界面？",
@@ -511,12 +511,12 @@ export default {
                     this.open = false;
                     this.$router.push({
                       path: "/sjwflowbusiness/workflowtask",
-                      query: { receiveid: this.form.id }
+                      query: { receiveid: this.form.id },
                     });
                   });
                 } else {
                   // 无待办事项则更换承办部门
-                  updateUser(this.form).then(response => {
+                  updateUser(this.form).then((response) => {
                     if (response.code === 200) {
                       this.msgSuccess("修改成功");
                       this.open = false;
@@ -526,7 +526,7 @@ export default {
                 }
               });
             } else {
-              updateUser(this.form).then(response => {
+              updateUser(this.form).then((response) => {
                 if (response.code === 200) {
                   this.msgSuccess("修改成功");
                   this.open = false;
@@ -535,7 +535,7 @@ export default {
               });
             }
           } else {
-            addUser(this.form).then(response => {
+            addUser(this.form).then((response) => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -555,17 +555,17 @@ export default {
         {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
+          type: "warning",
         }
       )
-        .then(function() {
+        .then(function () {
           return delUser(ids);
         })
         .then(() => {
           this.getList();
           this.msgSuccess("删除成功");
         })
-        .catch(function() {});
+        .catch(function () {});
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -573,21 +573,21 @@ export default {
       this.$confirm("是否确认导出所有业务平台用户管理数据项?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
-        .then(function() {
+        .then(function () {
           return exportUser(queryParams);
         })
-        .then(response => {
+        .then((response) => {
           this.download(response.msg);
         })
-        .catch(function() {});
+        .catch(function () {});
     },
     /** 懒加载树 */
     loadNode(node, resolve) {
       this.deptQueryParams.pid = node.data.id;
       this.deptQueryParams.selectType = "tree";
-      getDeptTree(this.deptQueryParams).then(response => {
+      getDeptTree(this.deptQueryParams).then((response) => {
         resolve(response.data);
       });
     },
@@ -595,9 +595,9 @@ export default {
     refreshUserList(data) {
       (data.category == "单位" && [
         (this.queryParams.companyid = data.id),
-        (this.queryParams.deptid = undefined)
+        (this.queryParams.deptid = undefined),
       ]) || [(this.queryParams.deptid = data.id)];
-      listUser(this.queryParams).then(response => {
+      listUser(this.queryParams).then((response) => {
         this.userList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -605,7 +605,7 @@ export default {
     },
     /** 更新激活状态 */
     updateActivated(data) {
-      updateUser(data).then(response => {
+      updateUser(data).then((response) => {
         if (response.code === 200) {
           this.msgSuccess("修改成功");
         }
@@ -617,6 +617,7 @@ export default {
       label != undefined && [(this.form[label] = node.label)];
 
       if ((this.id = "deptid")) {
+        //携带待办
         if (this.form.deptid != this.oldDeptID) {
           this.showCarry = true;
         } else {
@@ -627,7 +628,7 @@ export default {
     /** 重置密码 */
     resetpassword() {
       this.$confirm("是否确认重置密码？", "提示", {}).then(() => {
-        resetPassword(this.form.id).then(response => {
+        resetPassword(this.form.id).then((response) => {
           if (response.code === 200) {
             this.msgSuccess("密码已重置");
           }
@@ -637,7 +638,7 @@ export default {
     /** 查询该员是否有待办事项 */
     haveWaitlist() {
       return new Promise((resolve, reject) => {
-        listWorkflowtask(this.tasksParams).then(response => {
+        listWorkflowtask(this.tasksParams).then((response) => {
           if (response.total > 0) {
             resolve(true);
           } else {
@@ -651,8 +652,8 @@ export default {
       row.imageUrl = Math.random();
     },
     /** 签名上传前事件 */
-    beforeAvatarUpload() {}
-  }
+    beforeAvatarUpload() {},
+  },
 };
 </script>
 <style scoped>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.framework.web.domain.TreeSelectStr;
 import com.ruoyi.project.sjwflowsys.domain.Dept;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * 部门Service接口
@@ -67,5 +68,12 @@ public interface IDeptService
      * @param list
      * @return
      */
-    public TreeSelectStr getDeptTree(String ID, List<TreeSelectStr> list);
+    public TreeSelectStr getDeptTree(String ID, List<TreeSelectStr> list,boolean isCompany);
+
+    /**
+     * 判断节点是否是省纪委、市纪委、县区纪委
+     * @param deptType
+     * @return
+     */
+    public boolean JudgeDeptType(String deptType);
 }

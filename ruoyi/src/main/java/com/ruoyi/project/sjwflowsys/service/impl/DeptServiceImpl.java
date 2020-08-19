@@ -8,11 +8,13 @@ import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
 import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
 import com.ruoyi.framework.web.domain.TreeSelect;
 import com.ruoyi.framework.web.domain.TreeSelectStr;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.sjwflowsys.mapper.DeptMapper;
 import com.ruoyi.project.sjwflowsys.domain.Dept;
 import com.ruoyi.project.sjwflowsys.service.IDeptService;
+import sun.security.util.ArrayUtil;
 
 /**
  * 部门Service业务层处理
@@ -112,7 +114,7 @@ public class DeptServiceImpl implements IDeptService
      * @param list
      * @return
      */
-    public TreeSelectStr getDeptTree(String ID,List<TreeSelectStr> list){
+    public TreeSelectStr getDeptTree(String ID,List<TreeSelectStr> list,boolean isCompany){
         Dept dept = deptMapper.selectDeptById(ID);
         TreeSelectStr tsMain = new TreeSelectStr();
         if(dept.getPid().equals("-1"))
@@ -133,12 +135,26 @@ public class DeptServiceImpl implements IDeptService
                 if(d.getId().equals(ID)){
                     ts.setChildren(list);
                 }else{
-                    ts.setChildren(null);
+                    if(!isCompany || !JudgeDeptType(d.getDepttype())){
+                        ts.setChildren(null);
+                    }else{
+                        ts.setChildren(new ArrayList<>());
+                    }
                 }
                 trees.add(ts);
             }
-            tsMain = getDeptTree(dept.getPid(),trees);
+            tsMain = getDeptTree(dept.getPid(),trees,isCompany);
         }
         return tsMain;
+    }
+
+    /**
+     * 判断节点是否是省纪委、市纪委、县区纪委
+     * @param deptType
+     * @return
+     */
+    public boolean JudgeDeptType(String deptType){
+        String [] array = {"省纪委","市纪委","县区纪委"};
+        return ArrayUtils.contains(array,deptType);
     }
 }

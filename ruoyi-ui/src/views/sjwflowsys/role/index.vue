@@ -46,7 +46,6 @@
         >
           <el-table-column type="selection" width="55" align="center" />
           <el-table-column label="id" align="center" prop="id" />
-          <el-table-column label="companyid" align="center" prop="companyid" />
           <el-table-column label="角色名" align="center" prop="name" />
           <el-table-column label="排序码" align="center" prop="sortcode" />
           <el-table-column label="角色分类" align="center" prop="category" />
@@ -83,10 +82,16 @@
     <!-- 添加或修改角色管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="companyid" prop="companyid">
-          <el-input v-model="form.companyid" placeholder="请输入companyid" />
+        <el-form-item label="父级" prop="companyid">
+          <dept-select-tree
+            :pid="form.companyid"
+            :id="form.companyid"
+            @selectterm="updatepSelectTreeValue"
+            :type="'company'"
+            :selectID="'companyid'"
+          ></dept-select-tree>
         </el-form-item>
-        <el-form-item label="name" prop="name">
+        <el-form-item label="角色名" prop="name">
           <el-input v-model="form.name" placeholder="请输入角色名" />
         </el-form-item>
         <el-form-item label="排序码" prop="sortcode">
@@ -113,12 +118,13 @@ import {
   delRole,
   addRole,
   updateRole,
-  exportRole
+  exportRole,
 } from "@/api/sjwflowsys/role";
 import { getDeptTree } from "@/api/sjwflowsys/dept";
-
+import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
 export default {
   name: "Role",
+  components: { deptSelectTree },
   data() {
     return {
       // 遮罩层
@@ -142,33 +148,33 @@ export default {
         pageNum: 1,
         pageSize: 30,
         name: undefined,
-        companyid: undefined
+        companyid: undefined,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
         deleted: [
-          { required: true, message: "$comment不能为空", trigger: "blur" }
-        ]
+          { required: true, message: "$comment不能为空", trigger: "blur" },
+        ],
       },
       props: {
         label: "name",
         children: "children",
-        isLeaf: "hasChildren"
+        isLeaf: "hasChildren",
       },
       windowHeight: this.$store.getters.clientHeight,
       treeheight: {
         height: this.$store.getters.clientHeight - 100 + "px",
-        overflow: "auto"
+        overflow: "auto",
       },
       rolequeryParams: {
         pid: "-1",
-        type: "role",
+        type: "company",
         selectType: "tree",
-        deptType: ""
+        deptType: "",
       },
-      deptList: []
+      deptList: [],
     };
   },
   created() {
@@ -178,7 +184,7 @@ export default {
     /** 查询角色管理列表 */
     getList() {
       this.loading = true;
-      listRole(this.queryParams).then(response => {
+      listRole(this.queryParams).then((response) => {
         this.roleList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -198,7 +204,7 @@ export default {
         name: undefined,
         sortcode: undefined,
         category: undefined,
-        deleted: "0"
+        deleted: "0",
       };
       this.resetForm("form");
     },
@@ -214,7 +220,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id);
+      this.ids = selection.map((item) => item.id);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
@@ -228,18 +234,18 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids;
-      getRole(id).then(response => {
+      getRole(id).then((response) => {
         this.form = response.data;
         this.open = true;
         this.title = "修改角色管理";
       });
     },
     /** 提交按钮 */
-    submitForm: function() {
-      this.$refs["form"].validate(valid => {
+    submitForm: function () {
+      this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateRole(this.form).then(response => {
+            updateRole(this.form).then((response) => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
@@ -247,7 +253,7 @@ export default {
               }
             });
           } else {
-            addRole(this.form).then(response => {
+            addRole(this.form).then((response) => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -267,17 +273,17 @@ export default {
         {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
+          type: "warning",
         }
       )
-        .then(function() {
+        .then(function () {
           return delRole(ids);
         })
         .then(() => {
           this.getList();
           this.msgSuccess("删除成功");
         })
-        .catch(function() {});
+        .catch(function () {});
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -285,21 +291,20 @@ export default {
       this.$confirm("是否确认导出所有角色管理数据项?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
-        .then(function() {
+        .then(function () {
           return exportRole(queryParams);
         })
-        .then(response => {
+        .then((response) => {
           this.download(response.msg);
         })
-        .catch(function() {});
+        .catch(function () {});
     },
     /** 懒加载树 */
     loadNode(node, resolve) {
       this.rolequeryParams.pid = node.data.id;
-      this.rolequeryParams.selectType = "role";
-      getDeptTree(this.rolequeryParams).then(response => {
+      getDeptTree(this.rolequeryParams).then((response) => {
         console.log(response);
         resolve(response.data);
       });
@@ -307,12 +312,17 @@ export default {
     /** 部门节点点击事件 */
     refreshRoleList(data) {
       this.queryParams.companyid = data.id;
-      listRole(this.queryParams).then(response => {
+      listRole(this.queryParams).then((response) => {
         this.roleList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
-    }
-  }
+    },
+    /** 同步下拉树数据 */
+    updatepSelectTreeValue(node, id, label) {
+      this.form[id] = node.id;
+      label != undefined && [(this.form[label] = node.label)];
+    },
+  },
 };
 </script>
