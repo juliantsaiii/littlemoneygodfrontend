@@ -61,11 +61,14 @@
 	.el-table__header-wrapper, .el-table__fixed-header-wrapper {
 		th {
 			word-break: break-word;
-			background-color: #f8f8f9;
+			background-color: #e8eaf7;
 			color: #515a6e;
 			height: 40px;
 			font-size: 13px;
 		}
+	}
+	td{
+		padding: 5px 0;
 	}
 }
 

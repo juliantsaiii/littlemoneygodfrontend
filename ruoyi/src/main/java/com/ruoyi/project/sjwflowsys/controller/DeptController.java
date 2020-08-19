@@ -13,6 +13,7 @@ import com.ruoyi.project.sjwflowsys.domain.User;
 import com.ruoyi.project.sjwflowsys.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,7 +89,7 @@ public class DeptController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('sjwflowsys:dept:list')")
     @GetMapping("/listTree")
-    public AjaxResult listTree(@RequestParam(value="pid",required=false,defaultValue="-1")String pid,@RequestParam(value="type",defaultValue="dept")String type,@RequestParam(value="selectType" ,defaultValue="select")String selectType)
+    public AjaxResult listTree(@RequestParam(value="pid",required=false,defaultValue="-1")String pid,@RequestParam(value="type",defaultValue="dept")String type,@RequestParam(value="selectType" ,defaultValue="select")String selectType,String deptType)
     {
         Dept dept = new Dept();
         if(!StringUtils.isNotEmpty(pid))
@@ -99,36 +100,45 @@ public class DeptController extends BaseController
         }
         List<Dept> list = deptService.selectDeptList(dept);
 
-        //查的是人，把用户转成部门加入集合
-        if(type.equals("user"))
-        {
-            for(Dept d : list)
-            {
-                d.setHasChildren(true);
-            }
-            User user = new User();
-            user.setDeptid(pid);
-            List<User> userList = userService.selectUserList(user);
-            for(User u : userList)
-            {
-                Dept d = new Dept();
-                d.setId(u.getId());
-                d.setName(u.getFullname());
-                d.setHasChildren(false);
-                list.add(d);
-            }
-        }
-        else //查询的是部门，并且展示方式是tree，haschildren值与selecttree相反，
-        {
-            if(selectType.equals("tree"))
-            {
+        switch(type){
+            case "user"://查的是人，把用户转成部门加入集合
                 for(Dept d : list)
                 {
-                    d.setHasChildren(!d.getHasChildren());
+                    d.setHasChildren(true);
                 }
-            }
-
+                User user = new User();
+                user.setDeptid(pid);
+                List<User> userList = userService.selectUserList(user);
+                for(User u : userList)
+                {
+                    Dept d = new Dept();
+                    d.setId(u.getId());
+                    d.setName(u.getFullname());
+                    d.setHasChildren(false);
+                    list.add(d);
+                }
+                break;
+            case "dept": //查询的是部门，并且展示方式是tree，haschildren值与selecttree相反，
+                if(selectType.equals("tree"))
+                {
+                    for(Dept d : list)
+                    {
+                        d.setHasChildren(!d.getHasChildren());
+                    }
+                }
+                break;
+            case "role":
+                for(Dept d : list)
+                {
+                    if(d.getDepttype()==null||d.getDepttype().equals("省纪委")||d.getDepttype().equals("市纪委")||d.getDepttype().equals("县区纪委")){
+                        d.setHasChildren(true);
+                    }else{
+                        d.setHasChildren(false);
+                    }
+                }
+                break;
         }
+
         return AjaxResult.success(list);
     }
 
