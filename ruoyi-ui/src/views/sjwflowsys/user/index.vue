@@ -292,7 +292,8 @@ import {
   addUser,
   updateUser,
   exportUser,
-  resetPassword
+  resetPassword,
+  addleadersignature
 } from "@/api/sjwflowsys/user";
 import { listWorkflowtask } from "@/api/sjwflowbusiness/workflowtask";
 import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
@@ -653,6 +654,11 @@ export default {
     /** 附件上传成功事件 */
     handleAvatarSuccess(res, file, filelist, row) {
       row.imageUrl = Math.random();
+      addleadersignature(row.id).then(response => {
+        if (response.code == "200") {
+          this.msgSuccess("上传成功");
+        }
+      });
     },
     /** 签名上传前事件 */
     beforeAvatarUpload() {}

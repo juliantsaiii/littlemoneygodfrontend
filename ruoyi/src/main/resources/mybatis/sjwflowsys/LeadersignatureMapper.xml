@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowsys.mapper.LeadersignatureMapper">
+    
+    <resultMap type="Leadersignature" id="LeadersignatureResult">
+        <result property="id"    column="ID"    />
+        <result property="name"    column="Name"    />
+        <result property="path"    column="Path"    />
+    </resultMap>
+
+    <sql id="selectLeadersignatureVo">
+        select ID, Name, Path from leadersignature
+    </sql>
+
+    <select id="selectLeadersignatureList" parameterType="Leadersignature" resultMap="LeadersignatureResult">
+        <include refid="selectLeadersignatureVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and Name like concat('%', #{name}, '%')</if>
+            <if test="path != null  and path != ''"> and Path = #{path}</if>
+        </where>
+    </select>
+    
+    <select id="selectLeadersignatureById" parameterType="String" resultMap="LeadersignatureResult">
+        <include refid="selectLeadersignatureVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertLeadersignature" parameterType="Leadersignature">
+        insert into leadersignature
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="name != null">Name,</if>
+            <if test="path != null">Path,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="path != null">#{path},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLeadersignature" parameterType="Leadersignature">
+        update leadersignature
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">Name = #{name},</if>
+            <if test="path != null">Path = #{path},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteLeadersignatureById" parameterType="String">
+        delete from leadersignature where ID = #{id}
+    </delete>
+
+    <delete id="deleteLeadersignatureByIds" parameterType="String">
+        delete from leadersignature where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

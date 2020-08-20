@@ -63,3 +63,13 @@ export function resetPassword(id) {
   })
 }
 
+// 新增用户签名
+export function addleadersignature(id) {
+  return request({
+    url: '/sjwflowsys/leadersignature/add',
+    method: 'post',
+    params: { "userid": id },
+  })
+}
+
+

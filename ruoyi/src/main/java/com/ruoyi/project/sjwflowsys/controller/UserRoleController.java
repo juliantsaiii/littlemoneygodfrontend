@@ -36,7 +36,6 @@ public class UserRoleController extends BaseController
     /**
      * 查询角色用户列表
      */
-    @PreAuthorize("@ss.hasPermi('sjwflowsys:role:list')")
     @GetMapping("/list")
     public TableDataInfo list(UserRole userRole)
     {
@@ -48,7 +47,6 @@ public class UserRoleController extends BaseController
     /**
      * 导出角色用户列表
      */
-    @PreAuthorize("@ss.hasPermi('sjwflowsys:role:export')")
     @Log(title = "角色用户", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(UserRole userRole)
@@ -61,7 +59,6 @@ public class UserRoleController extends BaseController
     /**
      * 获取角色用户详细信息
      */
-    @PreAuthorize("@ss.hasPermi('sjwflowsys:role:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") String id)
     {
@@ -71,7 +68,6 @@ public class UserRoleController extends BaseController
     /**
      * 新增角色用户
      */
-    @PreAuthorize("@ss.hasPermi('sjwflowsys:role:add')")
     @Log(title = "角色用户", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody UserRole userRole)
@@ -82,7 +78,6 @@ public class UserRoleController extends BaseController
     /**
      * 修改角色用户
      */
-    @PreAuthorize("@ss.hasPermi('sjwflowsys:role:edit')")
     @Log(title = "角色用户", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody UserRole userRole)
@@ -93,7 +88,6 @@ public class UserRoleController extends BaseController
     /**
      * 删除角色用户
      */
-    @PreAuthorize("@ss.hasPermi('sjwflowsys:role:remove')")
     @Log(title = "角色用户", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable String[] ids)
