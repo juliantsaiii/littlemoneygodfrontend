@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowsys.mapper.UserRoleMapper">
+    
+    <resultMap type="UserRole" id="UserRoleResult">
+        <result property="id"    column="ID"    />
+        <result property="userid"    column="UserID"    />
+        <result property="roleid"    column="RoleID"    />
+        <result property="deleted"    column="Deleted"    />
+    </resultMap>
+
+    <sql id="selectUserRoleVo">
+        select ID, UserID, RoleID, Deleted from user_role
+    </sql>
+
+    <select id="selectUserRoleList" parameterType="UserRole" resultMap="UserRoleResult">
+        <include refid="selectUserRoleVo"/>
+        <where>  
+            <if test="userid != null  and userid != ''"> and UserID = #{userid}</if>
+            <if test="roleid != null  and roleid != ''"> and RoleID = #{roleid}</if>
+            <if test="deleted != null "> and Deleted = #{deleted}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserRoleById" parameterType="String" resultMap="UserRoleResult">
+        <include refid="selectUserRoleVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertUserRole" parameterType="UserRole">
+        insert into user_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="userid != null">UserID,</if>
+            <if test="roleid != null">RoleID,</if>
+            <if test="deleted != null">Deleted,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userid != null">#{userid},</if>
+            <if test="roleid != null">#{roleid},</if>
+            <if test="deleted != null">#{deleted},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserRole" parameterType="UserRole">
+        update user_role
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userid != null">UserID = #{userid},</if>
+            <if test="roleid != null">RoleID = #{roleid},</if>
+            <if test="deleted != null">Deleted = #{deleted},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <update id="updateUserRoleByUser" parameterType="map">
+        update user_role set userid = #{newuserid} where userid = #{olduserid} and deleted = 0
+    </update>
+
+    <delete id="deleteUserRoleById" parameterType="String">
+        delete from user_role where ID = #{id}
+    </delete>
+
+    <delete id="deleteUserRoleByIds" parameterType="String">
+        delete from user_role where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

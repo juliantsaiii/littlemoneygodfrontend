@@ -135,7 +135,7 @@ public class DeptServiceImpl implements IDeptService
                 if(d.getId().equals(ID)){
                     ts.setChildren(list);
                 }else{
-                    if(!isCompany || !JudgeDeptType(d.getDepttype())){
+                    if((!isCompany || !JudgeDeptType(d.getDepttype()))&&d.getHasChild()){
                         ts.setChildren(null);
                     }else{
                         ts.setChildren(new ArrayList<>());

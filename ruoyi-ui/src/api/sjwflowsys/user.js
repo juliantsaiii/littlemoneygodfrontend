@@ -22,16 +22,18 @@ export function addUser(data) {
   return request({
     url: '/sjwflowsys/user',
     method: 'post',
-    data: data
+    data: data,
   })
 }
 
 // 修改业务平台用户管理
-export function updateUser(data) {
+export function updateUser(data, carrywaitlist) {
   return request({
     url: '/sjwflowsys/user',
     method: 'put',
-    data: data
+    data: data,
+    params: { "carrywaitlist": carrywaitlist }
+
   })
 }
 

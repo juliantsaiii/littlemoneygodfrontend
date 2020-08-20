@@ -88,6 +88,23 @@ public class SambFileUtil {
     }
 
 
+    /**
+     * 把共享目录指定文件夹下的文件拷贝到另外一个共享目录指定文件夹下
+     * @param oldfilepath 源文件路径
+     * @param newpath 新文件夹路径
+     * @throws IOException
+     */
+    public void smbCopy(String oldfilepath,String newpath,String filename) throws IOException {
+        SmbFile oldFile = new SmbFile("smb://" + name + ":" + password + "@" + ip + oldfilepath);
+        SmbFile newPath = new SmbFile("smb://" + name + ":" + password + "@" + ip + newpath);
+        if (!newPath.exists()) { // 目录文件夹不存在，就创建
+            newPath.mkdirs();
+        }
+        if (oldFile.exists() && oldFile.isFile()) {
+            SmbFile newfile = new SmbFile("smb://" + name + ":" + password + "@" + ip + newpath + filename);
+            oldFile.copyTo(newfile);
+        }
+    }
 
 
 

@@ -125,4 +125,12 @@ public class WorkflowtaskServiceImpl implements IWorkflowtaskService
         return workflowtaskMapper.getWaitTaskByClueID(id);
     }
 
+    /**
+     * 更换一个人的所有待办事项
+     * @param map
+     * @return
+     */
+    public int changeReceverByUser(Map<String,String> map){
+        return workflowtaskMapper.changeReceverByUser(map);
+    }
 }

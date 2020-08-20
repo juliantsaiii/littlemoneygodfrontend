@@ -1,9 +1,16 @@
 package com.ruoyi.project.sjwflowsys.controller;
 
+import java.io.IOException;
 import java.security.DigestException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import com.ruoyi.common.utils.file.SambFileUtil;
+import com.ruoyi.project.sjwflowbusiness.service.IWorkflowtaskService;
+import com.ruoyi.project.sjwflowsys.domain.UserRole;
+import com.ruoyi.project.sjwflowsys.service.IUserRoleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;
@@ -48,6 +55,16 @@ public class UserController extends BaseController
 
     @Value("${sjwflowbusiness.initpwd}")
     private String initpwd;
+
+    @Autowired
+    private IWorkflowtaskService workflowtaskService;
+
+    @Autowired
+    private SambFileUtil smbfileutil;
+
+    @Autowired
+    private IUserRoleService userRoleService;
+
 
     /**
      * 查询业务平台用户管理列表
@@ -112,7 +129,7 @@ public class UserController extends BaseController
     @PreAuthorize("@ss.hasPermi('sjwflowsys:user:edit')")
     @Log(title = "业务平台用户管理", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody User user)
+    public AjaxResult edit(@RequestBody User user,String carrywaitlist)
     {
         User oldUser = userService.selectUserById(user.getId());
         if(oldUser == null){
@@ -125,11 +142,40 @@ public class UserController extends BaseController
             BeanUtils.copyProperties(oldUser,userNew);
             userNew.setId(UUID.randomUUID().toString());
             userService.insertUser(userNew);
+            //携带签名图片
+            try {
+                smbfileutil.smbCopy("/Signature/"+oldUser.getId()+".png","/Signature/",userNew.getId()+".png");
+            } catch (IOException e) {
+
+            }
+
+            Map<String,String> map = new HashMap<>();
+            map.put("newuserid",userNew.getId());
+            map.put("newusername",user.getFullname());
+            map.put("olduserid",oldUser.getId());
+            //如果携带待办事项移交待办事项
+            if(carrywaitlist.equals("1")){
+                workflowtaskService.changeReceverByUser(map);
+            }
+            //更换角色
+            UserRole ur = new UserRole();
+            ur.setUserid(oldUser.getId());
+            ur.setDeleted(false);
+            List<UserRole> urList = userRoleService.selectUserRoleList(ur);
+            if(urList.size()==1){
+                ur = urList.get(0);
+                ur.setId(UUID.randomUUID().toString());
+                ur.setUserid(userNew.getId());
+                userRoleService.insertUserRole(ur);
+            }
+
 
             oldUser.setActivated("0");
             userService.updateUser(oldUser);
 
+            //更新新用户的其他信息
             user.setId(userNew.getId());
+            user.setActivated("1");
             return toAjax(userService.updateUser(user));
         }
         else

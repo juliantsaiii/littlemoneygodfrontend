@@ -82,4 +82,11 @@ public interface IWorkflowtaskService
      * @return
      */
     public Workflowtask getWaitTaskByClueID(String id);
+
+    /**
+     * 更换一个人的所有待办事项
+     * @param map
+     * @return
+     */
+    public int changeReceverByUser(Map<String,String> map);
 }

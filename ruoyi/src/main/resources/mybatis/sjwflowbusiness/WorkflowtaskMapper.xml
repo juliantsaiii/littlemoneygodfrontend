@@ -256,6 +256,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         and status in (0,1)
     </update>
 
+    <update id="changeReceverByUser" parameterType="map">
+        update workflowtask set receiveid = #{newuserid},receivename = #{newusername} where receiveid = #{olduserid} and status in (0,1) and isdeleted = false
+    </update>
+
+
     <select id="getWaitTaskByClueID" parameterType="String"  resultMap="WorkflowtaskResult">
         <include refid="selectWorkflowtaskVo"/>
         where clueid = #{id} and status in (0,1)

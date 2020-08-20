@@ -16,7 +16,7 @@ import { LOAD_CHILDREN_OPTIONS } from "@riophae/vue-treeselect";
 import {
   listDept,
   getDeptTree,
-  getDeptTreebyNode,
+  getDeptTreebyNode
 } from "@/api/sjwflowsys/dept";
 export default {
   components: { Treeselect },
@@ -27,14 +27,14 @@ export default {
       value: this.pid,
       sellabel: undefined,
       deptOptions: [],
-      queryType: this.type == "dept" ? false : true,
+      queryType: this.type == "user" ? false : true,
       queryParams: {
         pid: undefined,
         type: this.type,
         selectType: "select",
-        childID: this.id,
+        childID: this.id
       },
-      childinit: {},
+      childinit: {}
     };
   },
   created() {
@@ -44,27 +44,27 @@ export default {
     id(val) {
       if (!!val) {
         this.queryParams.childID = val;
-        // this.getTreeselect();
+        this.getTreeselect();
       }
     },
     pid(val) {
       if (!!val) {
         this.value = val;
       }
-    },
+    }
   },
   methods: {
     getTreeselect() {
       if (!!this.value) {
-        getDeptTreebyNode(this.queryParams).then((response) => {
+        getDeptTreebyNode(this.queryParams).then(response => {
           this.deptOptions = response.data;
         });
       } else {
         this.queryParams.pid = "-1";
-        listDept(this.queryParams).then((response) => {
+        listDept(this.queryParams).then(response => {
           let pNode = response.data[0];
           this.deptOptions = [
-            { id: pNode.id, label: pNode.name, children: null },
+            { id: pNode.id, label: pNode.name, children: null }
           ];
         });
       }
@@ -72,10 +72,10 @@ export default {
     loadOptions({ action, parentNode, callback }) {
       if (action === LOAD_CHILDREN_OPTIONS) {
         this.queryParams.pid = parentNode.id;
-        getDeptTree(this.queryParams).then((response) => {
+        getDeptTree(this.queryParams).then(response => {
           let resData = response.data;
           let arr = [];
-          resData.forEach((item) => {
+          resData.forEach(item => {
             let objData = {};
             objData.id = item.id;
             objData.label = item.name;
@@ -106,7 +106,7 @@ export default {
       if (val == undefined || val == "") {
         this.$emit("selectterm", null);
       }
-    },
-  },
+    }
+  }
 };
 </script>
