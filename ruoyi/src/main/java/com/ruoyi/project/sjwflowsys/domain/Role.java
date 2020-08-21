@@ -43,6 +43,20 @@ public class Role extends BaseEntity
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Boolean deleted;
 
+    public Role(){
+        this.deleted = false;
+    }
+
+    public String[] getBelongDepts() {
+        return belongDepts;
+    }
+
+    public void setBelongDepts(String[] belongDepts) {
+        this.belongDepts = belongDepts;
+    }
+
+    private String[] belongDepts;
+
     public void setId(String id) 
     {
         this.id = id;

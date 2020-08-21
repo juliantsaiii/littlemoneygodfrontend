@@ -8,7 +8,9 @@
             :props="props"
             :load="loadNode"
             lazy
+            node-key="id"
             @node-click="refreshRoleList"
+            :default-expanded-keys="['00000000-0000-1000-0000-000000000000']"
           ></el-tree>
         </div>
       </el-col>
@@ -80,33 +82,77 @@
     </el-row>
 
     <!-- 添加或修改角色管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="90%" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="父级" prop="companyid">
-          <dept-select-tree
-            :pid="form.companyid"
-            :id="form.companyid"
-            @selectterm="updatepSelectTreeValue"
-            :type="'company'"
-            :selectID="'companyid'"
-          ></dept-select-tree>
-        </el-form-item>
-        <el-form-item label="角色名" prop="name">
-          <el-input v-model="form.name" placeholder="请输入角色名" />
-        </el-form-item>
-        <el-form-item label="排序码" prop="sortcode">
-          <el-input v-model="form.sortcode" placeholder="请输入排序码" />
-        </el-form-item>
-        <el-form-item label="角色分类">
-          <el-select v-model="form.category" placeholder="请选择角色类型">
-            <el-option
-              v-for="item in roletypeoptions"
-              :key="item.dictValue"
-              :value="item.dictValue"
-              :label="item.dictLabel"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+        <el-row>
+          <el-col :span="6">
+            <el-form-item label="父级" prop="companyid">
+              <dept-select-tree
+                :pid="form.companyid"
+                :id="form.companyid"
+                @selectterm="updatepSelectTreeValue"
+                :type="'company'"
+                :selectID="'companyid'"
+              ></dept-select-tree>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="角色名" prop="name">
+              <el-input v-model="form.name" placeholder="请输入角色名" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="排序码" prop="sortcode">
+              <el-input-number v-model="form.sortcode" placeholder="请输入排序码" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="角色分类">
+              <el-select v-model="form.category" placeholder="请选择角色类型">
+                <el-option
+                  v-for="item in roletypeoptions"
+                  :key="item.dictValue"
+                  :value="item.dictValue"
+                  :label="item.dictLabel"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="50">
+          <el-col :span="8">
+            <el-form-item label="菜单">
+              <div class="box-container"></div>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="数据权限">
+              <div class="box-container">
+                <el-tree
+                  ref="companytree"
+                  :data="currentDeptTree"
+                  :props="props"
+                  show-checkbox
+                  node-key="id"
+                  :default-checked-keys="roleDates"
+                ></el-tree>
+              </div>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="当前人员">
+              <div class="box-container">
+                <el-tag
+                  v-for="tag in roleusers"
+                  :key="tag.name"
+                  closable
+                  :type="tag.type"
+                  @close="removeuser(tag)"
+                >{{tag.name}}</el-tag>
+              </div>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -123,8 +169,11 @@ import {
   delRole,
   addRole,
   updateRole,
-  exportRole
+  exportRole,
+  delUserRole,
+  getRoleData
 } from "@/api/sjwflowsys/role";
+import { getUserByRole } from "@/api/sjwflowsys/user";
 import { getDeptTree } from "@/api/sjwflowsys/dept";
 import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
 export default {
@@ -180,7 +229,15 @@ export default {
         deptType: ""
       },
       deptList: [],
-      roletypeoptions: []
+      roletypeoptions: [],
+      //动态展开树
+      dataidArr: [],
+      //角色对应用户
+      roleusers: [],
+      //当前company部门树
+      currentDeptTree: [],
+      //角色对应数据权限
+      roleDates: []
     };
   },
   created() {
@@ -213,9 +270,11 @@ export default {
         name: undefined,
         sortcode: undefined,
         category: undefined,
-        deleted: "0"
+        deleted: false
       };
       this.resetForm("form");
+      this.roleDates = [];
+      this.roleusers = [];
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -247,12 +306,16 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改角色管理";
+        this.getUsers(id);
+        this.getDeptByCompany(this.form.companyid);
       });
     },
     /** 提交按钮 */
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          let roledatas = this.$refs.companytree.getCheckedKeys();
+          this.form.belongDepts = roledatas;
           if (this.form.id != undefined) {
             updateRole(this.form).then(response => {
               if (response.code === 200) {
@@ -330,7 +393,54 @@ export default {
     updatepSelectTreeValue(node, id, label) {
       this.form[id] = node.id;
       label != undefined && [(this.form[label] = node.label)];
+      this.getDeptByCompany(node.id);
+    },
+    /** 移除角色中的用户 */
+    removeuser(note) {
+      this.$confirm(
+        `是否确认从<strong>${this.form.name}</strong>中移除<strong>${note.name}</strong>`,
+        "提示",
+        {
+          dangerouslyUseHTMLString: true
+        }
+      ).then(() => {
+        delUserRole(note.id).then(response => {
+          if (response.code == "200") {
+            this.msgSuccess("移除成功");
+            this.getUsers(this.form.id);
+          }
+        });
+      });
+    },
+    /** 获取用户 */
+    getUsers(id) {
+      getUserByRole(id).then(response => {
+        this.roleusers = response.data;
+      });
+    },
+    /** 获取当前角色company部门 */
+    getDeptByCompany(id) {
+      this.rolequeryParams.pid = id;
+      this.rolequeryParams.type = "tree";
+      getDeptTree(this.rolequeryParams).then(response => {
+        this.currentDeptTree = response.data;
+        getRoleData(this.form.id).then(res => {
+          this.roleDates = res.data;
+        });
+      });
     }
   }
 };
 </script>
+<style>
+.box-container {
+  height: 600px;
+  border: 1px solid #dcdfe6;
+  border-radius: 3px;
+  padding: 20px;
+  overflow: auto;
+}
+.el-tag {
+  margin-left: 10px;
+}
+</style>

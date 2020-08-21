@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowsys.mapper.RoledataMapper">
+    
+    <resultMap type="Roledata" id="RoledataResult">
+        <result property="id"    column="ID"    />
+        <result property="roleid"    column="RoleID"    />
+        <result property="belongcompanys"    column="BelongCompanys"    />
+        <result property="belongdepts"    column="BelongDepts"    />
+        <result property="excludedepts"    column="ExcludeDepts"    />
+    </resultMap>
+
+    <sql id="selectRoledataVo">
+        select ID, RoleID, BelongCompanys, BelongDepts, ExcludeDepts from roledata
+    </sql>
+
+    <select id="selectRoledataList" parameterType="Roledata" resultMap="RoledataResult">
+        <include refid="selectRoledataVo"/>
+        <where>  
+            <if test="roleid != null  and roleid != ''"> and RoleID = #{roleid}</if>
+            <if test="belongcompanys != null  and belongcompanys != ''"> and BelongCompanys = #{belongcompanys}</if>
+            <if test="belongdepts != null  and belongdepts != ''"> and BelongDepts = #{belongdepts}</if>
+            <if test="excludedepts != null  and excludedepts != ''"> and ExcludeDepts = #{excludedepts}</if>
+        </where>
+    </select>
+    
+    <select id="selectRoledataById" parameterType="String" resultMap="RoledataResult">
+        <include refid="selectRoledataVo"/>
+        where roleid = #{id}
+    </select>
+        
+    <insert id="insertRoledata" parameterType="Roledata">
+        insert into roledata
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="roleid != null">RoleID,</if>
+            <if test="belongcompanys != null">BelongCompanys,</if>
+            <if test="belongdepts != null">BelongDepts,</if>
+            <if test="excludedepts != null">ExcludeDepts,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="roleid != null">#{roleid},</if>
+            <if test="belongcompanys != null">#{belongcompanys},</if>
+            <if test="belongdepts != null">#{belongdepts},</if>
+            <if test="excludedepts != null">#{excludedepts},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRoledata" parameterType="Roledata">
+        update roledata
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleid != null">RoleID = #{roleid},</if>
+            <if test="belongcompanys != null">BelongCompanys = #{belongcompanys},</if>
+            <if test="belongdepts != null">BelongDepts = #{belongdepts},</if>
+            <if test="excludedepts != null">ExcludeDepts = #{excludedepts},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteRoledataById" parameterType="String">
+        delete from roledata where RoleID = #{id}
+    </delete>
+
+    <delete id="deleteRoledataByIds" parameterType="String">
+        delete from roledata where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

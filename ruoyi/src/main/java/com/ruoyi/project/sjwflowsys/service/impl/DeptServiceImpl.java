@@ -157,4 +157,47 @@ public class DeptServiceImpl implements IDeptService
         String [] array = {"省纪委","市纪委","县区纪委"};
         return ArrayUtils.contains(array,deptType);
     }
+
+    /**
+     * 根据条件设置部门树的haschildren
+     * @param selectType
+     * @param Type
+     * @param list
+     * @return
+     */
+    public List<Dept> setHasChildren(String selectType,String Type,List<Dept> list){
+        switch (Type){
+            case "dept": //查询的是部门，并且展示方式是tree，haschildren值与selecttree相反，
+                if(selectType.equals("tree"))
+                {
+                    for(Dept d : list)
+                    {
+                        d.setHasChildren(!d.getHasChildren());
+                    }
+                }
+                break;
+            case "company":
+                boolean istree = selectType.equals("tree");
+                for(Dept d : list)
+                {
+                    if(d.getDepttype()==null||JudgeDeptType(d.getDepttype())){
+                        d.setHasChildren(istree);
+                    }else{
+                        d.setHasChildren(!istree);
+                    }
+                }
+                break;
+        }
+        return list;
+    }
+
+    /**
+     * 更新用户表部门id
+     * @param deptid
+     * @param deptname
+     * @return
+     */
+    public int updateDeptname(String deptid, String deptname){
+        return deptMapper.updateDeptname(deptid,deptname);
+    }
 }

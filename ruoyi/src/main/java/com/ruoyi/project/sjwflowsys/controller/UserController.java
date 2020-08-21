@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.ruoyi.common.utils.file.SambFileUtil;
+import com.ruoyi.framework.web.domain.ElTag;
 import com.ruoyi.project.sjwflowbusiness.service.IWorkflowtaskService;
 import com.ruoyi.project.sjwflowsys.domain.UserRole;
 import com.ruoyi.project.sjwflowsys.service.IUserRoleService;
@@ -203,5 +205,13 @@ public class UserController extends BaseController
         user.setPassword(pwdmd5);
         user.setId(id);
         return toAjax(userService.updateUser(user));
+    }
+
+
+    @PostMapping("/getUserByRole")
+    public  AjaxResult getUserByRole(String roleid){
+        List<User> users = userService.selectUserByRole(roleid);
+        List<ElTag> elTags = users.stream().map(ElTag::new).collect(Collectors.toList());
+        return AjaxResult.success(elTags);
     }
 }

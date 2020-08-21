@@ -5,6 +5,8 @@ import java.util.List;
 import com.ruoyi.framework.web.domain.TreeSelectStr;
 import com.ruoyi.project.sjwflowsys.domain.Dept;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * 部门Service接口
@@ -76,4 +78,21 @@ public interface IDeptService
      * @return
      */
     public boolean JudgeDeptType(String deptType);
+
+    /**
+     * 根据条件设置部门树的haschildren
+     * @param selectType
+     * @param Type
+     * @param deptList
+     * @return
+     */
+    public List<Dept> setHasChildren(String selectType,String Type,List<Dept> deptList);
+
+    /**
+     * 更新用户表部门id
+     * @param deptid
+     * @param deptname
+     * @return
+     */
+    public int updateDeptname(String deptid, String deptname);
 }

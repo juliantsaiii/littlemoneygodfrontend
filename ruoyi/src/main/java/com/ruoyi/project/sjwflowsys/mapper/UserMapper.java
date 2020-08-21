@@ -1,7 +1,13 @@
 package com.ruoyi.project.sjwflowsys.mapper;
 
 import java.util.List;
+
+import com.ruoyi.framework.web.domain.ElTag;
 import com.ruoyi.project.sjwflowsys.domain.User;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
+import org.springframework.security.core.parameters.P;
 
 /**
  * 业务平台用户管理Mapper接口
@@ -9,6 +15,7 @@ import com.ruoyi.project.sjwflowsys.domain.User;
  * @author littlemoneygod
  * @date 2020-07-15
  */
+@Mapper
 public interface UserMapper 
 {
     /**
@@ -65,4 +72,11 @@ public interface UserMapper
      * @return
      */
     public int checkUserNameUnique(String UserName);
+
+    /**
+     * 根据角色id找用户
+     * @param roleid
+     * @return
+     */
+    public List<User> selectUserByRole(String roleid);
 }

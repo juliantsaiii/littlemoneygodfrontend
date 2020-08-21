@@ -1,6 +1,10 @@
 package com.ruoyi.project.sjwflowsys.controller;
 
 import java.util.List;
+import java.util.UUID;
+
+import com.ruoyi.project.sjwflowsys.domain.Roledata;
+import com.ruoyi.project.sjwflowsys.service.IRoledataService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +36,8 @@ public class RoleController extends BaseController
 {
     @Autowired
     private IRoleService roleService;
-
+    @Autowired
+    private IRoledataService roledataService;
     /**
      * 查询角色管理列表
      */
@@ -72,6 +77,13 @@ public class RoleController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody Role role)
     {
+        role.setId(UUID.randomUUID().toString());
+        if(role.getBelongDepts().length != 0){
+            String deptIds = String.join(",",role.getBelongDepts());
+            Roledata rd = new Roledata(role,deptIds);
+            rd.setId(UUID.randomUUID().toString());
+            roledataService.insertRoledata(rd);
+        }
         return toAjax(roleService.insertRole(role));
     }
 
@@ -82,6 +94,13 @@ public class RoleController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody Role role)
     {
+
+        String deptIds = String.join(",",role.getBelongDepts());
+        roledataService.deleteRoledataById(role.getId());
+        if(deptIds!=null){
+            Roledata rd = new Roledata(role,deptIds);
+            roledataService.insertRoledata(rd);
+        }
         return toAjax(roleService.updateRole(role));
     }
 

@@ -89,9 +89,9 @@ public class UserRoleController extends BaseController
      * 删除角色用户
      */
     @Log(title = "角色用户", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable String[] ids)
+	@DeleteMapping("/{id}")
+    public AjaxResult remove(@PathVariable String id)
     {
-        return toAjax(userRoleService.deleteUserRoleByIds(ids));
+        return toAjax(userRoleService.deleteUserRoleById(id));
     }
 }

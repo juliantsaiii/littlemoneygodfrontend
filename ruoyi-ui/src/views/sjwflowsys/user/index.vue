@@ -8,7 +8,9 @@
             :props="props"
             :load="loadNode"
             lazy
+            node-key="id"
             @node-click="refreshUserList"
+            :default-expanded-keys="['00000000-0000-1000-0000-000000000000']"
           ></el-tree>
         </div>
       </el-col>

@@ -73,3 +73,12 @@ export function addleadersignature(id) {
 }
 
 
+//根据角色id查找用户
+export function getUserByRole(id) {
+  return request({
+    url: '/sjwflowsys/user/getUserByRole',
+    method: "post",
+    params: { "roleid": id }
+  })
+}
+

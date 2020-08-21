@@ -27,6 +27,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isadmin"    column="isadmin"    />
     </resultMap>
 
+    <!--<resultMap type="com.ruoyi.framework.web.domain.ELTag" id="EltagResult">-->
+        <!--<result property="id"    column="ID"    />-->
+        <!--<result property="name"    column="FullName"    />-->
+    <!--</resultMap>-->
+
+
     <sql id="selectUserVo">
         select ID, PID, UnitID, DeptID, DeptName, Name, Password, FullName, IDCard, CompanyID, CompanyName, SortCode, EditTime, GuoDuYe, Deleted, Phone, UserType, Activated, AnalysisRoot, isadmin from user
     </sql>
@@ -45,6 +51,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectUserById" parameterType="String" resultMap="UserResult">
         <include refid="selectUserVo"/>
         where ID = #{id}
+    </select>
+
+    <select id="selectUserByRole" parameterType="String" resultMap="UserResult">
+        select  ID,FullName from user where id in (select userid from user_role where roleid = #{roleid} and deleted = 0) and deleted = 0 and activated = 1
     </select>
 
     <select id="checkUserNameUnique" parameterType="String" resultType="int">

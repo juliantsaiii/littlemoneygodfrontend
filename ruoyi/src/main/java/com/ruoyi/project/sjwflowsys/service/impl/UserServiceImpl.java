@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
 import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
+import com.ruoyi.framework.web.domain.ElTag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.sjwflowsys.mapper.UserMapper;
@@ -102,5 +103,14 @@ public class UserServiceImpl implements IUserService
      */
     public int checkUserNameUnique(String UserName){
         return userMapper.checkUserNameUnique(UserName);
+    }
+
+    /**
+     * 根据角色id找用户
+     * @param roleid
+     * @return
+     */
+    public List<User> selectUserByRole(String roleid){
+        return userMapper.selectUserByRole(roleid);
     }
 }

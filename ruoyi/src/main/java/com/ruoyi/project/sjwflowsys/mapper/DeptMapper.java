@@ -2,6 +2,8 @@ package com.ruoyi.project.sjwflowsys.mapper;
 
 import java.util.List;
 import com.ruoyi.project.sjwflowsys.domain.Dept;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * 部门Mapper接口
@@ -65,4 +67,13 @@ public interface DeptMapper
      * @return
      */
     public int checkUserNameUnique(String UserName);
+
+    /**
+     * 更新用户表部门id
+     * @param deptid
+     * @param deptname
+     * @return
+     */
+    @Update("update user set deptname = #{deptname} where deptid = #{deptid}")
+    public int updateDeptname(@Param("deptid") String deptid, @Param("deptname") String deptname);
 }

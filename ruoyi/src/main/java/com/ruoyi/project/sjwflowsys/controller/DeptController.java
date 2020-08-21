@@ -130,27 +130,19 @@ public class DeptController extends BaseController
                 }
                 break;
             case "dept": //查询的是部门，并且展示方式是tree，haschildren值与selecttree相反，
-                if(selectType.equals("tree"))
-                {
-                    for(Dept d : list)
-                    {
-                        d.setHasChildren(!d.getHasChildren());
-                    }
-                }
-                break;
             case "company":
-                boolean istree = selectType.equals("tree");
-                for(Dept d : list)
-                {
-                    if(d.getDepttype()==null||deptService.JudgeDeptType(d.getDepttype())){
-                        d.setHasChildren(istree);
-                    }else{
-                        d.setHasChildren(!istree);
-                    }
-                }
+               deptService.setHasChildren(selectType,type,list);
                 break;
         }
-
+        if(dept.getPid().equals("-1")){
+            for(Dept d:list)
+            {
+                Dept deptquery = new Dept();
+                deptquery.setPid(d.getId());
+                List<Dept> deptList = deptService.selectDeptList(deptquery);
+                d.setChildren(deptService.setHasChildren(selectType,type,deptList));
+            }
+        }
         return AjaxResult.success(list);
     }
 
@@ -204,6 +196,11 @@ public class DeptController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody Dept dept)
     {
+        Dept oldDept = deptService.selectDeptById(dept.getId());
+        //若更换了部门名称，则更换用户表部门名称
+        if(!StringUtils.isEmpty(dept.getName()) && !oldDept.getName().equals(dept.getName())){
+            deptService.updateDeptname(dept.getId(),dept.getName());
+        }
         return toAjax(deptService.updateDept(dept));
     }
 

@@ -60,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteUserRoleById" parameterType="String">
-        delete from user_role where ID = #{id}
+        delete from user_role where UserID = #{id}
     </delete>
 
     <delete id="deleteUserRoleByIds" parameterType="String">

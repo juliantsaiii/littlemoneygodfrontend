@@ -31,7 +31,7 @@ export function updateRole(data) {
   return request({
     url: '/sjwflowsys/role',
     method: 'put',
-    data: data
+    data: data,
   })
 }
 
@@ -70,3 +70,17 @@ export function getRoleTreebyNode(query) {
   })
 }
 
+export function delUserRole(id) {
+  return request({
+    url: '/sjwflowsys/userrole/' + id,
+    method: 'delete'
+  })
+}
+
+export function getRoleData(id) {
+  return request({
+    url: '/sjwflowsys/roledata/getDeptIDs',
+    method: 'post',
+    params: { "roleid": id }
+  })
+}
