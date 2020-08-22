@@ -45,6 +45,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
+    <insert id="insertUserRoles">
+        insert into user_role (id,userid,roleid,deleted) values
+        <foreach collection="list" item="userrole" separator=",">
+            (#{userrole.id},#{userrole.userid},#{userrole.roleid},false)
+        </foreach>
+    </insert>
+
     <update id="updateUserRole" parameterType="UserRole">
         update user_role
         <trim prefix="SET" suffixOverrides=",">
@@ -64,7 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteUserRoleByIds" parameterType="String">
-        delete from user_role where ID in 
+        delete from user_role where userid in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

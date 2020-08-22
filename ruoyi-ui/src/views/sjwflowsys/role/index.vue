@@ -190,6 +190,7 @@ import {
   exportRole,
   delUserRole,
   getRoleData,
+  insertUserRoles,
 } from "@/api/sjwflowsys/role";
 import { getUserByRole } from "@/api/sjwflowsys/user";
 import { getDeptTree, getDeptTreebyCompany } from "@/api/sjwflowsys/dept";
@@ -458,6 +459,7 @@ export default {
       this.adduserdialog = true;
       getDeptTreebyCompany(this.form.companyid).then((response) => {
         this.roleUserTree = response.data;
+        this.userDatas = [];
         for (var i in this.roleusers) {
           this.userDatas.push(this.roleusers[i].id);
         }
@@ -465,9 +467,17 @@ export default {
     },
     //添加角色里的用户
     addRoleUsers() {
-      this.adduserdialog = false;
       let ids = this.$refs.usertree.getCheckedKeys();
-      console.log(ids);
+      let data = new FormData();
+      data.append("ids", ids);
+      data.append("roleid", this.form.id);
+      insertUserRoles(data).then((response) => {
+        if (response.code == "200") {
+          this.msgSuccess("添加成功");
+          this.adduserdialog = false;
+          this.getUsers(this.form.id);
+        }
+      });
     },
   },
 };

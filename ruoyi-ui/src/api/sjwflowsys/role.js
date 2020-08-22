@@ -84,3 +84,11 @@ export function getRoleData(id) {
     params: { "roleid": id }
   })
 }
+
+export function insertUserRoles(data) {
+  return request({
+    url: "/sjwflowsys/role/insertUserRoles",
+    method: "post",
+    data: data,
+  })
+}

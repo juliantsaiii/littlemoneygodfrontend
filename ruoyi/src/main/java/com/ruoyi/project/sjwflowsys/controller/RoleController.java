@@ -1,11 +1,14 @@
 package com.ruoyi.project.sjwflowsys.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.project.sjwflowsys.domain.Roledata;
+import com.ruoyi.project.sjwflowsys.domain.UserRole;
 import com.ruoyi.project.sjwflowsys.service.IRoledataService;
+import com.ruoyi.project.sjwflowsys.service.IUserRoleService;
 import io.netty.util.internal.StringUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,8 @@ public class RoleController extends BaseController
     private IRoleService roleService;
     @Autowired
     private IRoledataService roledataService;
+    @Autowired
+    private IUserRoleService userRoleService;
     /**
      * 查询角色管理列表
      */
@@ -115,5 +120,24 @@ public class RoleController extends BaseController
     public AjaxResult remove(@PathVariable String[] ids)
     {
         return toAjax(roleService.deleteRoleByIds(ids));
+    }
+
+    /**
+     * 批量插入role
+     * @param ids
+     * @return
+     */
+    @PostMapping("/insertUserRoles")
+    public AjaxResult insertUserRoles( String[] ids,String roleid){
+        userRoleService.deleteUserRoleByIds(ids);
+        List<UserRole> urList = new ArrayList<>();
+        for(String i : ids){
+            UserRole ur = new UserRole();
+            ur.setId(UUID.randomUUID().toString());
+            ur.setUserid(i);
+            ur.setRoleid(roleid);
+            urList.add(ur);
+        }
+        return toAjax(userRoleService.insertUserRoles(urList));
     }
 }

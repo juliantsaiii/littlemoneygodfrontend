@@ -1,7 +1,9 @@
 package com.ruoyi.project.sjwflowsys.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
 import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.project.sjwflowsys.mapper.UserRoleMapper;
 import com.ruoyi.project.sjwflowsys.domain.UserRole;
 import com.ruoyi.project.sjwflowsys.service.IUserRoleService;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * 角色用户Service业务层处理
@@ -103,5 +106,14 @@ public class UserRoleServiceImpl implements IUserRoleService
      */
     public int updateUserRoleByUser(Map<String,String> map){
         return userRoleMapper.updateUserRoleByUser(map);
+    }
+
+    /**
+     * 批量插入role
+     * @param urList
+     * @return
+     */
+    public int insertUserRoles(List<UserRole> urList){
+        return userRoleMapper.insertUserRoles(urList);
     }
 }

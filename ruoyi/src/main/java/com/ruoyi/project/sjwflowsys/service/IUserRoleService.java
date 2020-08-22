@@ -67,4 +67,11 @@ public interface IUserRoleService
      * @return
      */
     public int updateUserRoleByUser(Map<String,String> map);
+
+    /**
+     * 批量插入role
+     * @param roleList
+     * @return
+     */
+    public int insertUserRoles(List<UserRole> roleList);
 }
