@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.framework.web.domain.TreeSelectStr;
 import com.ruoyi.project.sjwflowsys.domain.Dept;
+import com.ruoyi.project.sjwflowsys.domain.User;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
@@ -95,4 +96,21 @@ public interface IDeptService
      * @return
      */
     public int updateDeptname(String deptid, String deptname);
+
+    /**
+     * 根据companyid生成部门树
+     * @param depts
+     * @param users
+     * @param pid
+     * @param result
+     * @return
+     */
+    public List<Dept> UserTreeByCompany(List<Dept> depts, List<User> users, String pid, List<Dept> result);
+
+    /**
+     * 根据companyid 查部门
+     * @param id
+     * @return
+     */
+    public List<Dept> selectDeptByCompanyID(String id);
 }

@@ -317,4 +317,12 @@ public class Dept extends TreeEntity
             .append("paizhumainleadername", getPaizhumainleadername())
             .toString();
     }
+
+    public Dept(User user){
+        this.setId(user.getId());
+        this.setName(user.getFullname());
+        this.setHasChildren(false);
+    }
+    public Dept(){
+    }
 }

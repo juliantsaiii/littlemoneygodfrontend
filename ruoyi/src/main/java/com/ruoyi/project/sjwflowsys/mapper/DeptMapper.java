@@ -76,4 +76,11 @@ public interface DeptMapper
      */
     @Update("update user set deptname = #{deptname} where deptid = #{deptid}")
     public int updateDeptname(@Param("deptid") String deptid, @Param("deptname") String deptname);
+
+    /**
+     * 根据companyid 查部门
+     * @param id
+     * @return
+     */
+    public List<Dept> selectDeptByCompanyID(String id);
 }

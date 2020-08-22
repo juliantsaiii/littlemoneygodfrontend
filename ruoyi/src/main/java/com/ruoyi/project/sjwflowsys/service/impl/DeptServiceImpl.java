@@ -2,12 +2,14 @@ package com.ruoyi.project.sjwflowsys.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
 import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
 import com.ruoyi.framework.web.domain.TreeSelect;
 import com.ruoyi.framework.web.domain.TreeSelectStr;
+import com.ruoyi.project.sjwflowsys.domain.User;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -199,5 +201,41 @@ public class DeptServiceImpl implements IDeptService
      */
     public int updateDeptname(String deptid, String deptname){
         return deptMapper.updateDeptname(deptid,deptname);
+    }
+
+    /**
+     * 根据companyid生成部门树
+     * @param depts
+     * @param users
+     * @param pid
+     * @param result
+     * @return
+     */
+    public List<Dept> UserTreeByCompany(List<Dept> depts,List<User> users,String pid,List<Dept> result){
+        List<Dept> curDepts = depts.stream().filter(d->d.getPid().equals(pid)).collect(Collectors.toList());
+        result.addAll(curDepts);
+        for(Dept d : curDepts)
+        {
+            d.setHasChildren(true);
+            d.setChildren(GetUserByDept(d.getId(),users));
+            UserTreeByCompany(depts,users,d.getId(),result);
+        }
+        return result;
+    }
+
+    public List<Dept> GetUserByDept(String deptid,List<User> user)
+    {
+        List<User> curUsers = user.stream().filter(u->u.getDeptid().equals(deptid)).collect(Collectors.toList());
+        List<Dept> curdepts = curUsers.stream().map(Dept::new).collect(Collectors.toList());
+        return curdepts;
+    }
+
+    /**
+     * 根据companyid 查部门
+     * @param id
+     * @return
+     */
+    public List<Dept> selectDeptByCompanyID(String id){
+        return deptMapper.selectDeptByCompanyID(id);
     }
 }

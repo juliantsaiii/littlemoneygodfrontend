@@ -70,3 +70,14 @@ export function getDeptTreebyNode(query) {
   })
 }
 
+// 根据companyid查询部门树
+export function getDeptTreebyCompany(id) {
+  return request({
+    url: '/sjwflowsys/dept/getDeptTreeByCompanyID',
+    method: 'post',
+    params: { "CompanyID": id }
+  })
+}
+
+
+

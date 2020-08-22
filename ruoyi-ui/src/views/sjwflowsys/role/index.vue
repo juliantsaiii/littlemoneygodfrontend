@@ -142,6 +142,7 @@
           <el-col :span="8">
             <el-form-item label="当前人员">
               <div class="box-container">
+                <el-button size="mini" type="text" icon="el-icon-plus" @click="initUserTree()">添加</el-button>
                 <el-tag
                   v-for="tag in roleusers"
                   :key="tag.name"
@@ -159,6 +160,23 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="选择人员" :visible.sync="adduserdialog">
+      <div style="height:600px;overflow:auto">
+        <el-tree
+          ref="usertree"
+          :data="roleUserTree"
+          :props="props"
+          show-checkbox
+          node-key="id"
+          :default-checked-keys="userDatas"
+        ></el-tree>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="adduserdialog = false">取 消</el-button>
+        <el-button type="primary" @click="addRoleUsers()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -171,10 +189,10 @@ import {
   updateRole,
   exportRole,
   delUserRole,
-  getRoleData
+  getRoleData,
 } from "@/api/sjwflowsys/role";
 import { getUserByRole } from "@/api/sjwflowsys/user";
-import { getDeptTree } from "@/api/sjwflowsys/dept";
+import { getDeptTree, getDeptTreebyCompany } from "@/api/sjwflowsys/dept";
 import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
 export default {
   name: "Role",
@@ -202,31 +220,31 @@ export default {
         pageNum: 1,
         pageSize: 30,
         name: undefined,
-        companyid: undefined
+        companyid: undefined,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
         deleted: [
-          { required: true, message: "$comment不能为空", trigger: "blur" }
-        ]
+          { required: true, message: "$comment不能为空", trigger: "blur" },
+        ],
       },
       props: {
         label: "name",
         children: "children",
-        isLeaf: "hasChildren"
+        isLeaf: "hasChildren",
       },
       windowHeight: this.$store.getters.clientHeight,
       treeheight: {
         height: this.$store.getters.clientHeight - 100 + "px",
-        overflow: "auto"
+        overflow: "auto",
       },
       rolequeryParams: {
         pid: "-1",
         type: "company",
         selectType: "tree",
-        deptType: ""
+        deptType: "",
       },
       deptList: [],
       roletypeoptions: [],
@@ -237,12 +255,18 @@ export default {
       //当前company部门树
       currentDeptTree: [],
       //角色对应数据权限
-      roleDates: []
+      roleDates: [],
+      //控制选人框
+      adduserdialog: false,
+      //角色对应用户id
+      userDatas: [],
+      //角色对应用户树
+      roleUserTree: [],
     };
   },
   created() {
     this.getList();
-    this.getDicts("sjwflow_role_type").then(response => {
+    this.getDicts("sjwflow_role_type").then((response) => {
       this.roletypeoptions = response.data;
     });
   },
@@ -250,7 +274,7 @@ export default {
     /** 查询角色管理列表 */
     getList() {
       this.loading = true;
-      listRole(this.queryParams).then(response => {
+      listRole(this.queryParams).then((response) => {
         this.roleList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -270,7 +294,7 @@ export default {
         name: undefined,
         sortcode: undefined,
         category: undefined,
-        deleted: false
+        deleted: false,
       };
       this.resetForm("form");
       this.roleDates = [];
@@ -288,7 +312,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id);
+      this.ids = selection.map((item) => item.id);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
@@ -302,7 +326,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids;
-      getRole(id).then(response => {
+      getRole(id).then((response) => {
         this.form = response.data;
         this.open = true;
         this.title = "修改角色管理";
@@ -311,13 +335,13 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm: function() {
-      this.$refs["form"].validate(valid => {
+    submitForm: function () {
+      this.$refs["form"].validate((valid) => {
         if (valid) {
           let roledatas = this.$refs.companytree.getCheckedKeys();
           this.form.belongDepts = roledatas;
           if (this.form.id != undefined) {
-            updateRole(this.form).then(response => {
+            updateRole(this.form).then((response) => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
@@ -325,7 +349,7 @@ export default {
               }
             });
           } else {
-            addRole(this.form).then(response => {
+            addRole(this.form).then((response) => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -345,17 +369,17 @@ export default {
         {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
+          type: "warning",
         }
       )
-        .then(function() {
+        .then(function () {
           return delRole(ids);
         })
         .then(() => {
           this.getList();
           this.msgSuccess("删除成功");
         })
-        .catch(function() {});
+        .catch(function () {});
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -363,27 +387,27 @@ export default {
       this.$confirm("是否确认导出所有角色管理数据项?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
-        .then(function() {
+        .then(function () {
           return exportRole(queryParams);
         })
-        .then(response => {
+        .then((response) => {
           this.download(response.msg);
         })
-        .catch(function() {});
+        .catch(function () {});
     },
     /** 懒加载树 */
     loadNode(node, resolve) {
       this.rolequeryParams.pid = node.data.id;
-      getDeptTree(this.rolequeryParams).then(response => {
+      getDeptTree(this.rolequeryParams).then((response) => {
         resolve(response.data);
       });
     },
     /** 部门节点点击事件 */
     refreshRoleList(data) {
       this.queryParams.companyid = data.id;
-      listRole(this.queryParams).then(response => {
+      listRole(this.queryParams).then((response) => {
         this.roleList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -401,10 +425,10 @@ export default {
         `是否确认从<strong>${this.form.name}</strong>中移除<strong>${note.name}</strong>`,
         "提示",
         {
-          dangerouslyUseHTMLString: true
+          dangerouslyUseHTMLString: true,
         }
       ).then(() => {
-        delUserRole(note.id).then(response => {
+        delUserRole(note.id).then((response) => {
           if (response.code == "200") {
             this.msgSuccess("移除成功");
             this.getUsers(this.form.id);
@@ -414,7 +438,7 @@ export default {
     },
     /** 获取用户 */
     getUsers(id) {
-      getUserByRole(id).then(response => {
+      getUserByRole(id).then((response) => {
         this.roleusers = response.data;
       });
     },
@@ -422,14 +446,30 @@ export default {
     getDeptByCompany(id) {
       this.rolequeryParams.pid = id;
       this.rolequeryParams.type = "tree";
-      getDeptTree(this.rolequeryParams).then(response => {
+      getDeptTree(this.rolequeryParams).then((response) => {
         this.currentDeptTree = response.data;
-        getRoleData(this.form.id).then(res => {
+        getRoleData(this.form.id).then((res) => {
           this.roleDates = res.data;
         });
       });
-    }
-  }
+    },
+    //初始化用户树
+    initUserTree() {
+      this.adduserdialog = true;
+      getDeptTreebyCompany(this.form.companyid).then((response) => {
+        this.roleUserTree = response.data;
+        for (var i in this.roleusers) {
+          this.userDatas.push(this.roleusers[i].id);
+        }
+      });
+    },
+    //添加角色里的用户
+    addRoleUsers() {
+      this.adduserdialog = false;
+      let ids = this.$refs.usertree.getCheckedKeys();
+      console.log(ids);
+    },
+  },
 };
 </script>
 <style>

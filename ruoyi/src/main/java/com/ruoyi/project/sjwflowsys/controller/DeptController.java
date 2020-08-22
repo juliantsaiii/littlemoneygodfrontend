@@ -113,21 +113,21 @@ public class DeptController extends BaseController
 
         switch(type){
             case "user"://查的是人，把用户转成部门加入集合
-                for(Dept d : list)
-                {
-                    d.setHasChildren(true);
-                }
+                list.stream().forEach(d-> d.setHasChildren(true));
                 User user = new User();
                 user.setDeptid(pid);
                 List<User> userList = userService.selectUserList(user);
-                for(User u : userList)
-                {
-                    Dept d = new Dept();
-                    d.setId(u.getId());
-                    d.setName(u.getFullname());
-                    d.setHasChildren(false);
-                    list.add(d);
-                }
+                List<Dept> userDepts = userList.stream().map(Dept::new).collect(Collectors.toList());
+                list.addAll(userDepts);
+//                if(selectType.equals("select")){
+//
+//                }else{
+//                    User user = new User();
+//                    user.setCompanyid(pid);
+//                    List<User> userList = userService.selectUserList(user);
+//                    List<User> userList2 = userList.stream().filter(u->u.getPid().equals("")).collect(Collectors.toList());
+////                    list.stream().forEach(d->dept.setChildren(userList.stream().filter(u->u.getPid().equals(d.getId())).collect(Collectors.toList()).stream().map(Dept::new).collect(Collectors.toList())));
+//                }
                 break;
             case "dept": //查询的是部门，并且展示方式是tree，haschildren值与selecttree相反，
             case "company":
@@ -213,5 +213,19 @@ public class DeptController extends BaseController
     public AjaxResult remove(@PathVariable String[] ids)
     {
         return toAjax(deptService.deleteDeptByIds(ids));
+    }
+
+    /**
+     * 根据部门查company
+     * @param CompanyID
+     * @return
+     */
+    @PostMapping("/getDeptTreeByCompanyID")
+    public AjaxResult getDeptTree(String CompanyID){
+        User u = new User();
+        u.setCompanyid(CompanyID);
+        List<Dept> depts = deptService.selectDeptByCompanyID(CompanyID);
+        List<User> users = userService.selectUserList(u);
+        return AjaxResult.success(deptService.UserTreeByCompany(depts,users,CompanyID,new ArrayList<>()));
     }
 }

@@ -65,7 +65,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by sortcode
     </select>
 
-
+    <select id="selectDeptByCompanyID" parameterType="String" resultMap="DeptResult">
+        select * from dept where pid = #{id} or pid in (select id from dept where pid =  #{id}) order by sortcode
+    </select>
 
     
     <select id="selectDeptById" parameterType="String" resultMap="DeptResult">

@@ -3,8 +3,10 @@ package com.ruoyi.project.sjwflowsys.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.project.sjwflowsys.domain.Roledata;
 import com.ruoyi.project.sjwflowsys.service.IRoledataService;
+import io.netty.util.internal.StringUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -97,8 +99,9 @@ public class RoleController extends BaseController
 
         String deptIds = String.join(",",role.getBelongDepts());
         roledataService.deleteRoledataById(role.getId());
-        if(deptIds!=null){
+        if(!StringUtil.isNullOrEmpty(deptIds)){
             Roledata rd = new Roledata(role,deptIds);
+            rd.setId(UUID.randomUUID().toString());
             roledataService.insertRoledata(rd);
         }
         return toAjax(roleService.updateRole(role));
