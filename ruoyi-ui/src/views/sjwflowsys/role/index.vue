@@ -122,7 +122,16 @@
         <el-row :gutter="50">
           <el-col :span="8">
             <el-form-item label="菜单">
-              <div class="box-container"></div>
+              <div class="box-container">
+                <el-tree
+                  ref="functiontree"
+                  :data="functionTree"
+                  :props="props"
+                  show-checkbox
+                  node-key="id"
+                  :default-checked-keys="functionDatas"
+                ></el-tree>
+              </div>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -191,6 +200,8 @@ import {
   delUserRole,
   getRoleData,
   insertUserRoles,
+  getfunctionTree,
+  getFunctionIDs,
 } from "@/api/sjwflowsys/role";
 import { getUserByRole } from "@/api/sjwflowsys/user";
 import { getDeptTree, getDeptTreebyCompany } from "@/api/sjwflowsys/dept";
@@ -263,6 +274,10 @@ export default {
       userDatas: [],
       //角色对应用户树
       roleUserTree: [],
+      //功能树
+      functionTree: [],
+      //角色对应功能ID
+      functionDatas: [],
     };
   },
   created() {
@@ -333,6 +348,7 @@ export default {
         this.title = "修改角色管理";
         this.getUsers(id);
         this.getDeptByCompany(this.form.companyid);
+        this.initFunctionTree();
       });
     },
     /** 提交按钮 */
@@ -340,7 +356,12 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           let roledatas = this.$refs.companytree.getCheckedKeys();
+          let functionDatas = [
+            ...this.$refs.functiontree.getCheckedKeys(),
+            ...this.$refs.functiontree.getHalfCheckedKeys(),
+          ];
           this.form.belongDepts = roledatas;
+          this.form.functions = functionDatas;
           if (this.form.id != undefined) {
             updateRole(this.form).then((response) => {
               if (response.code === 200) {
@@ -477,6 +498,15 @@ export default {
           this.adduserdialog = false;
           this.getUsers(this.form.id);
         }
+      });
+    },
+    //初始化功能树
+    initFunctionTree() {
+      getfunctionTree().then((response) => {
+        this.functionTree = response.data;
+        getFunctionIDs(this.form.id).then((res) => {
+          this.functionDatas = res.data;
+        });
       });
     },
   },

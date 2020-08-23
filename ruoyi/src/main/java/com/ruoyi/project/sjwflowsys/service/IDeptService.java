@@ -101,11 +101,10 @@ public interface IDeptService
      * 根据companyid生成部门树
      * @param depts
      * @param users
-     * @param pid
      * @param result
      * @return
      */
-    public List<Dept> UserTreeByCompany(List<Dept> depts, List<User> users, String pid, List<Dept> result);
+    public List<Dept> UserTreeByCompany(List<Dept> depts, List<User> users,  List<Dept> result);
 
     /**
      * 根据companyid 查部门

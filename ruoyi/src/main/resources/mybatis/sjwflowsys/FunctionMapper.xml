@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowsys.mapper.FunctionMapper">
+    
+    <resultMap type="Function" id="FunctionResult">
+        <result property="id"    column="ID"    />
+        <result property="pid"    column="PID"    />
+        <result property="name"    column="Name"    />
+        <result property="url"    column="Url"    />
+        <result property="sortcode"    column="SortCode"    />
+        <result property="controlid"    column="ControlID"    />
+        <result property="systemtypeid"    column="SystemTypeID"    />
+        <result property="deleted"    column="Deleted"    />
+    </resultMap>
+
+    <sql id="selectFunctionVo">
+        select ID, PID, Name, Url, SortCode, ControlID, SystemTypeID, Deleted from function
+    </sql>
+
+    <select id="selectFunctionList" parameterType="Function" resultMap="FunctionResult">
+        <include refid="selectFunctionVo"/>
+        <where>  
+            <if test="pid != null  and pid != ''"> and PID = #{pid}</if>
+            <if test="name != null  and name != ''"> and Name like concat('%', #{name}, '%')</if>
+            <if test="url != null  and url != ''"> and Url = #{url}</if>
+            <if test="sortcode != null  and sortcode != ''"> and SortCode = #{sortcode}</if>
+            <if test="controlid != null  and controlid != ''"> and ControlID = #{controlid}</if>
+            <if test="systemtypeid != null  and systemtypeid != ''"> and SystemTypeID = #{systemtypeid}</if>
+            <if test="deleted != null "> and Deleted = #{deleted}</if>
+        </where>
+        order by sortcode
+    </select>
+    
+    <select id="selectFunctionById" parameterType="String" resultMap="FunctionResult">
+        <include refid="selectFunctionVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertFunction" parameterType="Function">
+        insert into function
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="pid != null">PID,</if>
+            <if test="name != null">Name,</if>
+            <if test="url != null">Url,</if>
+            <if test="sortcode != null">SortCode,</if>
+            <if test="controlid != null">ControlID,</if>
+            <if test="systemtypeid != null">SystemTypeID,</if>
+            <if test="deleted != null">Deleted,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="pid != null">#{pid},</if>
+            <if test="name != null">#{name},</if>
+            <if test="url != null">#{url},</if>
+            <if test="sortcode != null">#{sortcode},</if>
+            <if test="controlid != null">#{controlid},</if>
+            <if test="systemtypeid != null">#{systemtypeid},</if>
+            <if test="deleted != null">#{deleted},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFunction" parameterType="Function">
+        update function
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pid != null">PID = #{pid},</if>
+            <if test="name != null">Name = #{name},</if>
+            <if test="url != null">Url = #{url},</if>
+            <if test="sortcode != null">SortCode = #{sortcode},</if>
+            <if test="controlid != null">ControlID = #{controlid},</if>
+            <if test="systemtypeid != null">SystemTypeID = #{systemtypeid},</if>
+            <if test="deleted != null">Deleted = #{deleted},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteFunctionById" parameterType="String">
+        delete from function where ID = #{id}
+    </delete>
+
+    <delete id="deleteFunctionByIds" parameterType="String">
+        delete from function where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

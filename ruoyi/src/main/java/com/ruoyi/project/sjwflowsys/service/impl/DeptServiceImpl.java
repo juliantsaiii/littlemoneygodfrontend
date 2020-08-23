@@ -207,18 +207,18 @@ public class DeptServiceImpl implements IDeptService
      * 根据companyid生成部门树
      * @param depts
      * @param users
-     * @param pid
      * @param result
      * @return
      */
-    public List<Dept> UserTreeByCompany(List<Dept> depts,List<User> users,String pid,List<Dept> result){
-        List<Dept> curDepts = depts.stream().filter(d->d.getPid().equals(pid)).collect(Collectors.toList());
-        result.addAll(curDepts);
-        for(Dept d : curDepts)
+    public List<Dept> UserTreeByCompany(List<Dept> depts,List<User> users,List<Dept> result){
+        for(Dept d : result)
         {
+            List<Dept> curDepts = depts.stream().filter(de->de.getPid().equals(d.getId())).collect(Collectors.toList());
+            List<Dept> nextDepts = curDepts;
+            curDepts.addAll(GetUserByDept(d.getId(),users));
+            d.setChildren(curDepts);
             d.setHasChildren(true);
-            d.setChildren(GetUserByDept(d.getId(),users));
-            UserTreeByCompany(depts,users,d.getId(),result);
+            UserTreeByCompany(depts,users,nextDepts);
         }
         return result;
     }

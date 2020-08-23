@@ -226,6 +226,9 @@ public class DeptController extends BaseController
         u.setCompanyid(CompanyID);
         List<Dept> depts = deptService.selectDeptByCompanyID(CompanyID);
         List<User> users = userService.selectUserList(u);
-        return AjaxResult.success(deptService.UserTreeByCompany(depts,users,CompanyID,new ArrayList<>()));
+        Dept d = new Dept();
+        d.setPid(CompanyID);
+        List<Dept> curDepts = deptService.selectDeptList(d);
+        return AjaxResult.success(deptService.UserTreeByCompany(depts,users,curDepts));
     }
 }

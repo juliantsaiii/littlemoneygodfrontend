@@ -1,22 +1,22 @@
 package com.ruoyi.project.sjwflowsys.domain;
 
+import com.ruoyi.framework.web.domain.TreeEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
 import com.ruoyi.framework.web.domain.BaseEntity;
 
 /**
- * 角色管理对象 role
+ * 功能对象 function
  * 
  * @author littlemoneygod
- * @date 2020-08-19
+ * @date 2020-08-23
  */
-public class Role extends BaseEntity
+public class Function extends TreeEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private String id;
 
     /** $column.columnComment */
@@ -25,49 +25,29 @@ public class Role extends BaseEntity
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private String companyid;
-
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private String name;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private Long sortcode;
+    private String url;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
-    private String category;
+    private String sortcode;
+
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private String controlid;
+
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private String systemtypeid;
 
     /** $column.columnComment */
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Boolean deleted;
 
-    public Role(){
-        this.deleted = false;
-    }
-
-    public String[] getBelongDepts() {
-        return belongDepts;
-    }
-
-    public void setBelongDepts(String[] belongDepts) {
-        this.belongDepts = belongDepts;
-    }
-
-    private String[] belongDepts;
-
-    public String[] getFunctions() {
-        return functions;
-    }
-
-    public void setFunctions(String[] functions) {
-        this.functions = functions;
-    }
-
-    private String[] functions;
-
-    public void setId(String id)
+    public void setId(String id) 
     {
         this.id = id;
     }
@@ -85,15 +65,6 @@ public class Role extends BaseEntity
     {
         return pid;
     }
-    public void setCompanyid(String companyid) 
-    {
-        this.companyid = companyid;
-    }
-
-    public String getCompanyid() 
-    {
-        return companyid;
-    }
     public void setName(String name) 
     {
         this.name = name;
@@ -103,23 +74,41 @@ public class Role extends BaseEntity
     {
         return name;
     }
-    public void setSortcode(Long sortcode) 
+    public void setUrl(String url) 
+    {
+        this.url = url;
+    }
+
+    public String getUrl() 
+    {
+        return url;
+    }
+    public void setSortcode(String sortcode) 
     {
         this.sortcode = sortcode;
     }
 
-    public Long getSortcode() 
+    public String getSortcode() 
     {
         return sortcode;
     }
-    public void setCategory(String category) 
+    public void setControlid(String controlid) 
     {
-        this.category = category;
+        this.controlid = controlid;
     }
 
-    public String getCategory() 
+    public String getControlid() 
     {
-        return category;
+        return controlid;
+    }
+    public void setSystemtypeid(String systemtypeid) 
+    {
+        this.systemtypeid = systemtypeid;
+    }
+
+    public String getSystemtypeid() 
+    {
+        return systemtypeid;
     }
     public void setDeleted(Boolean deleted) 
     {
@@ -136,10 +125,11 @@ public class Role extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
             .append("pid", getPid())
-            .append("companyid", getCompanyid())
             .append("name", getName())
+            .append("url", getUrl())
             .append("sortcode", getSortcode())
-            .append("category", getCategory())
+            .append("controlid", getControlid())
+            .append("systemtypeid", getSystemtypeid())
             .append("deleted", getDeleted())
             .toString();
     }

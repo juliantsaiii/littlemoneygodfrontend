@@ -84,11 +84,26 @@ export function getRoleData(id) {
     params: { "roleid": id }
   })
 }
-
+//插入用户
 export function insertUserRoles(data) {
   return request({
     url: "/sjwflowsys/role/insertUserRoles",
     method: "post",
     data: data,
+  })
+}
+//获取功能树
+export function getfunctionTree(id) {
+  return request({
+    url: '/sjwflowsys/function/getfunctionTree',
+    method: 'post',
+  })
+}
+//根据角色id查找用户
+export function getFunctionIDs(id) {
+  return request({
+    url: '/sjwflowsys/rolefunction/getFunctionIDs',
+    method: "post",
+    params: { "roleid": id }
   })
 }

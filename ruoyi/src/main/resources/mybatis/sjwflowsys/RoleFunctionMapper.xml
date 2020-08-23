@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowsys.mapper.RoleFunctionMapper">
+    
+    <resultMap type="RoleFunction" id="RoleFunctionResult">
+        <result property="id"    column="ID"    />
+        <result property="roleid"    column="RoleID"    />
+        <result property="functionid"    column="FunctionID"    />
+        <result property="deleted"    column="Deleted"    />
+    </resultMap>
+
+    <sql id="selectRoleFunctionVo">
+        select ID, RoleID, FunctionID, Deleted from role_function
+    </sql>
+
+    <select id="selectRoleFunctionList" parameterType="RoleFunction" resultMap="RoleFunctionResult">
+        <include refid="selectRoleFunctionVo"/>
+        <where>  
+            <if test="roleid != null  and roleid != ''"> and RoleID = #{roleid}</if>
+            <if test="functionid != null  and functionid != ''"> and FunctionID = #{functionid}</if>
+            <if test="deleted != null "> and Deleted = #{deleted}</if>
+        </where>
+    </select>
+    
+    <select id="selectRoleFunctionById" parameterType="String" resultMap="RoleFunctionResult">
+        <include refid="selectRoleFunctionVo"/>
+        where ID = #{id}
+    </select>
+
+    <select id="selectFunctionByRole" parameterType="String" resultType="String">
+        select functionid from role_function where roleid = #{id} and functionid not in (select pid from `function` where pid is not null) and deleted = false
+    </select>
+        
+    <insert id="insertRoleFunction" parameterType="RoleFunction">
+        insert into role_function
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">ID,</if>
+            <if test="roleid != null">RoleID,</if>
+            <if test="functionid != null">FunctionID,</if>
+            <if test="deleted != null">Deleted,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="roleid != null">#{roleid},</if>
+            <if test="functionid != null">#{functionid},</if>
+            <if test="deleted != null">#{deleted},</if>
+         </trim>
+    </insert>
+
+    <insert id="insertRoleFuncitons">
+        insert into role_function (id,roleid,functionid,deleted) values
+        <foreach collection="list" item="rolefunction" separator=",">
+            (#{rolefunction.id},#{rolefunction.roleid},#{rolefunction.functionid},false)
+        </foreach>
+    </insert>
+
+    <update id="updateRoleFunction" parameterType="RoleFunction">
+        update role_function
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleid != null">RoleID = #{roleid},</if>
+            <if test="functionid != null">FunctionID = #{functionid},</if>
+            <if test="deleted != null">Deleted = #{deleted},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteRoleFunctionById" parameterType="String">
+        delete from role_function where roleID = #{id}
+    </delete>
+
+    <delete id="deleteRoleFunctionByIds" parameterType="String">
+        delete from role_function where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

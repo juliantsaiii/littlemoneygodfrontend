@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.UUID;
 
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.project.sjwflowsys.domain.RoleFunction;
 import com.ruoyi.project.sjwflowsys.domain.Roledata;
 import com.ruoyi.project.sjwflowsys.domain.UserRole;
-import com.ruoyi.project.sjwflowsys.service.IRoledataService;
-import com.ruoyi.project.sjwflowsys.service.IUserRoleService;
+import com.ruoyi.project.sjwflowsys.service.*;
 import io.netty.util.internal.StringUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.project.sjwflowsys.domain.Role;
-import com.ruoyi.project.sjwflowsys.service.IRoleService;
 import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -45,6 +44,8 @@ public class RoleController extends BaseController
     private IRoledataService roledataService;
     @Autowired
     private IUserRoleService userRoleService;
+    @Autowired
+    private IRoleFunctionService roleFunctionService;
     /**
      * 查询角色管理列表
      */
@@ -91,6 +92,12 @@ public class RoleController extends BaseController
             rd.setId(UUID.randomUUID().toString());
             roledataService.insertRoledata(rd);
         }
+        List<RoleFunction> rfs = new ArrayList<>();
+        for(String fid : role.getFunctions()){
+            RoleFunction rf = new RoleFunction(role.getId(),fid);
+            rfs.add(rf);
+        }
+        roleFunctionService.insertRoleFuncitons(rfs);
         return toAjax(roleService.insertRole(role));
     }
 
@@ -104,11 +111,18 @@ public class RoleController extends BaseController
 
         String deptIds = String.join(",",role.getBelongDepts());
         roledataService.deleteRoledataById(role.getId());
+        roleFunctionService.deleteRoleFunctionById(role.getId());
         if(!StringUtil.isNullOrEmpty(deptIds)){
             Roledata rd = new Roledata(role,deptIds);
             rd.setId(UUID.randomUUID().toString());
             roledataService.insertRoledata(rd);
         }
+        List<RoleFunction> rfs = new ArrayList<>();
+        for(String fid : role.getFunctions()){
+            RoleFunction rf = new RoleFunction(role.getId(),fid);
+            rfs.add(rf);
+        }
+        roleFunctionService.insertRoleFuncitons(rfs);
         return toAjax(roleService.updateRole(role));
     }
 
