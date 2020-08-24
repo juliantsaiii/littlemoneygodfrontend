@@ -2,15 +2,11 @@ package com.ruoyi.common.utils.file;
 
 import com.ruoyi.common.exception.file.FileException;
 import com.ruoyi.common.utils.StringUtils;
-import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbFile;
-import jcifs.smb.SmbFileInputStream;
 import jcifs.smb.SmbFileOutputStream;
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.*;
 

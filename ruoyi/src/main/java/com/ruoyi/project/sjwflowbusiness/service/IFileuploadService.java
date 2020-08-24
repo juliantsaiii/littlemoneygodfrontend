@@ -3,7 +3,6 @@ package com.ruoyi.project.sjwflowbusiness.service;
 import java.util.List;
 import com.ruoyi.project.sjwflowbusiness.domain.Fileupload;
 import com.ruoyi.project.sjwflowbusiness.domain.FileuploadDownload;
-import com.ruoyi.project.sjwflowbusiness.mapper.FileuploadMapper;
 
 /**
  * 附件管理Service接口

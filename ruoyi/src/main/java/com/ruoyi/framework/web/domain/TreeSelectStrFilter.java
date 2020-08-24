@@ -1,6 +1,5 @@
 package com.ruoyi.framework.web.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TreeSelectStrFilter {

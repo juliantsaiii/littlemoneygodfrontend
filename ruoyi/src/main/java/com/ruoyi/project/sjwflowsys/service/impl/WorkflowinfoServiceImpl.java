@@ -1,18 +1,14 @@
 package com.ruoyi.project.sjwflowsys.service.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
 import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
-import com.ruoyi.framework.web.domain.TreeEntity;
 import com.ruoyi.framework.web.domain.TreeEntityStr;
-import com.ruoyi.framework.web.domain.TreeSelect;
 import com.ruoyi.project.sjwflowsys.domain.Dict;
 import com.ruoyi.project.sjwflowsys.mapper.DictMapper;
-import net.bytebuddy.implementation.auxiliary.AuxiliaryType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.sjwflowsys.mapper.WorkflowinfoMapper;

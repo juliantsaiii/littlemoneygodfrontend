@@ -1,6 +1,9 @@
 package com.ruoyi.project.sjwflowsys.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
+import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.sjwflowsys.mapper.RoledataMapper;
@@ -14,6 +17,7 @@ import com.ruoyi.project.sjwflowsys.service.IRoledataService;
  * @date 2020-08-21
  */
 @Service
+@DataSource(value = DataSourceType.SLAVE)
 public class RoledataServiceImpl implements IRoledataService 
 {
     @Autowired

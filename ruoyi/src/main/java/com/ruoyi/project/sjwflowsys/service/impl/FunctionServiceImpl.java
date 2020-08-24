@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
+import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.sjwflowsys.mapper.FunctionMapper;
@@ -17,6 +19,7 @@ import com.ruoyi.project.sjwflowsys.service.IFunctionService;
  * @date 2020-08-23
  */
 @Service
+@DataSource(value = DataSourceType.SLAVE)
 public class FunctionServiceImpl implements IFunctionService 
 {
     @Autowired

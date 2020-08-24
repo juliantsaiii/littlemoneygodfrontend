@@ -5,9 +5,6 @@ import java.util.List;
 import com.ruoyi.framework.web.domain.TreeSelectStr;
 import com.ruoyi.project.sjwflowsys.domain.Dept;
 import com.ruoyi.project.sjwflowsys.domain.User;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Update;
 
 /**
  * 部门Service接口

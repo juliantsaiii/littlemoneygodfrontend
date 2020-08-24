@@ -1,7 +1,5 @@
 package com.ruoyi.framework.web.domain;
 
-import com.ruoyi.project.sjwflowsys.domain.Dict;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
 import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
-import com.ruoyi.framework.web.domain.TreeSelect;
 import com.ruoyi.framework.web.domain.TreeSelectStr;
 import com.ruoyi.project.sjwflowsys.domain.User;
 import org.apache.commons.lang3.ArrayUtils;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.project.sjwflowsys.mapper.DeptMapper;
 import com.ruoyi.project.sjwflowsys.domain.Dept;
 import com.ruoyi.project.sjwflowsys.service.IDeptService;
-import sun.security.util.ArrayUtil;
 
 /**
  * 部门Service业务层处理

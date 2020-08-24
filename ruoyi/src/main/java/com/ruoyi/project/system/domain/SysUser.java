@@ -2,7 +2,6 @@ package com.ruoyi.project.system.domain;
 
 import java.util.Date;
 import java.util.List;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;

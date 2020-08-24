@@ -44,7 +44,7 @@ import PieChart from "./dashboard/PieChart";
 import BarChart from "./dashboard/BarChart";
 import { listLatestNotice } from "@/api/system/notice";
 import { UpdateReadStatus } from "@/api/system/user";
-
+import { getConnectionStatus } from "@/api/tool/serverconnection";
 export default {
   name: "Index",
   components: {
@@ -77,6 +77,7 @@ export default {
     if (this.showUpdateMsgDialog) {
       this.getLatesdUpdateMsg();
     }
+    getConnectionStatus();
   }
 };
 </script>

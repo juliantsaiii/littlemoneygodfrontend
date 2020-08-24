@@ -130,6 +130,7 @@
                   show-checkbox
                   node-key="id"
                   :default-checked-keys="functionDatas"
+                  :default-expanded-keys="['a685f90f-af06-4a03-bec7-8135ffb10947','fe35da2d-35ab-4426-901b-ef667efff61a']"
                 ></el-tree>
               </div>
             </el-form-item>
@@ -201,7 +202,7 @@ import {
   getRoleData,
   insertUserRoles,
   getfunctionTree,
-  getFunctionIDs,
+  getFunctionIDs
 } from "@/api/sjwflowsys/role";
 import { getUserByRole } from "@/api/sjwflowsys/user";
 import { getDeptTree, getDeptTreebyCompany } from "@/api/sjwflowsys/dept";
@@ -232,31 +233,31 @@ export default {
         pageNum: 1,
         pageSize: 30,
         name: undefined,
-        companyid: undefined,
+        companyid: undefined
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
         deleted: [
-          { required: true, message: "$comment不能为空", trigger: "blur" },
-        ],
+          { required: true, message: "$comment不能为空", trigger: "blur" }
+        ]
       },
       props: {
         label: "name",
         children: "children",
-        isLeaf: "hasChildren",
+        isLeaf: "hasChildren"
       },
       windowHeight: this.$store.getters.clientHeight,
       treeheight: {
         height: this.$store.getters.clientHeight - 100 + "px",
-        overflow: "auto",
+        overflow: "auto"
       },
       rolequeryParams: {
         pid: "-1",
         type: "company",
         selectType: "tree",
-        deptType: "",
+        deptType: ""
       },
       deptList: [],
       roletypeoptions: [],
@@ -277,12 +278,12 @@ export default {
       //功能树
       functionTree: [],
       //角色对应功能ID
-      functionDatas: [],
+      functionDatas: []
     };
   },
   created() {
     this.getList();
-    this.getDicts("sjwflow_role_type").then((response) => {
+    this.getDicts("sjwflow_role_type").then(response => {
       this.roletypeoptions = response.data;
     });
   },
@@ -290,7 +291,7 @@ export default {
     /** 查询角色管理列表 */
     getList() {
       this.loading = true;
-      listRole(this.queryParams).then((response) => {
+      listRole(this.queryParams).then(response => {
         this.roleList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -310,7 +311,7 @@ export default {
         name: undefined,
         sortcode: undefined,
         category: undefined,
-        deleted: false,
+        deleted: false
       };
       this.resetForm("form");
       this.roleDates = [];
@@ -328,7 +329,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map((item) => item.id);
+      this.ids = selection.map(item => item.id);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
@@ -342,7 +343,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids;
-      getRole(id).then((response) => {
+      getRole(id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改角色管理";
@@ -352,18 +353,18 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm: function () {
-      this.$refs["form"].validate((valid) => {
+    submitForm: function() {
+      this.$refs["form"].validate(valid => {
         if (valid) {
           let roledatas = this.$refs.companytree.getCheckedKeys();
           let functionDatas = [
             ...this.$refs.functiontree.getCheckedKeys(),
-            ...this.$refs.functiontree.getHalfCheckedKeys(),
+            ...this.$refs.functiontree.getHalfCheckedKeys()
           ];
           this.form.belongDepts = roledatas;
           this.form.functions = functionDatas;
           if (this.form.id != undefined) {
-            updateRole(this.form).then((response) => {
+            updateRole(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
@@ -371,7 +372,7 @@ export default {
               }
             });
           } else {
-            addRole(this.form).then((response) => {
+            addRole(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -391,17 +392,17 @@ export default {
         {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning",
+          type: "warning"
         }
       )
-        .then(function () {
+        .then(function() {
           return delRole(ids);
         })
         .then(() => {
           this.getList();
           this.msgSuccess("删除成功");
         })
-        .catch(function () {});
+        .catch(function() {});
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -409,27 +410,27 @@ export default {
       this.$confirm("是否确认导出所有角色管理数据项?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
-        .then(function () {
+        .then(function() {
           return exportRole(queryParams);
         })
-        .then((response) => {
+        .then(response => {
           this.download(response.msg);
         })
-        .catch(function () {});
+        .catch(function() {});
     },
     /** 懒加载树 */
     loadNode(node, resolve) {
       this.rolequeryParams.pid = node.data.id;
-      getDeptTree(this.rolequeryParams).then((response) => {
+      getDeptTree(this.rolequeryParams).then(response => {
         resolve(response.data);
       });
     },
     /** 部门节点点击事件 */
     refreshRoleList(data) {
       this.queryParams.companyid = data.id;
-      listRole(this.queryParams).then((response) => {
+      listRole(this.queryParams).then(response => {
         this.roleList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -447,10 +448,10 @@ export default {
         `是否确认从<strong>${this.form.name}</strong>中移除<strong>${note.name}</strong>`,
         "提示",
         {
-          dangerouslyUseHTMLString: true,
+          dangerouslyUseHTMLString: true
         }
       ).then(() => {
-        delUserRole(note.id).then((response) => {
+        delUserRole(note.id).then(response => {
           if (response.code == "200") {
             this.msgSuccess("移除成功");
             this.getUsers(this.form.id);
@@ -460,7 +461,7 @@ export default {
     },
     /** 获取用户 */
     getUsers(id) {
-      getUserByRole(id).then((response) => {
+      getUserByRole(id).then(response => {
         this.roleusers = response.data;
       });
     },
@@ -468,9 +469,9 @@ export default {
     getDeptByCompany(id) {
       this.rolequeryParams.pid = id;
       this.rolequeryParams.type = "tree";
-      getDeptTree(this.rolequeryParams).then((response) => {
+      getDeptTree(this.rolequeryParams).then(response => {
         this.currentDeptTree = response.data;
-        getRoleData(this.form.id).then((res) => {
+        getRoleData(this.form.id).then(res => {
           this.roleDates = res.data;
         });
       });
@@ -478,7 +479,7 @@ export default {
     //初始化用户树
     initUserTree() {
       this.adduserdialog = true;
-      getDeptTreebyCompany(this.form.companyid).then((response) => {
+      getDeptTreebyCompany(this.form.companyid).then(response => {
         this.roleUserTree = response.data;
         this.userDatas = [];
         for (var i in this.roleusers) {
@@ -492,7 +493,7 @@ export default {
       let data = new FormData();
       data.append("ids", ids);
       data.append("roleid", this.form.id);
-      insertUserRoles(data).then((response) => {
+      insertUserRoles(data).then(response => {
         if (response.code == "200") {
           this.msgSuccess("添加成功");
           this.adduserdialog = false;
@@ -502,14 +503,14 @@ export default {
     },
     //初始化功能树
     initFunctionTree() {
-      getfunctionTree().then((response) => {
+      getfunctionTree().then(response => {
         this.functionTree = response.data;
-        getFunctionIDs(this.form.id).then((res) => {
+        getFunctionIDs(this.form.id).then(res => {
           this.functionDatas = res.data;
         });
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style>

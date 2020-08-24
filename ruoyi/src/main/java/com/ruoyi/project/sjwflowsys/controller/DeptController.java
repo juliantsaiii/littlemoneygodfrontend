@@ -6,17 +6,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.framework.web.domain.TreeEntity;
 import com.ruoyi.framework.web.domain.TreeSelectStr;
-import com.ruoyi.framework.web.page.TableDataInfo;
 import com.ruoyi.project.sjwflowsys.domain.User;
 import com.ruoyi.project.sjwflowsys.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;

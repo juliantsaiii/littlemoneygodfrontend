@@ -3,12 +3,10 @@ package com.ruoyi.framework.web.domain;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ruoyi.project.sjwflowsys.domain.Dept;
 import com.ruoyi.project.sjwflowsys.domain.User;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Treeselect树结构实体类

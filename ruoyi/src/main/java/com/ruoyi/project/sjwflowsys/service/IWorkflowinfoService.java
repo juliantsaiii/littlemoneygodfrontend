@@ -3,7 +3,6 @@ package com.ruoyi.project.sjwflowsys.service;
 import java.util.List;
 
 import com.ruoyi.framework.web.domain.TreeEntityStr;
-import com.ruoyi.framework.web.domain.TreeSelect;
 import com.ruoyi.project.sjwflowsys.domain.Workflowinfo;
 
 /**

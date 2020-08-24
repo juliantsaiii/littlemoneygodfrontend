@@ -9,8 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.exception.CustomException;
-import com.ruoyi.common.exception.user.CaptchaException;
-import com.ruoyi.common.exception.user.CaptchaExpireException;
 import com.ruoyi.common.exception.user.UserPasswordNotMatchException;
 import com.ruoyi.common.utils.MessageUtils;
 import com.ruoyi.framework.manager.AsyncManager;

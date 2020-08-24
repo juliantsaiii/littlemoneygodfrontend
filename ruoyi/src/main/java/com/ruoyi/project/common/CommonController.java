@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.utils.file.SambFileUtil;
 import jcifs.smb.SmbFile;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,6 @@ import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.framework.config.RuoYiConfig;
 import com.ruoyi.framework.config.ServerConfig;
 import com.ruoyi.framework.web.domain.AjaxResult;
-
-import java.io.*;
 
 /**
  * 通用请求处理

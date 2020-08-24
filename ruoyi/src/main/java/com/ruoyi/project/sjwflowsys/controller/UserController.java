@@ -1,7 +1,6 @@
 package com.ruoyi.project.sjwflowsys.controller;
 
 import java.io.IOException;
-import java.security.DigestException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +14,8 @@ import com.ruoyi.project.sjwflowsys.domain.UserRole;
 import com.ruoyi.project.sjwflowsys.service.IUserRoleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

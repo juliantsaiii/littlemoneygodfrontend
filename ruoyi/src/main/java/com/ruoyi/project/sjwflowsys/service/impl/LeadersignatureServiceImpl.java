@@ -10,8 +10,6 @@ import com.ruoyi.project.sjwflowsys.mapper.LeadersignatureMapper;
 import com.ruoyi.project.sjwflowsys.domain.Leadersignature;
 import com.ruoyi.project.sjwflowsys.service.ILeadersignatureService;
 
-import javax.annotation.Resource;
-
 /**
  * 签名管理Service业务层处理
  * 
