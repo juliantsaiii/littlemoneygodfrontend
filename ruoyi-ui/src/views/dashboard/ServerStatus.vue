@@ -1,5 +1,5 @@
 <template>
-  <div class="serverstatus">
+  <div class="serverstatus" v-loading="loading">
     <el-row :gutter="20">
       <el-col :span="4" v-for="(item,i) in servers" :key="i" style="margin-bottom:20px">
         <el-popover placement="bottom" width="400" trigger="hover" open-delay="500">
@@ -47,13 +47,15 @@ export default {
   name: "serverstatus",
   data() {
     return {
-      servers: []
+      servers: [],
+      loading: true
     };
   },
   methods: {
     getServerMsgs() {
       getConnectionStatus().then(respose => {
         this.servers = respose.data;
+        this.loading = false;
       });
     }
   },
