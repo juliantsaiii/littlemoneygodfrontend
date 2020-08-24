@@ -1,5 +1,6 @@
 <template>
   <div class="dashboard-editor-container">
+    <server-status />
     <panel-group />
     <el-card class="chart-wrapper">
       <div slot="header" class="clearfix">
@@ -42,9 +43,9 @@ import LineChart from "./dashboard/LineChart";
 import RaddarChart from "./dashboard/RaddarChart";
 import PieChart from "./dashboard/PieChart";
 import BarChart from "./dashboard/BarChart";
+import ServerStatus from "./dashboard/ServerStatus";
 import { listLatestNotice } from "@/api/system/notice";
 import { UpdateReadStatus } from "@/api/system/user";
-import { getConnectionStatus } from "@/api/tool/serverconnection";
 export default {
   name: "Index",
   components: {
@@ -52,7 +53,8 @@ export default {
     LineChart,
     RaddarChart,
     PieChart,
-    BarChart
+    BarChart,
+    ServerStatus
   },
   data() {
     return {
@@ -77,7 +79,6 @@ export default {
     if (this.showUpdateMsgDialog) {
       this.getLatesdUpdateMsg();
     }
-    getConnectionStatus();
   }
 };
 </script>

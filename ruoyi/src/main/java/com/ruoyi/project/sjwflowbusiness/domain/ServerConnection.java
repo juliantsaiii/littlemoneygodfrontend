@@ -19,4 +19,14 @@ public class ServerConnection {
 
     private String Name;
     private Boolean Status;
+
+    public String getUrl() {
+        return Url;
+    }
+
+    public void setUrl(String url) {
+        Url = url;
+    }
+
+    private String Url;
 }

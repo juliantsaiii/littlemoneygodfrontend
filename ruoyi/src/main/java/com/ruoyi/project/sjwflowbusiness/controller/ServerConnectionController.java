@@ -6,6 +6,7 @@ import com.ruoyi.common.utils.HttpClientUtil;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.project.sjwflowbusiness.domain.ServerConnection;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,7 @@ import java.util.List;
 @RequestMapping("/sjwflowbusiness/serverconn/")
 public class ServerConnectionController {
 
-    @RequestMapping("/GetConnectionStatus")
+    @GetMapping("/GetConnectionStatus")
     public AjaxResult GetConnectionStatus(){
         ClassPathResource classPathResource = new ClassPathResource("/serverconfig.json");
         List<ServerConnection> scList = new ArrayList();
@@ -38,6 +39,7 @@ public class ServerConnectionController {
             for(int i=0;i<jsonArray.size();i++){
                 ServerConnection sc = new ServerConnection();
                 sc.setName(jsonArray.getJSONObject(i).get("name").toString());
+                sc.setUrl(jsonArray.getJSONObject(i).get("url").toString());
                 sc.setStatus(HttpClientUtil.testConnect(jsonArray.getJSONObject(i).get("url").toString()));
                 scList.add(sc);
             }

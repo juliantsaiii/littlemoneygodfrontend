@@ -20,7 +20,7 @@ public class HttpClientUtil {
         //1.生成httpclient，相当于该打开一个浏览器
         CloseableHttpClient httpClient = HttpClients.createDefault();
         //设置请求和传输超时时间
-        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(2000).setConnectTimeout(2000).build();
+        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(100).setConnectTimeout(100).build();
         CloseableHttpResponse response = null;
         String html = null;
         //2.创建get请求，相当于在浏览器地址栏输入 网址
