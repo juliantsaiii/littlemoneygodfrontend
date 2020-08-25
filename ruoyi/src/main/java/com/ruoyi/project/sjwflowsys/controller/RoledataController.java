@@ -2,6 +2,7 @@ package com.ruoyi.project.sjwflowsys.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.project.sjwflowsys.domain.Roledata;
@@ -23,7 +24,7 @@ public class RoledataController extends BaseController
     private IRoledataService roledataService;
 
 
-    @GetMapping("/getDeptIDs")
+    @PostMapping("/getDeptIDs")
     public AjaxResult getRoleDept(String roleid){
         String[] roles = {};
         Roledata roledata = roledataService.selectRoledataById(roleid);

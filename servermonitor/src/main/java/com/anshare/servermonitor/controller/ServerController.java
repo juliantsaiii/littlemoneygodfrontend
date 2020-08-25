@@ -2,16 +2,14 @@ package com.anshare.servermonitor.controller;
 
 import com.anshare.servermonitor.Service.Server;
 import com.anshare.servermonitor.entity.AjaxResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 服务器监控
  * @author littlemoneygod
  * @since 2020/08/24
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/monitor")
 public class ServerController {

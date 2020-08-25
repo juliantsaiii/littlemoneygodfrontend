@@ -6,3 +6,4 @@ export function getConnectionStatus() {
         methods: 'get'
     });
 }
+

@@ -1,16 +1,49 @@
 <template>
   <div class="serverstatus" v-loading="loading">
     <el-row :gutter="20">
-      <el-col :span="4" v-for="(item,i) in servers" :key="i" style="margin-bottom:20px">
-        <el-popover placement="bottom" width="400" trigger="hover" open-delay="500">
+      <el-col :span="3" v-for="(item,i) in servers" :key="i" style="margin-bottom:20px">
+        <el-popover
+          placement="bottom"
+          width="400"
+          trigger="hover"
+          :open-delay="500"
+          @show="getdetail()"
+        >
           <div>
-            {{item.name}}
+            <h3>{{item.name}}</h3>
+            <span :style="{color:item.status?'#1afa29':'red'}">{{item.status?"正常":"超时"}}</span>
             <hr />
             <dl>
-              <dt style>地址：</dt>
-              <dd>{{item.url}}</dd>
-              <dt style>状态：</dt>
-              <dd :style="{color:item.status?'#1afa29':'red'}">{{item.status?"正常":"超时"}}</dd>
+              <dt style>服务器ip：</dt>
+              <dd>{{detail.sys.computerIp}}</dd>
+              <dt style>操作系统：</dt>
+              <dd>{{detail.sys.osName}}</dd>
+              <dt style>系统架构：</dt>
+              <dd>{{detail.sys.osArch}}</dd>
+            </dl>
+            <hr />
+            <h4>Cpu</h4>
+            <dl>
+              <dt style>核心数：</dt>
+              <dd>{{detail.cpu.cpuNum}}</dd>
+              <dt style>用户使用率：</dt>
+              <dd>{{detail.cpu.sys}}%</dd>
+              <dt style>系统使用率：</dt>
+              <dd>{{detail.cpu.used}}%</dd>
+              <dt style>空闲率：</dt>
+              <dd>{{detail.cpu.free}}%</dd>
+            </dl>
+            <hr />
+            <h4>内存</h4>
+            <dl>
+              <dt style>总内存：</dt>
+              <dd>{{detail.mem.total}}G</dd>
+              <dt style>以用内存：</dt>
+              <dd>{{detail.mem.used}}G</dd>
+              <dt style>剩余内存：</dt>
+              <dd>{{detail.mem.free}}G</dd>
+              <dt style>使用率：</dt>
+              <dd>{{detail.mem.usage}}G</dd>
             </dl>
           </div>
           <el-card
@@ -42,13 +75,35 @@
 
 <script>
 import { getConnectionStatus } from "@/api/tool/serverconnection";
+import axios from "axios";
 
 export default {
   name: "serverstatus",
   data() {
     return {
       servers: [],
-      loading: true
+      loading: true,
+      detail: {
+        cpu: {
+          cpuNum: "",
+          sys: "",
+          used: "",
+          free: ""
+        },
+        mem: {
+          total: "",
+          used: "",
+          free: "",
+          usage: ""
+        },
+        sys: {
+          computerName: "",
+          computerIp: "",
+          userDir: "",
+          osName: "",
+          osArch: ""
+        }
+      }
     };
   },
   methods: {
@@ -57,6 +112,13 @@ export default {
         this.servers = respose.data;
         this.loading = false;
       });
+    },
+    getdetail() {
+      axios
+        .get("http://156.11.1.234:8020/servermonitor/monitor/server")
+        .then(respose => {
+          this.detail = respose.data.data;
+        });
     }
   },
   created() {
@@ -71,10 +133,6 @@ export default {
   height: 40px !important;
 }
 .serverstatus {
-  height: 190px;
-  div {
-    height: 50px;
-  }
   ul {
     list-style-type: none;
     padding: 0px;
@@ -102,7 +160,7 @@ export default {
   font-size: 13px;
 }
 .el-popover dt {
-  width: 100px;
+  width: 150px;
   text-align: right;
   float: left;
   font-size: 13px;

@@ -46,13 +46,6 @@ module.exports = {
           '^refresh': ''
         }
       },
-      "/refresh": {
-        target: 'http://' + process.env.VUE_APP_WINHTTP_URL + ':9991/',
-        changeOrigin: true,
-        pathRewrite: {
-          '^refresh': ''
-        }
-      },
       "/api": {
         target: 'http://' + process.env.VUE_APP_Product_URL + '/',
         changeOrigin: true,
@@ -60,6 +53,10 @@ module.exports = {
         //   '^refresh': ''
         // }
       },
+      // "/servermonitor": {
+      //   target: 'http://156.11.1.234:8020/',
+      //   changeOrigin: true,
+      // },
     },
     disableHostCheck: true
   },

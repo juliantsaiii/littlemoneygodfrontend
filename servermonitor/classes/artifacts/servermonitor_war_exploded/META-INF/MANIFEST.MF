@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: servermonitor
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: 刘均
+Implementation-Vendor-Id: com.anshare
+Created-By: IntelliJ IDEA
+Build-Jdk: 1.8.0_251
+Main-Class: ${start-class}
+
