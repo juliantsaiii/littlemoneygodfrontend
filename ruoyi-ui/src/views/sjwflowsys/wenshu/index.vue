@@ -41,7 +41,12 @@
               <el-switch v-model="scope.row.hascode" @change="changeCode(scope.row)"></el-switch>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column
+            label="操作"
+            align="center"
+            class-name="small-padding fixed-width"
+            width="200"
+          >
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -57,6 +62,13 @@
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['sjwflowsys:wenshu:edit']"
               >修改</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-coordinate"
+                @click="sealMsg(scope.row)"
+                v-hasPermi="['sjwflowsys:wenshu:edit']"
+              >章</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -130,6 +142,33 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="签章信息"
+      :visible.sync="sealOpen"
+      width="800px"
+      append-to-body
+      :close-on-click-modal="false"
+    >
+      <el-form ref="sealform" :model="sealform" :rules="sealRules" label-width="100px">
+        <el-form-item label="章名" prop="ename">
+          <el-input v-model="sealform.ename" placeholder="请输入章名"></el-input>
+        </el-form-item>
+        <el-form-item label="页码" prop="pagenum">
+          <el-input-number v-model="sealform.pagenum" placeholder="请输入盖章页码"></el-input-number>
+        </el-form-item>
+        <el-form-item label="横坐标" prop="positionx">
+          <el-input-number v-model="sealform.positionx" placeholder="请输入横坐标"></el-input-number>
+        </el-form-item>
+        <el-form-item label="纵坐标" prop="positiony">
+          <el-input-number v-model="sealform.positiony" placeholder="请输入纵坐标"></el-input-number>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitSealForm">确 定</el-button>
+        <el-button @click="sealCancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -144,6 +183,11 @@ import {
 } from "@/api/sjwflowsys/wenshu";
 import workflowinfoTree from "@/views/sjwflowsys/workflowinfo/components/workflowinfoTree";
 import { openNtkoWindow } from "@/api/monitor/viewfile";
+import {
+  getWenshuseal,
+  addWenshuseal,
+  updateWenshuseal
+} from "@/api/sjwflowsys/wenshu";
 export default {
   name: "Wenshu",
   components: { workflowinfoTree },
@@ -197,7 +241,19 @@ export default {
         { value: "审批表" },
         { value: "备案表" },
         { value: "隐藏" }
-      ]
+      ],
+      sealOpen: false,
+      sealform: {},
+      sealRules: {
+        ename: [{ required: true, message: "章名不能为空", trigger: "blur" }],
+        pagenum: [{ required: true, message: "页码不能为空", trigger: "blur" }],
+        positionx: [
+          { required: true, message: "横坐标不能为空", trigger: "blur" }
+        ],
+        positiony: [
+          { required: true, message: "纵坐标不能为空", trigger: "blur" }
+        ]
+      }
     };
   },
   created() {
@@ -238,6 +294,21 @@ export default {
         docabbreviation: undefined
       };
       this.resetForm("form");
+    },
+    sealCancel() {
+      this.sealOpen = false;
+      this.sealReset();
+    },
+    sealReset() {
+      this.sealform = {
+        id: undefined,
+        wenshuid: undefined,
+        ename: undefined,
+        pagenum: 1,
+        positionx: undefined,
+        positiony: undefined
+      };
+      this.resetForm("sealform");
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -297,6 +368,28 @@ export default {
         }
       });
     },
+    submitSealForm: function() {
+      this.$refs["sealform"].validate(valid => {
+        if (valid) {
+          if (this.sealform.id != undefined) {
+            updateWenshuseal(this.sealform).then(response => {
+              if (response.code === 200) {
+                this.msgSuccess("修改成功");
+                this.sealOpen = false;
+              }
+            });
+          } else {
+            this.sealform.wenshuid = this.form.id;
+            addWenshuseal(this.sealform).then(response => {
+              if (response.code === 200) {
+                this.msgSuccess("新增成功");
+                this.sealOpen = false;
+              }
+            });
+          }
+        }
+      });
+    },
     //根据流程树切换文书查询范围
     changevalue(id, infoname) {
       this.queryParams.infotype = id;
@@ -323,6 +416,13 @@ export default {
       );
 
       openNtkoWindow(url, false);
+    },
+    sealMsg(data) {
+      this.form = data;
+      getWenshuseal(this.form.id).then(response => {
+        this.sealform = response.data;
+        this.sealOpen = true;
+      });
     }
   }
 };

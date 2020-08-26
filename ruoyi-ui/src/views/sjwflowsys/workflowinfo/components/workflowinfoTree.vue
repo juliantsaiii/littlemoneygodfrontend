@@ -1,5 +1,10 @@
 <template>
-  <el-tree :data="infotree" :props="props" @node-click="treeClick"></el-tree>
+  <el-tree :data="infotree" :props="props" @node-click="treeClick">
+    <span slot-scope="{ node, data }">
+      <i :class="data.icon"></i>
+      <span style="padding-left: 4px;">{{node.label}}</span>
+    </span>
+  </el-tree>
 </template>
 
 <script>
@@ -11,8 +16,9 @@ export default {
       props: {
         children: "children",
         label: "parentName",
+        icon: "icon"
       },
-      infotree: [],
+      infotree: []
     };
   },
   created() {
@@ -20,14 +26,14 @@ export default {
   },
   methods: {
     initTree() {
-      getWorkflowinfoTree().then((response) => {
+      getWorkflowinfoTree().then(response => {
         this.infotree = response.data;
       });
     },
     treeClick(data) {
       this.$emit("changevalue", data.parentId, data.remark);
-    },
-  },
+    }
+  }
 };
 </script>
 

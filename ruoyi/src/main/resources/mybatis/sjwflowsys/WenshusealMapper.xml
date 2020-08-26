@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.sjwflowsys.mapper.WenshusealMapper">
+    
+    <resultMap type="Wenshuseal" id="WenshusealResult">
+        <result property="id"    column="id"    />
+        <result property="wenshuid"    column="wenshuID"    />
+        <result property="ename"    column="eName"    />
+        <result property="pagenum"    column="pageNum"    />
+        <result property="positionx"    column="positionX"    />
+        <result property="positiony"    column="positionY"    />
+    </resultMap>
+
+    <sql id="selectWenshusealVo">
+        select id, wenshuID, eName, pageNum, positionX, positionY from wenshuseal
+    </sql>
+
+    <select id="selectWenshusealList" parameterType="Wenshuseal" resultMap="WenshusealResult">
+        <include refid="selectWenshusealVo"/>
+        <where>  
+            <if test="wenshuid != null  and wenshuid != ''"> and wenshuID = #{wenshuid}</if>
+            <if test="ename != null  and ename != ''"> and eName like concat('%', #{ename}, '%')</if>
+            <if test="pagenum != null "> and pageNum = #{pagenum}</if>
+            <if test="positionx != null  and positionx != ''"> and positionX = #{positionx}</if>
+            <if test="positiony != null  and positiony != ''"> and positionY = #{positiony}</if>
+        </where>
+    </select>
+    
+    <select id="selectWenshusealById" parameterType="String" resultMap="WenshusealResult">
+        <include refid="selectWenshusealVo"/>
+        where wenshuid = #{id}
+    </select>
+        
+    <insert id="insertWenshuseal" parameterType="Wenshuseal">
+        insert into wenshuseal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="wenshuid != null">wenshuID,</if>
+            <if test="ename != null">eName,</if>
+            <if test="pagenum != null">pageNum,</if>
+            <if test="positionx != null">positionX,</if>
+            <if test="positiony != null">positionY,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="wenshuid != null">#{wenshuid},</if>
+            <if test="ename != null">#{ename},</if>
+            <if test="pagenum != null">#{pagenum},</if>
+            <if test="positionx != null">#{positionx},</if>
+            <if test="positiony != null">#{positiony},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWenshuseal" parameterType="Wenshuseal">
+        update wenshuseal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="wenshuid != null">wenshuID = #{wenshuid},</if>
+            <if test="ename != null">eName = #{ename},</if>
+            <if test="pagenum != null">pageNum = #{pagenum},</if>
+            <if test="positionx != null">positionX = #{positionx},</if>
+            <if test="positiony != null">positionY = #{positiony},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWenshusealById" parameterType="String">
+        delete from wenshuseal where id = #{id}
+    </delete>
+
+    <delete id="deleteWenshusealByIds" parameterType="String">
+        delete from wenshuseal where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

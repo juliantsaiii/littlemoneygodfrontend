@@ -51,3 +51,29 @@ export function exportWenshu(query) {
     params: query
   })
 }
+
+// 查询盖章信息详细
+export function getWenshuseal(id) {
+  return request({
+    url: '/sjwflowsys/wenshuseal/' + id,
+    method: 'get'
+  })
+}
+
+// 新增盖章信息
+export function addWenshuseal(data) {
+  return request({
+    url: '/sjwflowsys/wenshuseal',
+    method: 'post',
+    data: data
+  })
+}
+
+// 修改盖章信息
+export function updateWenshuseal(data) {
+  return request({
+    url: '/sjwflowsys/wenshuseal',
+    method: 'put',
+    data: data
+  })
+}

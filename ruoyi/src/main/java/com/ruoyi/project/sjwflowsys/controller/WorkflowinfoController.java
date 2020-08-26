@@ -1,6 +1,8 @@
 package com.ruoyi.project.sjwflowsys.controller;
 
 import java.util.List;
+
+import com.ruoyi.framework.web.domain.TreeEntityStr;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -109,6 +111,8 @@ public class WorkflowinfoController extends BaseController
     public AjaxResult getWorkflowinfoTree(){
         Workflowinfo info = new Workflowinfo();
         List<Workflowinfo> list = workflowinfoService.selectWorkflowinfoList(info);
-        return AjaxResult.success(workflowinfoService.buildWorkflowInfoTreeSelect(list));
+        List<TreeEntityStr> result = workflowinfoService.buildWorkflowInfoTreeSelect(list);
+        result.stream().forEach(e->e.setIcon("el-icon-s-home"));
+        return AjaxResult.success(result);
     }
 }
