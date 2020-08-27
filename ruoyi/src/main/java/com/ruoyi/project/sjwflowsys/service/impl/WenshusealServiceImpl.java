@@ -2,6 +2,8 @@ package com.ruoyi.project.sjwflowsys.service.impl;
 
 import java.util.List;
 
+import com.ruoyi.framework.aspectj.lang.annotation.DataSource;
+import com.ruoyi.framework.aspectj.lang.enums.DataSourceType;
 import com.ruoyi.project.sjwflowsys.domain.Wenshu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import com.ruoyi.project.sjwflowsys.service.IWenshusealService;
  * @date 2020-08-26
  */
 @Service
+@DataSource(value = DataSourceType.SLAVE)
 public class WenshusealServiceImpl implements IWenshusealService 
 {
     @Autowired
