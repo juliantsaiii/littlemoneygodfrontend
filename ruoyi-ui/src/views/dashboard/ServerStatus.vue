@@ -7,44 +7,46 @@
           width="400"
           trigger="hover"
           :open-delay="500"
-          @show="getdetail()"
+          @show="getdetail(item.monitor)"
         >
           <div>
             <h3>{{item.name}}</h3>
             <span :style="{color:item.status?'#1afa29':'red'}">{{item.status?"正常":"超时"}}</span>
             <hr />
-            <dl>
-              <dt style>服务器ip：</dt>
-              <dd>{{detail.sys.computerIp}}</dd>
-              <dt style>操作系统：</dt>
-              <dd>{{detail.sys.osName}}</dd>
-              <dt style>系统架构：</dt>
-              <dd>{{detail.sys.osArch}}</dd>
-            </dl>
-            <hr />
-            <h4>Cpu</h4>
-            <dl>
-              <dt style>核心数：</dt>
-              <dd>{{detail.cpu.cpuNum}}</dd>
-              <dt style>用户使用率：</dt>
-              <dd>{{detail.cpu.sys}}%</dd>
-              <dt style>系统使用率：</dt>
-              <dd>{{detail.cpu.used}}%</dd>
-              <dt style>空闲率：</dt>
-              <dd>{{detail.cpu.free}}%</dd>
-            </dl>
-            <hr />
-            <h4>内存</h4>
-            <dl>
-              <dt style>总内存：</dt>
-              <dd>{{detail.mem.total}}G</dd>
-              <dt style>以用内存：</dt>
-              <dd>{{detail.mem.used}}G</dd>
-              <dt style>剩余内存：</dt>
-              <dd>{{detail.mem.free}}G</dd>
-              <dt style>使用率：</dt>
-              <dd>{{detail.mem.usage}}G</dd>
-            </dl>
+            <template v-if="!!item.monitor">
+              <dl>
+                <dt style>服务器ip：</dt>
+                <dd>{{detail.sys.computerIp}}</dd>
+                <dt style>操作系统：</dt>
+                <dd>{{detail.sys.osName}}</dd>
+                <dt style>系统架构：</dt>
+                <dd>{{detail.sys.osArch}}</dd>
+              </dl>
+              <hr />
+              <h4>Cpu</h4>
+              <dl>
+                <dt style>核心数：</dt>
+                <dd>{{detail.cpu.cpuNum}}</dd>
+                <dt style>用户使用率：</dt>
+                <dd>{{detail.cpu.sys}}%</dd>
+                <dt style>系统使用率：</dt>
+                <dd>{{detail.cpu.used}}%</dd>
+                <dt style>空闲率：</dt>
+                <dd>{{detail.cpu.free}}%</dd>
+              </dl>
+              <hr />
+              <h4>内存</h4>
+              <dl>
+                <dt style>总内存：</dt>
+                <dd>{{detail.mem.total}}G</dd>
+                <dt style>以用内存：</dt>
+                <dd>{{detail.mem.used}}G</dd>
+                <dt style>剩余内存：</dt>
+                <dd>{{detail.mem.free}}G</dd>
+                <dt style>使用率：</dt>
+                <dd>{{detail.mem.usage}}G</dd>
+              </dl>
+            </template>
           </div>
           <el-card
             body-style="padding:0 10px; display: flex;"
@@ -113,12 +115,12 @@ export default {
         this.loading = false;
       });
     },
-    getdetail() {
-      axios
-        .get("http://156.11.1.234:8020/servermonitor/monitor/server")
-        .then(respose => {
+    getdetail(url) {
+      if (url != "") {
+        axios.get(url + "/servermonitor/monitor/server").then(respose => {
           this.detail = respose.data.data;
         });
+      }
     }
   },
   created() {

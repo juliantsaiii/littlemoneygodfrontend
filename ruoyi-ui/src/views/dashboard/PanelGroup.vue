@@ -215,9 +215,16 @@ export default {
     /** 刷新core表 */
     refreshCore() {
       if (!!this.clueid) {
-        axios.get("/refresh?clueid=" + this.clueid).then(() => {
-          this.msgSuccess("刷新完成");
-        });
+        axios
+          .get(
+            "http://" +
+              process.env.VUE_APP_WINHTTP_URL +
+              "?clueid=" +
+              this.clueid
+          )
+          .then(() => {
+            this.msgSuccess("刷新完成");
+          });
       }
     }
   },

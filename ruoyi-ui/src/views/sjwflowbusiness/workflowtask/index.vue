@@ -481,7 +481,10 @@ export default {
     getSessionID(task) {
       axios.defaults.withCredentials = true;
       axios
-        .get("/api/exchange/getLoginSession?id=" + task.receiveid)
+        .get(
+          // `http://${process.env.VUE_APP_Product_URL}/api/exchange/getLoginSession?id=` +
+          `/api/exchange/getLoginSession?id=` + task.receiveid
+        )
         .then(response => {
           //获取sessionid
           const cookie = response.data;

@@ -38,7 +38,6 @@ public class WenshusealController extends BaseController
     /**
      * 查询盖章信息列表
      */
-    @PreAuthorize("@ss.hasPermi('sjwflowsys:wenshuseal:list')")
     @GetMapping("/list")
     public TableDataInfo list(Wenshuseal wenshuseal)
     {
@@ -50,7 +49,6 @@ public class WenshusealController extends BaseController
     /**
      * 导出盖章信息列表
      */
-    @PreAuthorize("@ss.hasPermi('sjwflowsys:wenshuseal:export')")
     @Log(title = "盖章信息", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(Wenshuseal wenshuseal)
@@ -63,7 +61,6 @@ public class WenshusealController extends BaseController
     /**
      * 获取盖章信息详细信息
      */
-    @PreAuthorize("@ss.hasPermi('sjwflowsys:wenshuseal:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") String id)
     {
@@ -73,7 +70,6 @@ public class WenshusealController extends BaseController
     /**
      * 新增盖章信息
      */
-    @PreAuthorize("@ss.hasPermi('sjwflowsys:wenshuseal:add')")
     @Log(title = "盖章信息", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody Wenshuseal wenshuseal)
@@ -85,7 +81,6 @@ public class WenshusealController extends BaseController
     /**
      * 修改盖章信息
      */
-    @PreAuthorize("@ss.hasPermi('sjwflowsys:wenshuseal:edit')")
     @Log(title = "盖章信息", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody Wenshuseal wenshuseal)

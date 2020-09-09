@@ -19,6 +19,15 @@ public class ServerConnection {
 
     private String Name;
     private Boolean Status;
+    private String Monitor;
+
+    public String getMonitor() {
+        return Monitor;
+    }
+
+    public void setMonitor(String monitor) {
+        Monitor = monitor;
+    }
 
     public String getUrl() {
         return Url;

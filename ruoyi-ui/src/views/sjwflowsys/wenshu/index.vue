@@ -146,24 +146,64 @@
     <el-dialog
       title="签章信息"
       :visible.sync="sealOpen"
-      width="800px"
+      width="80%"
       append-to-body
       :close-on-click-modal="false"
     >
-      <el-form ref="sealform" :model="sealform" :rules="sealRules" label-width="100px">
-        <el-form-item label="章名" prop="ename">
-          <el-input v-model="sealform.ename" placeholder="请输入章名"></el-input>
-        </el-form-item>
-        <el-form-item label="页码" prop="pagenum">
-          <el-input-number v-model="sealform.pagenum" placeholder="请输入盖章页码"></el-input-number>
-        </el-form-item>
-        <el-form-item label="横坐标" prop="positionx">
-          <el-input-number v-model="sealform.positionx" placeholder="请输入横坐标"></el-input-number>
-        </el-form-item>
-        <el-form-item label="纵坐标" prop="positiony">
-          <el-input-number v-model="sealform.positiony" placeholder="请输入纵坐标"></el-input-number>
-        </el-form-item>
-      </el-form>
+      <el-row>
+        <el-form ref="sealform" :model="sealform" :rules="sealRules" label-width="80px">
+          <el-row :gutter="20">
+            <el-col :span="6">
+              <el-form-item label="章名" prop="ename">
+                <el-input v-model="sealform.ename" placeholder="请输入章名"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="页码" prop="pagenum">
+                <el-input-number v-model="sealform.pagenum" placeholder="请输入盖章页码"></el-input-number>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="横坐标" prop="positionx">
+                <el-input-number v-model="sealform.positionx" placeholder="请输入横坐标"></el-input-number>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="纵坐标" prop="positiony">
+                <el-input-number v-model="sealform.positiony" placeholder="请输入纵坐标"></el-input-number>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </el-row>
+      <el-row>
+        <el-table :data="sealList">
+          <el-table-column label="页码" align="center" type="index" />
+          <el-table-column label="横坐标" align="center" prop="name" />
+          <el-table-column label="纵坐标" align="center" prop="url" />
+          <el-table-column
+            label="操作"
+            align="center"
+            class-name="small-padding fixed-width"
+            width="200"
+          >
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+              >修改</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="sealMsg(scope.row)"
+              >删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-row>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitSealForm">确 定</el-button>
         <el-button @click="sealCancel">取 消</el-button>
@@ -253,6 +293,10 @@ export default {
         positiony: [
           { required: true, message: "纵坐标不能为空", trigger: "blur" }
         ]
+      },
+      sealList: [],
+      sealQuery: {
+        wenshuid: undefined
       }
     };
   },
@@ -418,10 +462,11 @@ export default {
       openNtkoWindow(url, false);
     },
     sealMsg(data) {
-      this.form = data;
-      getWenshuseal(this.form.id).then(response => {
-        this.sealform = response.data;
-        this.sealOpen = true;
+      // this.form = data;
+      this.sealQuery.wenshuid = data;
+      getWenshuseal(this.sealQuery).then(response => {
+        console.log(this.response);
+        this.sealList = response.data;
       });
     }
   }
