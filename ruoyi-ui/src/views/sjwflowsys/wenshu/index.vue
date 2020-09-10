@@ -7,7 +7,12 @@
         </div>
       </el-col>
       <el-col :span="18">
-        <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="100px">
+        <el-form
+          :model="queryParams"
+          ref="queryForm"
+          :inline="true"
+          label-width="100px"
+        >
           <el-form-item label="文书号缩写" prop="name">
             <el-input
               v-model="queryParams.name"
@@ -18,8 +23,16 @@
             />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              size="mini"
+              @click="handleQuery"
+              >搜索</el-button
+            >
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
+              >重置</el-button
+            >
           </el-form-item>
         </el-form>
 
@@ -35,10 +48,17 @@
           <el-table-column label="路径" align="center" prop="url" />
           <el-table-column label="类型" align="center" prop="type" />
           <el-table-column label="描述" align="center" prop="describe" />
-          <el-table-column label="文号头" align="center" prop="docabbreviation" />
+          <el-table-column
+            label="文号头"
+            align="center"
+            prop="docabbreviation"
+          />
           <el-table-column label="是否编号" align="center" prop="hascode">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.hascode" @change="changeCode(scope.row)"></el-switch>
+              <el-switch
+                v-model="scope.row.hascode"
+                @change="changeCode(scope.row)"
+              ></el-switch>
             </template>
           </el-table-column>
           <el-table-column
@@ -54,27 +74,30 @@
                 icon="el-icon-notebook-2"
                 @click="openWenshu(scope.row)"
                 v-hasPermi="['sjwflowsys:wenshu:remove']"
-              >书签</el-button>
+                >书签</el-button
+              >
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['sjwflowsys:wenshu:edit']"
-              >修改</el-button>
+                >修改</el-button
+              >
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-coordinate"
-                @click="sealMsg(scope.row)"
+                @click="opensealDialog(scope.row)"
                 v-hasPermi="['sjwflowsys:wenshu:edit']"
-              >章</el-button>
+                >章</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
 
         <pagination
-          v-show="total>0"
+          v-show="total > 0"
           :total="total"
           :page.sync="queryParams.pageNum"
           :limit.sync="queryParams.pageSize"
@@ -146,11 +169,11 @@
     <el-dialog
       title="签章信息"
       :visible.sync="sealOpen"
-      width="80%"
+      width="100%"
       append-to-body
       :close-on-click-modal="false"
     >
-      <el-row>
+      <!-- <el-row>
         <el-form ref="sealform" :model="sealform" :rules="sealRules" label-width="80px">
           <el-row :gutter="20">
             <el-col :span="6">
@@ -175,39 +198,23 @@
             </el-col>
           </el-row>
         </el-form>
-      </el-row>
+      </el-row> -->
       <el-row>
         <el-table :data="sealList">
-          <el-table-column label="页码" align="center" type="index" />
-          <el-table-column label="横坐标" align="center" prop="name" />
-          <el-table-column label="纵坐标" align="center" prop="url" />
-          <el-table-column
-            label="操作"
-            align="center"
-            class-name="small-padding fixed-width"
-            width="200"
-          >
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-edit"
-                @click="handleUpdate(scope.row)"
-              >修改</el-button>
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-delete"
-                @click="sealMsg(scope.row)"
-              >删除</el-button>
-            </template>
-          </el-table-column>
+          <el-table-column label="章名" align="center" prop="ename" />
+          <el-table-column label="页码" align="center" prop="pagenum" />
+          <el-table-column label="横坐标" align="center" prop="positionx" />
+          <el-table-column label="纵坐标" align="center" prop="positiony" />
         </el-table>
+        <sealposition
+          @getPosition="getPosition"
+          :wenshuid="wenshuid"
+        ></sealposition>
       </el-row>
-      <div slot="footer" class="dialog-footer">
+      <!--<div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitSealForm">确 定</el-button>
         <el-button @click="sealCancel">取 消</el-button>
-      </div>
+      </div>-->
     </el-dialog>
   </div>
 </template>
@@ -219,9 +226,11 @@ import {
   delWenshu,
   addWenshu,
   updateWenshu,
-  exportWenshu
+  exportWenshu,
+  addWenshusealBatch
 } from "@/api/sjwflowsys/wenshu";
 import workflowinfoTree from "@/views/sjwflowsys/workflowinfo/components/workflowinfoTree";
+import sealposition from "@/views/sjwflowsys/wenshu/getsealposition";
 import { openNtkoWindow } from "@/api/monitor/viewfile";
 import {
   getWenshuseal,
@@ -230,7 +239,7 @@ import {
 } from "@/api/sjwflowsys/wenshu";
 export default {
   name: "Wenshu",
-  components: { workflowinfoTree },
+  components: { workflowinfoTree, sealposition },
   data() {
     return {
       // 遮罩层
@@ -297,7 +306,8 @@ export default {
       sealList: [],
       sealQuery: {
         wenshuid: undefined
-      }
+      },
+      wenshuid: undefined
     };
   },
   created() {
@@ -461,12 +471,31 @@ export default {
 
       openNtkoWindow(url, false);
     },
-    sealMsg(data) {
-      // this.form = data;
-      this.sealQuery.wenshuid = data;
+    getsealMsg(id) {
+      this.sealQuery.wenshuid = this.wenshuid;
       getWenshuseal(this.sealQuery).then(response => {
-        console.log(this.response);
-        this.sealList = response.data;
+        this.sealList = response.rows;
+        console.log(this.sealList);
+      });
+    },
+    opensealDialog(data) {
+      this.sealOpen = true;
+      this.wenshuid = data.id;
+      this.getsealMsg();
+      // this.form = data;
+      // this.sealQuery.wenshuid = data;
+      // getWenshuseal(this.sealQuery).then(response => {
+      //   console.log(this.response);
+      //   this.sealList = response.data;
+      // });
+      //window.open("/seal/getsealposition.html");
+    },
+    getPosition(data) {
+      addWenshusealBatch(data).then(response => {
+        if (response.code === 200) {
+          this.getsealMsg();
+          this.msgSuccess("添加成功");
+        }
       });
     }
   }

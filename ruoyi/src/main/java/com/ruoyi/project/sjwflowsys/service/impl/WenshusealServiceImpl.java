@@ -100,4 +100,21 @@ public class WenshusealServiceImpl implements IWenshusealService
     {
         return wenshusealMapper.deleteWenshusealById(id);
     }
+
+    /**
+     * 根据wenshuid删除
+     *
+     * @param id
+     * @return 结果
+     */
+    @Override
+    public int deleteWenshusealByWenshuID(String id)
+    {
+        return wenshusealMapper.deleteWenshusealByWenshuID(id);
+    }
+
+    @Override
+    public int insertWenshusealBatch(List<Wenshuseal> wenshuseal) {
+        return wenshusealMapper.insertWenshusealBatch(wenshuseal);
+    }
 }

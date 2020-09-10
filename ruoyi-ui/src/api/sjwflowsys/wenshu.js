@@ -56,7 +56,8 @@ export function exportWenshu(query) {
 export function getWenshuseal(query) {
   return request({
     url: "/sjwflowsys/wenshuseal/list",
-    params: query
+    params: query,
+    type: "get"
   });
 }
 
@@ -82,6 +83,15 @@ export function updateWenshuseal(data) {
   return request({
     url: "/sjwflowsys/wenshuseal",
     method: "put",
+    data: data
+  });
+}
+
+// 批量新增盖章信息
+export function addWenshusealBatch(data) {
+  return request({
+    url: "/sjwflowsys/wenshuseal/addBatch",
+    method: "post",
     data: data
   });
 }

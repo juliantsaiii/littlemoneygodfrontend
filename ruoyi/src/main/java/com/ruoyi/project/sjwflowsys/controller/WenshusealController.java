@@ -79,6 +79,19 @@ public class WenshusealController extends BaseController
     }
 
     /**
+     * 批量新增盖章信息
+     */
+    @Log(title = "盖章信息", businessType = BusinessType.INSERT)
+    @PostMapping("/addBatch")
+    public AjaxResult addBatch(@RequestBody List<Wenshuseal> list)
+    {
+        wenshusealService.deleteWenshusealByWenshuID(list.get(0).getWenshuid());
+        list.stream().forEach(s->s.setId(UUID.randomUUID().toString()));
+        return toAjax(wenshusealService.insertWenshusealBatch(list));
+    }
+
+
+    /**
      * 修改盖章信息
      */
     @Log(title = "盖章信息", businessType = BusinessType.UPDATE)

@@ -58,4 +58,20 @@ public interface IWenshusealService
      * @return 结果
      */
     public int deleteWenshusealById(String id);
+
+    /**
+     * 根据wenshuid删除
+     *
+     * @param id
+     * @return 结果
+     */
+    public int deleteWenshusealByWenshuID(String id);
+
+    /**
+     * 批量新增盖章信息
+     *
+     * @param wenshuseal 盖章信息
+     * @return 结果
+     */
+    public int insertWenshusealBatch(List<Wenshuseal> wenshuseal);
 }

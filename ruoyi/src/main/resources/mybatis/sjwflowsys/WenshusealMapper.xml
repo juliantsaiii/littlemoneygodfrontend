@@ -19,12 +19,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectWenshusealList" parameterType="Wenshuseal" resultMap="WenshusealResult">
         <include refid="selectWenshusealVo"/>
-        <where>  
-            <if test="wenshuid != null  and wenshuid != ''"> and wenshuID = #{wenshuid}</if>
-            <if test="ename != null  and ename != ''"> and eName like concat('%', #{ename}, '%')</if>
-            <if test="pagenum != null "> and pageNum = #{pagenum}</if>
-            <if test="positionx != null  and positionx != ''"> and positionX = #{positionx}</if>
-            <if test="positiony != null  and positiony != ''"> and positionY = #{positiony}</if>
+        <where>
+            wenshuID = #{wenshuid}
         </where>
     </select>
     
@@ -53,6 +49,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
+    <insert id="insertWenshusealBatch" parameterType="List">
+        insert into wenshuseal values
+        <foreach collection="list" item="item" separator="," close=";">
+            (#{item.id},#{item.wenshuid},#{item.ename},#{item.pagenum},#{item.positionx},#{item.positiony})
+        </foreach>
+    </insert>
+
     <update id="updateWenshuseal" parameterType="Wenshuseal">
         update wenshuseal
         <trim prefix="SET" suffixOverrides=",">
@@ -74,6 +77,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
+    </delete>
+
+    <delete id="deleteWenshusealByWenshuID" parameterType="String">
+        delete from wenshuseal where wenshuid = #{id}
     </delete>
     
 </mapper>

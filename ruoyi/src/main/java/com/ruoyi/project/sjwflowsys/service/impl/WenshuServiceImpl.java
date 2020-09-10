@@ -94,4 +94,7 @@ public class WenshuServiceImpl implements IWenshuService
     {
         return wenshuMapper.deleteWenshuById(id);
     }
+
+
+
 }
