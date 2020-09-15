@@ -7,8 +7,12 @@
         </div>
       </el-col>
       <el-col :span="18">
-        <input v-show="true" v-model="sealmsg" id="msginput" />
-        <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="100px">
+        <el-form
+          :model="queryParams"
+          ref="queryForm"
+          :inline="true"
+          label-width="100px"
+        >
           <el-form-item label="文书号缩写" prop="name">
             <el-input
               v-model="queryParams.name"
@@ -19,8 +23,16 @@
             />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              size="mini"
+              @click="handleQuery"
+              >搜索</el-button
+            >
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
+              >重置</el-button
+            >
           </el-form-item>
         </el-form>
 
@@ -36,10 +48,17 @@
           <el-table-column label="路径" align="center" prop="url" />
           <el-table-column label="类型" align="center" prop="type" />
           <el-table-column label="描述" align="center" prop="describe" />
-          <el-table-column label="文号头" align="center" prop="docabbreviation" />
+          <el-table-column
+            label="文号头"
+            align="center"
+            prop="docabbreviation"
+          />
           <el-table-column label="是否编号" align="center" prop="hascode">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.hascode" @change="changeCode(scope.row)"></el-switch>
+              <el-switch
+                v-model="scope.row.hascode"
+                @change="changeCode(scope.row)"
+              ></el-switch>
             </template>
           </el-table-column>
           <el-table-column
@@ -55,21 +74,32 @@
                 icon="el-icon-notebook-2"
                 @click="openWenshu(scope.row)"
                 v-hasPermi="['sjwflowsys:wenshu:remove']"
-              >书签</el-button>
+                >书签</el-button
+              >
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['sjwflowsys:wenshu:edit']"
-              >修改</el-button>
+                >修改</el-button
+              >
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-coordinate"
                 @click="opensealDialog(scope.row)"
                 v-hasPermi="['sjwflowsys:wenshu:edit']"
-              >章</el-button>
+                >获取章</el-button
+              >
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-coordinate"
+                @click="getsealMsg(scope.row.id)"
+                v-hasPermi="['sjwflowsys:wenshu:edit']"
+                >查看章</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -147,36 +177,10 @@
     <el-dialog
       title="签章信息"
       :visible.sync="sealOpen"
-      width="100%"
+      width="60%"
       append-to-body
       :close-on-click-modal="false"
     >
-      <!-- <el-row>
-        <el-form ref="sealform" :model="sealform" :rules="sealRules" label-width="80px">
-          <el-row :gutter="20">
-            <el-col :span="6">
-              <el-form-item label="章名" prop="ename">
-                <el-input v-model="sealform.ename" placeholder="请输入章名"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="页码" prop="pagenum">
-                <el-input-number v-model="sealform.pagenum" placeholder="请输入盖章页码"></el-input-number>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="横坐标" prop="positionx">
-                <el-input-number v-model="sealform.positionx" placeholder="请输入横坐标"></el-input-number>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="纵坐标" prop="positiony">
-                <el-input-number v-model="sealform.positiony" placeholder="请输入纵坐标"></el-input-number>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </el-row>-->
       <el-row>
         <el-table :data="sealList">
           <el-table-column label="章名" align="center" prop="ename" />
@@ -184,12 +188,7 @@
           <el-table-column label="横坐标" align="center" prop="positionx" />
           <el-table-column label="纵坐标" align="center" prop="positiony" />
         </el-table>
-        <sealposition @getPosition="getPosition" :wenshuid="wenshuid"></sealposition>
       </el-row>
-      <!--<div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitSealForm">确 定</el-button>
-        <el-button @click="sealCancel">取 消</el-button>
-      </div>-->
     </el-dialog>
   </div>
 </template>
@@ -202,19 +201,18 @@ import {
   addWenshu,
   updateWenshu,
   exportWenshu,
-  addWenshusealBatch,
+  addWenshusealBatch
 } from "@/api/sjwflowsys/wenshu";
 import workflowinfoTree from "@/views/sjwflowsys/workflowinfo/components/workflowinfoTree";
-import sealposition from "@/views/sjwflowsys/wenshu/getsealposition";
 import { openNtkoWindow } from "@/api/monitor/viewfile";
 import {
   getWenshuseal,
   addWenshuseal,
-  updateWenshuseal,
+  updateWenshuseal
 } from "@/api/sjwflowsys/wenshu";
 export default {
   name: "Wenshu",
-  components: { workflowinfoTree, sealposition },
+  components: { workflowinfoTree },
   data() {
     return {
       sealmsg: "",
@@ -240,32 +238,32 @@ export default {
         pageSize: 10,
         name: undefined,
         infotype: undefined,
-        process: undefined,
+        process: undefined
       },
       treeheight: {
         height: this.$store.getters.clientHeight - 100 + "px",
-        overflow: "auto",
+        overflow: "auto"
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
         name: [
-          { required: true, message: "文书名称不能为空", trigger: "blur" },
+          { required: true, message: "文书名称不能为空", trigger: "blur" }
         ],
         designation: [
-          { required: true, message: "缩写不能为空", trigger: "blur" },
+          { required: true, message: "缩写不能为空", trigger: "blur" }
         ],
         process: [
-          { required: true, message: "流程名不能为空", trigger: "blur" },
+          { required: true, message: "流程名不能为空", trigger: "blur" }
         ],
-        url: [{ required: true, message: "文书路径不能为空", trigger: "blur" }],
+        url: [{ required: true, message: "文书路径不能为空", trigger: "blur" }]
       },
       typeoptions: [
         { value: "决定书" },
         { value: "审批表" },
         { value: "备案表" },
-        { value: "隐藏" },
+        { value: "隐藏" }
       ],
       sealOpen: false,
       sealform: {},
@@ -273,33 +271,36 @@ export default {
         ename: [{ required: true, message: "章名不能为空", trigger: "blur" }],
         pagenum: [{ required: true, message: "页码不能为空", trigger: "blur" }],
         positionx: [
-          { required: true, message: "横坐标不能为空", trigger: "blur" },
+          { required: true, message: "横坐标不能为空", trigger: "blur" }
         ],
         positiony: [
-          { required: true, message: "纵坐标不能为空", trigger: "blur" },
-        ],
+          { required: true, message: "纵坐标不能为空", trigger: "blur" }
+        ]
       },
       sealList: [],
       sealQuery: {
-        wenshuid: undefined,
+        wenshuid: undefined
       },
-      wenshuid: undefined,
+      wenshuid: undefined
     };
   },
   created() {
     this.getList();
   },
+  mounted() {
+    window.addEventListener("message", this.getPosition, false);
+  },
   watch: {
     sealmsg(val) {
       console.log(val);
       alert(val);
-    },
+    }
   },
   methods: {
     /** 查询文书管理列表 */
     getList() {
       this.loading = true;
-      listWenshu(this.queryParams).then((response) => {
+      listWenshu(this.queryParams).then(response => {
         this.wenshuList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -327,7 +328,7 @@ export default {
         secretaries: undefined,
         format: undefined,
         describe: undefined,
-        docabbreviation: undefined,
+        docabbreviation: undefined
       };
       this.resetForm("form");
     },
@@ -342,7 +343,7 @@ export default {
         ename: undefined,
         pagenum: 1,
         positionx: undefined,
-        positiony: undefined,
+        positiony: undefined
       };
       this.resetForm("sealform");
     },
@@ -360,7 +361,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map((item) => item.id);
+      this.ids = selection.map(item => item.id);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
@@ -374,18 +375,18 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids;
-      getWenshu(id).then((response) => {
+      getWenshu(id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改文书管理";
       });
     },
     /** 提交按钮 */
-    submitForm: function () {
-      this.$refs["form"].validate((valid) => {
+    submitForm: function() {
+      this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateWenshu(this.form).then((response) => {
+            updateWenshu(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
@@ -393,7 +394,7 @@ export default {
               }
             });
           } else {
-            addWenshu(this.form).then((response) => {
+            addWenshu(this.form).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
@@ -404,11 +405,11 @@ export default {
         }
       });
     },
-    submitSealForm: function () {
-      this.$refs["sealform"].validate((valid) => {
+    submitSealForm: function() {
+      this.$refs["sealform"].validate(valid => {
         if (valid) {
           if (this.sealform.id != undefined) {
-            updateWenshuseal(this.sealform).then((response) => {
+            updateWenshuseal(this.sealform).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.sealOpen = false;
@@ -416,7 +417,7 @@ export default {
             });
           } else {
             this.sealform.wenshuid = this.form.id;
-            addWenshuseal(this.sealform).then((response) => {
+            addWenshuseal(this.sealform).then(response => {
               if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.sealOpen = false;
@@ -434,7 +435,7 @@ export default {
     },
     //编辑是否编号字段
     changeCode(data) {
-      updateWenshu(data).then((response) => {
+      updateWenshu(data).then(response => {
         if (response.code === 200) {
           this.msgSuccess("修改成功");
         }
@@ -454,33 +455,26 @@ export default {
       openNtkoWindow(url, false);
     },
     getsealMsg(id) {
-      this.sealQuery.wenshuid = this.wenshuid;
-      getWenshuseal(this.sealQuery).then((response) => {
+      this.sealOpen = true;
+      this.sealQuery.wenshuid = id;
+      getWenshuseal(this.sealQuery).then(response => {
         this.sealList = response.rows;
-        console.log(this.sealList);
       });
     },
     opensealDialog(data) {
-      // this.sealOpen = true;
-      // this.wenshuid = data.id;
-      // this.getsealMsg();
-
-      // this.form = data;
-      // this.sealQuery.wenshuid = data;
-      // getWenshuseal(this.sealQuery).then(response => {
-      //   console.log(this.response);
-      //   this.sealList = response.data;
-      // });
-      window.open("/sursen/index.html?filepath=1");
+      this.wenshuid = data.id;
+      window.open("/sursen/index.html?wenshuid=" + data.id);
     },
-    getPosition(data) {
-      addWenshusealBatch(data).then((response) => {
+    getPosition(event) {
+      addWenshusealBatch(event.data).then(response => {
         if (response.code === 200) {
-          this.getsealMsg();
-          this.msgSuccess("添加成功");
+          this.getsealMsg(this.wenshuid);
+          event.source.postMessage("200", event.origin);
+        } else {
+          event.source.postMessage("500", event.origin);
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>

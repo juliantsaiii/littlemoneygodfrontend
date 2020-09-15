@@ -1,6 +1,11 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+    <el-form
+      :model="queryParams"
+      ref="queryForm"
+      :inline="true"
+      label-width="68px"
+    >
       <el-form-item label="线索ID" prop="id">
         <el-input
           v-model="queryParams.id"
@@ -38,8 +43,16 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          size="mini"
+          @click="handleQuery"
+          >搜索</el-button
+        >
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
+          >重置</el-button
+        >
       </el-form-item>
     </el-form>
 
@@ -52,7 +65,8 @@
           :disabled="multiple"
           v-hasPermi="['sjwflowbusiness:tempclueinfo:remove']"
           @click="deleteBatch"
-        >删除</el-button>
+          >删除</el-button
+        >
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -61,8 +75,9 @@
           size="mini"
           :disabled="multiple"
           v-hasPermi="['sjwflowbusiness:tempclueinfo:remove']"
-          @click="dialogTreeVisible=true"
-        >转交</el-button>
+          @click="dialogTreeVisible = true"
+          >转交</el-button
+        >
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -71,7 +86,8 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['sjwflowbusiness:tempclueinfo:export']"
-        >导出</el-button>
+          >导出</el-button
+        >
       </el-col>
       <el-col :span="1.5" :pull="1" style="float:right">
         <svg-icon icon-class="deleted" />
@@ -99,14 +115,26 @@
         :min-width="100"
       >
         <template slot-scope="scope">
-          <span v-clipboard:copy="scope.row.id" v-clipboard:success="copySuccess">{{scope.row.id}}</span>
+          <span
+            v-clipboard:copy="scope.row.id"
+            v-clipboard:success="copySuccess"
+            >{{ scope.row.id }}</span
+          >
         </template>
       </el-table-column>
-      <el-table-column label="姓名" align="left" prop="personname" :min-width="150">
+      <el-table-column
+        label="姓名"
+        align="left"
+        prop="personname"
+        :min-width="150"
+      >
         <template slot-scope="scope">
           <svg-icon icon-class="repeat" v-show="scope.row.isrepeated" />
-          <svg-icon icon-class="multipeople" v-show="scope.row.addpeoplemainid" />
-          <span>{{scope.row.personname}}</span>
+          <svg-icon
+            icon-class="multipeople"
+            v-show="scope.row.addpeoplemainid"
+          />
+          <span>{{ scope.row.personname }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -138,11 +166,21 @@
         :min-width="200"
       >
         <template slot-scope="scope">
-          <span>{{scope.row.cluecode}}/{{scope.row.clueno}}</span>
+          <span>{{ scope.row.cluecode }}/{{ scope.row.clueno }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="填报日期" align="center" prop="reportdate" min-width="100" />
-      <el-table-column label="线索来源" align="center" prop="cluesource" :show-overflow-tooltip="true" />
+      <el-table-column
+        label="填报日期"
+        align="center"
+        prop="reportdate"
+        min-width="100"
+      />
+      <el-table-column
+        label="线索来源"
+        align="center"
+        prop="cluesource"
+        :show-overflow-tooltip="true"
+      />
       <el-table-column
         label="承办部门"
         align="center"
@@ -150,9 +188,14 @@
         :show-overflow-tooltip="true"
       />
       <el-table-column label="状态" align="center" prop="handlestate" />
-      <el-table-column label="重复件" align="center" prop="isrepeated" :show-overflow-tooltip="true">
+      <el-table-column
+        label="重复件"
+        align="center"
+        prop="isrepeated"
+        :show-overflow-tooltip="true"
+      >
         <template slot-scope="scope">
-          <span>{{scope.row.isrepeated?scope.row.isrepeated:'否'}}</span>
+          <span>{{ scope.row.isrepeated ? scope.row.isrepeated : "否" }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -165,18 +208,22 @@
           <span
             v-clipboard:copy="scope.row.addpeoplemainid"
             v-clipboard:success="copySuccess"
-          >{{scope.row.addpeoplemainid}}</span>
+            >{{ scope.row.addpeoplemainid }}</span
+          >
         </template>
       </el-table-column>
 
       <el-table-column label="是否删除" align="center">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.isdeleted" @change="updateform(scope.row)"></el-switch>
+          <el-switch
+            v-model="scope.row.isdeleted"
+            @change="updateform(scope.row)"
+          ></el-switch>
         </template>
       </el-table-column>
       <el-table-column label="措施线索">
         <template slot-scope="scope">
-          <span>{{scope.row.ismeasureclue?'是':'否'}}</span>
+          <span>{{ scope.row.ismeasureclue ? "是" : "否" }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -191,8 +238,12 @@
             size="mini"
             type="text"
             icon="el-icon-files"
-            @click="fileuploaddialog = true;openviewdialog(scope.row.id)"
-          >附件</el-button>
+            @click="
+              fileuploaddialog = true;
+              openviewdialog(scope.row.id);
+            "
+            >附件</el-button
+          >
 
           <!-- <router-link
             :to="{path:'/sjwflowbusiness/workflowtask/',query: {id: scope.row.id}}"
@@ -204,28 +255,37 @@
             size="mini"
             type="text"
             icon="el-icon-files"
-            @click="workflowtaskdialog = true;openviewdialog(scope.row.id)"
-          >步骤</el-button>
+            @click="
+              workflowtaskdialog = true;
+              openviewdialog(scope.row.id);
+            "
+            >步骤</el-button
+          >
 
           <el-button
             size="mini"
             type="text"
             icon="el-icon-location-information"
-            @click="infoviewdialog = true;openviewdialog(scope.row.id)"
-          >跳转</el-button>
+            @click="
+              infoviewdialog = true;
+              openviewdialog(scope.row.id);
+            "
+            >跳转</el-button
+          >
 
           <el-button
             size="mini"
             type="text"
             icon="el-icon-refresh"
             @click="refreshclue(scope.row.id)"
-          >刷新</el-button>
+            >刷新</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
 
     <pagination
-      v-show="total>0"
+      v-show="total > 0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
@@ -235,30 +295,55 @@
     <el-dialog title="流程" :visible.sync="infoviewdialog" width="80%">
       <template slot="title">
         <span>流程</span>
-        <span class="tips">(1.跳转条件：改线索存在待办事项。2.操作方式：双击步骤跳转，此跳转为新增步骤，若要删除中间步骤，请使用步骤按钮删除步骤)</span>
+        <span class="tips"
+          >(1.跳转条件：该线索存在待办事项。2.操作方式：双击步骤跳转，此跳转为新增步骤，若要删除中间步骤，请使用步骤按钮删除步骤)</span
+        >
       </template>
       <template>
-        <displayview :curclueid="currentclueid" :isOpen="infoviewdialog"></displayview>
+        <displayview
+          :curclueid="currentclueid"
+          :isOpen="infoviewdialog"
+        ></displayview>
       </template>
     </el-dialog>
 
     <el-dialog title="步骤" :visible.sync="workflowtaskdialog" width="80%">
       <template>
-        <workflowtask :curclueid="currentclueid" :isdialog="true" :isOpen="workflowtaskdialog"></workflowtask>
+        <workflowtask
+          :curclueid="currentclueid"
+          :isdialog="true"
+          :isOpen="workflowtaskdialog"
+        ></workflowtask>
       </template>
     </el-dialog>
 
     <el-dialog title="附件" :visible.sync="fileuploaddialog" width="80%">
       <template>
-        <fileupload :curclueid="currentclueid" :isdialog="true" :isOpen="fileuploaddialog"></fileupload>
+        <fileupload
+          :curclueid="currentclueid"
+          :isdialog="true"
+          :isOpen="fileuploaddialog"
+        ></fileupload>
       </template>
     </el-dialog>
 
-    <el-dialog title="选择转交人" :visible.sync="dialogTreeVisible" :close-on-click-modal="false">
-      <dept-select-tree @selectterm="getReceiverMsg" :type="'user'"></dept-select-tree>
+    <el-dialog
+      title="选择转交人"
+      :visible.sync="dialogTreeVisible"
+      :close-on-click-modal="false"
+    >
+      <dept-select-tree
+        @selectterm="getReceiverMsg"
+        :type="'user'"
+      ></dept-select-tree>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogTreeVisible = false">取 消</el-button>
-        <el-button type="primary" @click="changeReceiver" :disabled="receiveSubmit">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="changeReceiver"
+          :disabled="receiveSubmit"
+          >确 定</el-button
+        >
       </div>
     </el-dialog>
   </div>
@@ -272,7 +357,7 @@ import {
   addTempclueinfo,
   updateTempclueinfo,
   exportTempclueinfo,
-  fakedelclueinfo,
+  fakedelclueinfo
 } from "@/api/sjwflowbusiness/tempclueinfo";
 import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
 import displayview from "@/views/tool/go/displayview";
@@ -312,7 +397,7 @@ export default {
         personname: undefined,
         personunit: undefined,
         cluesource: undefined,
-        clueno: undefined,
+        clueno: undefined
       },
       // 表单参数
       form: {},
@@ -334,7 +419,7 @@ export default {
       //更换接收人name
       receiveName: undefined,
       //步骤框
-      workflowtaskdialog: false,
+      workflowtaskdialog: false
     };
   },
   created() {
@@ -344,7 +429,7 @@ export default {
     /** 查询线索操作列表 */
     getList() {
       this.loading = true;
-      listTempclueinfo(this.queryParams).then((response) => {
+      listTempclueinfo(this.queryParams).then(response => {
         this.tempclueinfoList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -513,7 +598,7 @@ export default {
         yuqistatus: "0",
         isexport: undefined,
         handlerequire: undefined,
-        cadreauthority: undefined,
+        cadreauthority: undefined
       };
       this.resetForm("form");
     },
@@ -529,10 +614,10 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map((item) => item.id);
+      this.ids = selection.map(item => item.id);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
-      this.personnames = selection.map((item) => item.personname);
+      this.personnames = selection.map(item => item.personname);
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -540,19 +625,19 @@ export default {
       this.$confirm("是否确认导出所有线索操作数据项?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
-        .then(function () {
+        .then(function() {
           return exportTempclueinfo(queryParams);
         })
-        .then((response) => {
+        .then(response => {
           this.download(response.msg);
         })
-        .catch(function () {});
+        .catch(function() {});
     },
     /** 更新form */
     updateform(data) {
-      updateTempclueinfo(data).then((res) => {
+      updateTempclueinfo(data).then(res => {
         if (res.code == "200") {
           this.msgSuccess("修改成功");
         }
@@ -565,9 +650,9 @@ export default {
     /** 批量删除 */
     deleteBatch() {
       this.$confirm("是否确认删除以下线索<h3>" + this.personnames + "</h3>", {
-        dangerouslyUseHTMLString: true,
+        dangerouslyUseHTMLString: true
       }).then(() => {
-        fakedelclueinfo(this.ids).then((response) => {
+        fakedelclueinfo(this.ids).then(response => {
           if (response.code == "200") {
             this.msgSuccess("删除成功");
             this.getList();
@@ -600,7 +685,7 @@ export default {
         params.append("ids", this.ids);
         params.append("receiveid", this.receiveID);
         params.append("receivename", this.receiveName);
-        changeClueReceiver(params).then((response) => {
+        changeClueReceiver(params).then(response => {
           if (response.code == "200") {
             this.msgSuccess("转交成功");
             this.dialogTreeVisible = false;
@@ -629,8 +714,8 @@ export default {
           this.msgSuccess("刷新完成");
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
