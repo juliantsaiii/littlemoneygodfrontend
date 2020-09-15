@@ -1,0 +1,122 @@
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>火狐下测试脚本</title>
+
+</head>
+
+<body>
+	<div style="height:10%;">
+		文件全路径:<input type="text" id="sealf" value="" style="width:300px" />
+		<br>
+		1.如果文件上没有章，
+		章名:<input type="text" id="sealn" value="" style="width:150px" />&nbsp;&nbsp;
+		页码:<input type="text" id="sealp" value="" style="width:50px" />&nbsp;&nbsp;
+		X坐标:<input type="text" id="sealx" value="" style="width:50px" />&nbsp;&nbsp;
+		Y坐标:<input type="text" id="sealy" value="" style="width:50px" />&nbsp;&nbsp;
+		<input type="button" id="sealid" onclick="javascript:seal();" value="确认" />
+		<br>
+		2.如果文件上有章，可直接提取章位置&nbsp;<input type="button" id="tq" onclick="javascript:tiqu();" value="提取" />
+		<button onclick="sendBack()">哈哈</button>
+	</div>
+	<div id="showofd" style="width:100%; height:90%;">
+		<script language="javascript">
+			var isIE = getBrowserName().indexOf("IE") >= 0 ? true : false;
+
+			if (isIE) {
+				document.write(" <OBJECT ID='SedOI' CLASSID='CLSID:D3CF4FD9-C527-4C53-8227-609A232E2C0E' width='0' height='0'></OBJECT>");
+				document.write("<OBJECT ID='TrivialObject' CLASSID='CLSID:A18E7987-900A-4c32-B0B9-B4C1BEDB5DDD' WIDTH=100% HEIGHT=100%></OBJECT>");
+			} else {
+				document.write("<embed id='SedOI' TYPE='application/SursenOFD-plugin'  WIDTH='0' HEIGHT='0'></embed>");
+				document.write("<object id='TrivialObject' TYPE='trivial/very' WIDTH=100% HEIGHT=100%></object>");
+			}
+
+			TrivialObject = document.getElementById("TrivialObject");
+
+
+			var filepath = GetQueryValue1("filepath");
+
+
+			function tiqu() {
+				var path = document.getElementById("sealf").value;
+				if (path == "") {
+					alert("请填写文件全路径！");
+					return;
+				}
+				TrivialObject.openFile(path, false);
+
+				var currentHandle = SedOI.S_OpenFile(path, "");
+				var sealInfo = SedOI.S_GetSealPosName();
+				SedOI.S_CloseFileByHandle(currentHandle);
+
+				var sinfo = "";
+				var ss = sealInfo.split(";");
+				for (var i = 0; i < ss.length; i++) {
+					var s = ss[i].split(",");
+					sinfo += "章名：" + s[0] + "，页码：" + (parseInt(s[1]) + 1) + "，x坐标：" + parseInt(s[2]) + "，y坐标：" + parseInt(s[3]);
+
+					if (i != (ss.length - 1)) {
+						sinfo += "\r\n";
+					}
+				}
+
+				alert(sinfo);
+			}
+
+			function seal() {
+				var path = document.getElementById("sealf").value;
+				if (path == "") {
+					alert("请填写文件全路径！");
+					return;
+				}
+				TrivialObject.openFile(path, false);
+				var x = parseInt(document.getElementById("sealx").value);
+				var y = parseInt(document.getElementById("sealy").value);
+				var p = parseInt(document.getElementById("sealp").value);
+				var s = SedOI.S_OpenFile("1.ofd", "");
+				var rect = SedOI.S_AddSealEx(document.getElementById("sealn").value, "", p, x * 1000, y * 1000, false);
+				if (rect != 0) {
+					SedOI.S_CloseFileByHandle(s);
+					alert("插入印章失败");
+				} else {
+					SedOI.S_SaveFile();
+					SedOI.S_CloseFileByHandle(s);
+				}
+			}
+
+			function getBrowserName() {
+				if (navigator.userAgent.indexOf("Firefox") > -1) {
+					return "Firefox";
+				} else if (navigator.userAgent.indexOf("Chrome") > -1) {
+					return "Chrome";
+				} else if (!!window.ActiveXObject || "ActiveXObject" in window || window.navigator.userAgent.indexOf("MSIE") >= 1) {
+					return "IE";
+				}
+			}
+
+			function sendBack() {
+				window.opener.document.getElementById("msginput").value = "123";
+			}
+
+			/**
+			   * [通过参数名获取url中的参数值]
+			   * 示例URL:http://htmlJsTest/getrequest.html?uid=admin&rid=1&fid=2&name=小明
+			   * @param  {[string]} queryName [参数名]
+			   * @return {[string]}           [参数值]
+			   */
+			function GetQueryValue1(queryName) {
+				var reg = new RegExp("(^|&)" + queryName + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if (r != null) {
+					return decodeURI(r[2]);
+				} else {
+					return null;
+				}
+			}
+
+		</script>
+	</div>
+</body>
+
+</html>
