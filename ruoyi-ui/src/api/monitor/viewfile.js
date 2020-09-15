@@ -13,8 +13,8 @@ export function openNtkoWindow(url, isReadonly) {
         "&urlPre=" +
         process.env.VUE_APP_BASE_API,
       false,
-      "南京安夏电子科技有限公司某某测试用户",
-      "EA2DD26261BAE1662BB827FB200CC90BE0C67745"
+      "南京安夏电子科技有限公司",
+      "D9672EDAF5C0D415DE789FFDD21BE9AD23E6FF35"
     );
   }
 }
