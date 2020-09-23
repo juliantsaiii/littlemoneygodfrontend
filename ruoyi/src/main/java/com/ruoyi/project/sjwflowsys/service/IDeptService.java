@@ -28,7 +28,7 @@ public interface IDeptService
      * @param dept 部门
      * @return 部门集合
      */
-    public List<Dept> selectDeptList(Dept dept);
+    public List<Dept> selectDeptList(Dept dept,String type,List<String> parentids);
 
     /**
      * 新增部门
@@ -68,7 +68,7 @@ public interface IDeptService
      * @param list
      * @return
      */
-    public TreeSelectStr getDeptTree(String ID, List<TreeSelectStr> list,boolean isCompany);
+    public TreeSelectStr getDeptTree(String ID, List<TreeSelectStr> list,boolean isCompany,List<String> parentids,String type);
 
     /**
      * 判断节点是否是省纪委、市纪委、县区纪委
@@ -109,4 +109,11 @@ public interface IDeptService
      * @return
      */
     public List<Dept> selectDeptByCompanyID(String id);
+
+
+    /**
+     * 查找所有parentid
+     * @return
+     */
+    public List<String> findAllparentId();
 }

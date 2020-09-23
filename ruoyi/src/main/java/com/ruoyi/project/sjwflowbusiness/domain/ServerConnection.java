@@ -20,6 +20,15 @@ public class ServerConnection {
     private String Name;
     private Boolean Status;
     private String Monitor;
+    private String Ip;
+
+    public String getIp() {
+        return Ip;
+    }
+
+    public void setIp(String ip) {
+        Ip = ip;
+    }
 
     public String getMonitor() {
         return Monitor;

@@ -37,7 +37,13 @@ public class DeptServiceImpl implements IDeptService
     @Override
     public Dept selectDeptById(String id)
     {
-        return deptMapper.selectDeptById(id);
+        Dept dept = deptMapper.selectDeptById(id);
+        List<String> parentids = deptMapper.findAllparentId();
+        if(parentids.stream().filter(f->f.equals(dept.getId())).findAny().isPresent())
+            dept.setHasChildren(true);
+        else
+            dept.setHasChildren(false);
+        return dept;
     }
 
     /**
@@ -47,13 +53,23 @@ public class DeptServiceImpl implements IDeptService
      * @return 部门
      */
     @Override
-    public List<Dept> selectDeptList(Dept dept)
+    public List<Dept> selectDeptList(Dept dept,String type,List<String> parentids)
     {
         List<Dept> depts = deptMapper.selectDeptList(dept);
-        for(Dept d:depts)
+        if(type.equals("user"))
         {
-            d.setHasChildren(d.getHasChild());
+            depts.stream().forEach(d->d.setHasChildren(true));
+        }else{
+            for(Dept d:depts)
+            {
+                if(parentids.stream().filter(f->f.equals(d.getId())).findAny().isPresent())
+                    d.setHasChildren(true);
+                else
+                    d.setHasChildren(false);
+            }
         }
+
+
         return depts;
     }
 
@@ -113,8 +129,8 @@ public class DeptServiceImpl implements IDeptService
      * @param list
      * @return
      */
-    public TreeSelectStr getDeptTree(String ID,List<TreeSelectStr> list,boolean isCompany){
-        Dept dept = deptMapper.selectDeptById(ID);
+    public TreeSelectStr getDeptTree(String ID,List<TreeSelectStr> list,boolean isCompany,List<String> parentids,String type){
+        Dept dept = selectDeptById(ID);
         TreeSelectStr tsMain = new TreeSelectStr();
         if(dept.getPid().equals("-1"))
         {
@@ -125,7 +141,7 @@ public class DeptServiceImpl implements IDeptService
             Dept query = new Dept();
             query.setPid(dept.getPid());
             List<TreeSelectStr> trees = new ArrayList<>();
-            List<Dept> depts = deptMapper.selectDeptList(query);
+            List<Dept> depts = selectDeptList(query,type,parentids);
             for (Dept d:depts)
             {
                 TreeSelectStr ts = new TreeSelectStr();
@@ -134,7 +150,7 @@ public class DeptServiceImpl implements IDeptService
                 if(d.getId().equals(ID)){
                     ts.setChildren(list);
                 }else{
-                    if((!isCompany || !JudgeDeptType(d.getDepttype()))&&d.getHasChild()){
+                    if((!isCompany || !JudgeDeptType(d.getDepttype()))&&d.getHasChildren()){
                         ts.setChildren(null);
                     }else{
                         ts.setChildren(new ArrayList<>());
@@ -142,7 +158,7 @@ public class DeptServiceImpl implements IDeptService
                 }
                 trees.add(ts);
             }
-            tsMain = getDeptTree(dept.getPid(),trees,isCompany);
+            tsMain = getDeptTree(dept.getPid(),trees,isCompany,parentids, type);
         }
         return tsMain;
     }
@@ -234,5 +250,10 @@ public class DeptServiceImpl implements IDeptService
      */
     public List<Dept> selectDeptByCompanyID(String id){
         return deptMapper.selectDeptByCompanyID(id);
+    }
+
+    @Override
+    public List<String> findAllparentId() {
+        return deptMapper.findAllparentId();
     }
 }

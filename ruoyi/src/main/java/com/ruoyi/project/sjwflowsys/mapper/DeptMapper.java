@@ -3,6 +3,7 @@ package com.ruoyi.project.sjwflowsys.mapper;
 import java.util.List;
 import com.ruoyi.project.sjwflowsys.domain.Dept;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 /**
@@ -83,4 +84,11 @@ public interface DeptMapper
      * @return
      */
     public List<Dept> selectDeptByCompanyID(String id);
+
+    /**
+     * 查找所有parentid
+     * @return
+     */
+    @Select(" select distinct pid from dept ")
+    public List<String> findAllparentId();
 }

@@ -40,6 +40,7 @@ public class ServerConnectionController {
                 ServerConnection sc = new ServerConnection();
                 sc.setName(jsonArray.getJSONObject(i).get("name").toString());
                 sc.setUrl(jsonArray.getJSONObject(i).get("url").toString());
+                sc.setIp(jsonArray.getJSONObject(i).get("ip").toString());
                 sc.setStatus(HttpClientUtil.testConnect(jsonArray.getJSONObject(i).get("url").toString()));
                 sc.setMonitor(jsonArray.getJSONObject(i).get("monitor").toString());
                 scList.add(sc);

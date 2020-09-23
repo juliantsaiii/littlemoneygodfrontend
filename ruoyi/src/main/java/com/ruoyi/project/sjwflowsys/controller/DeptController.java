@@ -49,7 +49,8 @@ public class DeptController extends BaseController
         {
             dept.setPid("-1");
         }
-        List<Dept> list = deptService.selectDeptList(dept);
+        List<String> parentids = deptService.findAllparentId();
+        List<Dept> list = deptService.selectDeptList(dept,"dept",parentids);
         return AjaxResult.success(list);
     }
 
@@ -60,6 +61,7 @@ public class DeptController extends BaseController
     public AjaxResult listTreeNode(@RequestParam(defaultValue = "dept") String type,@RequestParam String childID)
     {
         TreeSelectStr ts = new TreeSelectStr();
+        List<String> parentids = deptService.findAllparentId();
         switch(type){
             case "user":
                 User user = userService.selectUserById(childID);
@@ -67,16 +69,16 @@ public class DeptController extends BaseController
                 query.setDeptid(user.getDeptid());
                 List<User> userList = userService.selectUserList(query);
                 List<TreeSelectStr> usertrees = userList.stream().map(TreeSelectStr::new).collect(Collectors.toList());
-                ts = deptService.getDeptTree(user.getDeptid(),usertrees,false);
+                ts = deptService.getDeptTree(user.getDeptid(),usertrees,false,parentids,type);
                 break;
             case "dept":
-                ts =  deptService.getDeptTree(childID,new ArrayList<>(),false);
+                ts =  deptService.getDeptTree(childID,new ArrayList<>(),false,parentids,type);
                 break;
             case "role":
 
                 break;
             case "company":
-                ts =  deptService.getDeptTree(childID,new ArrayList<>(),true);
+                ts =  deptService.getDeptTree(childID,new ArrayList<>(),true,parentids,"dept");
                 if(ts.getChildren().size()!=0){
                     ts.getChildren().get(0).setChildren(new ArrayList<>());
                 }
@@ -105,7 +107,8 @@ public class DeptController extends BaseController
         }else{
             dept.setPid(pid);
         }
-        List<Dept> list = deptService.selectDeptList(dept);
+        List<String> parentids = deptService.findAllparentId();
+        List<Dept> list = deptService.selectDeptList(dept,type,parentids);
 
         switch(type){
             case "user"://查的是人，把用户转成部门加入集合
@@ -135,7 +138,7 @@ public class DeptController extends BaseController
             {
                 Dept deptquery = new Dept();
                 deptquery.setPid(d.getId());
-                List<Dept> deptList = deptService.selectDeptList(deptquery);
+                List<Dept> deptList = deptService.selectDeptList(deptquery,type,parentids);
                 d.setChildren(deptService.setHasChildren(selectType,type,deptList));
             }
         }
@@ -150,7 +153,8 @@ public class DeptController extends BaseController
     @GetMapping("/export")
     public AjaxResult export(Dept dept)
     {
-        List<Dept> list = deptService.selectDeptList(dept);
+        List<String> parentids = deptService.findAllparentId();
+        List<Dept> list = deptService.selectDeptList(dept,"dept",parentids);
         ExcelUtil<Dept> util = new ExcelUtil<Dept>(Dept.class);
         return util.exportExcel(list, "dept");
     }
@@ -224,7 +228,8 @@ public class DeptController extends BaseController
         List<User> users = userService.selectUserList(u);
         Dept d = new Dept();
         d.setPid(CompanyID);
-        List<Dept> curDepts = deptService.selectDeptList(d);
+        List<String> parentids = deptService.findAllparentId();
+        List<Dept> curDepts = deptService.selectDeptList(d,"dept",parentids);
         return AjaxResult.success(deptService.UserTreeByCompany(depts,users,curDepts));
     }
 }

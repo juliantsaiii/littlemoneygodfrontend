@@ -15,7 +15,12 @@
         </div>
       </el-col>
       <el-col :span="18">
-        <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+        <el-form
+          :model="queryParams"
+          ref="queryForm"
+          :inline="true"
+          label-width="68px"
+        >
           <el-form-item label="姓名" prop="fullname">
             <el-input
               v-model="queryParams.fullname"
@@ -43,8 +48,16 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              size="mini"
+              @click="handleQuery"
+              >搜索</el-button
+            >
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
+              >重置</el-button
+            >
           </el-form-item>
           <el-form-item style="float:right">
             <el-button
@@ -54,7 +67,8 @@
               size="mini"
               @click="handleAdd"
               v-hasPermi="['sjwflowsys:user:add']"
-            >新增</el-button>
+              >新增</el-button
+            >
           </el-form-item>
         </el-form>
 
@@ -94,13 +108,18 @@
           v-loading="loading"
           :data="userList"
           @selection-change="handleSelectionChange"
-          :height="windowHeight-200"
+          :height="windowHeight - 200"
         >
           <el-table-column label="部门名称" align="center" prop="deptname" />
           <el-table-column label="用户名" align="center" prop="name" />
           <el-table-column label="姓名" align="center" prop="fullname" />
           <el-table-column label="机构名" align="center" prop="companyname" />
-          <el-table-column label="人员类型" align="center" prop="usertype" :formatter="usertypeFormat" />
+          <el-table-column
+            label="人员类型"
+            align="center"
+            prop="usertype"
+            :formatter="usertypeFormat"
+          />
           <el-table-column label="签名" align="center" prop="imageUrl">
             <template slot-scope="scope">
               <el-upload
@@ -108,13 +127,27 @@
                 :action="uploadImgUrl"
                 :headers="headers"
                 :show-file-list="false"
-                :on-success="(response, file, fileList) => handleAvatarSuccess(response, file, fileList, scope.row)"
+                :on-success="
+                  (response, file, fileList) =>
+                    handleAvatarSuccess(response, file, fileList, scope.row)
+                "
                 :before-upload="beforeAvatarUpload"
-                :data="{'filename':scope.row.id + '.png','path':'/Signature/'}"
+                :data="{ filename: scope.row.id + '.png', path: '/Signature/' }"
               >
                 <img
                   v-if="1"
-                  :src="url + '/common/downloadpath?fileName=' + scope.row.id + '.png&filePath=' + preurl +'/Signature/' + scope.row.id + '.png' + '?radomn=' + scope.row.imageUrl"
+                  :src="
+                    url +
+                      '/common/downloadpath?fileName=' +
+                      scope.row.id +
+                      '.png&filePath=' +
+                      preurl +
+                      '/Signature/' +
+                      scope.row.id +
+                      '.png' +
+                      '?radomn=' +
+                      scope.row.imageUrl
+                  "
                   class="avatar"
                 />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -131,28 +164,32 @@
               ></el-switch>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column
+            label="操作"
+            align="center"
+            class-name="small-padding fixed-width"
+          >
             <template slot-scope="scope">
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
-                v-hasPermi="['sjwflowsys:user:edit']"
-              >修改</el-button>
+                >修改</el-button
+              >
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
-                v-hasPermi="['sjwflowsys:user:remove']"
-              >删除</el-button>
+                >删除</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
 
         <pagination
-          v-show="total>0"
+          v-show="total > 0"
           :total="total"
           :page.sync="queryParams.pageNum"
           :limit.sync="queryParams.pageSize"
@@ -187,7 +224,9 @@
             <el-form-item label="密码" prop="password">
               <!-- <el-input v-model="form.password" placeholder="请输入密码" type="password" /> -->
               <template>
-                <el-button type="warning" size="mini" @click="resetpassword">重置密码</el-button>
+                <el-button type="warning" size="mini" @click="resetpassword"
+                  >重置密码</el-button
+                >
               </template>
             </el-form-item>
           </el-col>
@@ -261,7 +300,8 @@
                   v-for="dict in activatedOptions"
                   :key="dict.dictValue"
                   :label="dict.dictValue"
-                >{{dict.dictLabel}}</el-radio>
+                  >{{ dict.dictLabel }}</el-radio
+                >
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -486,6 +526,7 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+      this.showCarry = false;
       this.reset();
       const id = row.id || this.ids;
       getUser(id).then(response => {

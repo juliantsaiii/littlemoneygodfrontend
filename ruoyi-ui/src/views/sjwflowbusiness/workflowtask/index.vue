@@ -1,6 +1,11 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryParams" :inline="true" label-width="100px">
+    <el-form
+      :model="queryParams"
+      ref="queryParams"
+      :inline="true"
+      label-width="100px"
+    >
       <el-form-item label="接收人" prop="receivename">
         <el-input
           v-model="queryParams.receivename"
@@ -22,20 +27,32 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          size="mini"
+          @click="handleQuery"
+          >搜索</el-button
+        >
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
+          >重置</el-button
+        >
       </el-form-item>
     </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          type="warning"
-          icon="el-icon-download"
+          type="primary"
+          icon="el-icon-s-promotion"
           size="mini"
-          @click="handleExport"
-          v-hasPermi="['sjwflowbusiness:workflowtask:export']"
-        >导出</el-button>
+          :disabled="multiple"
+          @click="
+            dialogTreeVisible = true;
+            updatetype = 2;
+          "
+          >转交</el-button
+        >
       </el-col>
     </el-row>
 
@@ -49,7 +66,10 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="是否删除" align="center">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.isdeleted" @change="updateform(scope.row)"></el-switch>
+          <el-switch
+            v-model="scope.row.isdeleted"
+            @change="updateform(scope.row)"
+          ></el-switch>
         </template>
       </el-table-column>
       <el-table-column
@@ -75,14 +95,23 @@
       />
       <el-table-column label="发送人" align="center" prop="sendername" />
       <el-table-column label="接收人" align="center" prop="receivename" />
-      <el-table-column label="接收时间" align="center" min-width="100" prop="receivetime">
+      <el-table-column
+        label="接收时间"
+        align="center"
+        min-width="100"
+        prop="receivetime"
+      >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.receivetime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="status" align="center" :min-width="100">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.status" placeholder @change="updateform(scope.row)">
+          <el-select
+            v-model="scope.row.status"
+            placeholder
+            @change="updateform(scope.row)"
+          >
             <el-option
               v-for="dict in statusOptions"
               :key="dict.dictValue"
@@ -109,7 +138,12 @@
       <el-table-column label="note" align="center" prop="note" />
 
       <el-table-column label="步骤阶段" align="center" prop="stepstate" />
-      <el-table-column label="databasename" align="center" prop="databasename" min-width="150" />
+      <el-table-column
+        label="databasename"
+        align="center"
+        prop="databasename"
+        min-width="150"
+      />
       <el-table-column label="infotype" align="center" prop="infotype" />
 
       <el-table-column
@@ -126,32 +160,39 @@
             icon="el-icon-user"
             @click="openUpdateDialog(scope.row)"
             v-hasPermi="['sjwflowbusiness:workflowtask:edit']"
-          >更换用户</el-button>
+            >更换用户</el-button
+          >
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="openEditDialog(scope.row)"
-          >编辑</el-button>
+            >编辑</el-button
+          >
           <el-button
             size="mini"
             type="text"
             icon="el-icon-document"
             @click="getSessionID(scope.row)"
-          >表单</el-button>
+            >表单</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
 
     <pagination
-      v-show="total>0"
+      v-show="total > 0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
 
-    <el-dialog title="更换接收人" :visible.sync="dialogTreeVisible" append-to-body>
+    <el-dialog
+      title="更换接收人"
+      :visible.sync="dialogTreeVisible"
+      append-to-body
+    >
       <dept-select-tree
         :pid="form.receiveid"
         :id="form.receiveid"
@@ -163,7 +204,12 @@
       ></dept-select-tree>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogTreeVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateReceiver">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="updateReceiver"
+          :disabled="receiveSubmit"
+          >确 定</el-button
+        >
       </div>
     </el-dialog>
 
@@ -203,19 +249,29 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="步骤阶段" prop="stepstate">
-              <el-input-number v-model="form.stepstate" placeholder="请输入步骤阶段" />
+              <el-input-number
+                v-model="form.stepstate"
+                placeholder="请输入步骤阶段"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="接收时间" prop="receivetime">
-              <el-date-picker v-model="form.receivetime" type="datetime" placeholder="选择接收时间"></el-date-picker>
+              <el-date-picker
+                v-model="form.receivetime"
+                type="datetime"
+                placeholder="选择接收时间"
+              ></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="databasename" prop="databasename">
-              <el-input v-model="form.databasename" placeholder="请输入databasename" />
+              <el-input
+                v-model="form.databasename"
+                placeholder="请输入databasename"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -241,7 +297,8 @@ import {
   delWorkflowtask,
   addWorkflowtask,
   updateWorkflowtask,
-  exportWorkflowtask
+  exportWorkflowtask,
+  changeClueReceiver
 } from "@/api/sjwflowbusiness/workflowtask";
 import deptSelectTree from "@/views/sjwflowsys/dept/components/deptSelectTree";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -309,7 +366,11 @@ export default {
         this.isdialog == true
           ? "600"
           : this.$store.getters.clientHeight - 200 + "px",
-      dialogTreeVisible: false
+      dialogTreeVisible: false,
+      //更换人确认按钮
+      receiveSubmit: true,
+      //更新类型
+      updatetype: undefined
     };
   },
   watch: {
@@ -323,13 +384,13 @@ export default {
     }
   },
   created() {
-    // this.queryParams.clueid = this.$route.params && this.$route.query.id;
-    // this.queryParams.receiveid =
-    //   this.$route.params && this.$route.query.receiveid;
-    // this.queryParams.status =
-    //   this.$route.params && this.$route.query.receiveid && 1;
-    // this.queryParams.isdeleted =
-    //   this.$route.params && this.$route.query.receiveid && 0;
+    this.queryParams.clueid = this.$route.params && this.$route.query.id;
+    this.queryParams.receiveid =
+      this.$route.params && this.$route.query.receiveid;
+    this.queryParams.status =
+      this.$route.params && this.$route.query.receiveid && 1;
+    this.queryParams.isdeleted =
+      this.$route.params && this.$route.query.receiveid && 0;
     this.getDicts("sjwflow_task_status").then(response => {
       this.statusOptions = response.data;
     });
@@ -415,7 +476,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id);
+      this.ids = selection.map(item => item.clueid);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
@@ -440,23 +501,34 @@ export default {
       updateWorkflowtask(data).then(res => {
         if (res.code == "200") {
           this.msgSuccess("修改成功");
+          this.getList();
         }
       });
-    } /** 同步下拉树数据 */,
+    },
+    /** 同步下拉树数据 */
     updatepSelectTreeValue(node, id, label) {
-      this.form[id] = node.id;
-      label != undefined && [(this.form[label] = node.label)];
+      if (node != null) {
+        this.receiveSubmit = false;
+        this.form[id] = node.id;
+        label != undefined && [(this.form[label] = node.label)];
+      } else {
+        this.receiveSubmit = true;
+      }
     },
     /** 打开换人框 */
     openUpdateDialog(data) {
       this.form = data;
+      this.updatetype = 1;
       this.dialogTreeVisible = true;
     },
     /** 更新接收人 */
     updateReceiver() {
-      this.updateform(this.form);
+      if (this.updatetype == 1) {
+        this.updateform(this.form);
+      } else if (this.updatetype == 2) {
+        this.changeReceiverBatch();
+      }
       this.dialogTreeVisible = false;
-      this.getList();
     },
     /** 更换task基本信息 */
     openEditDialog(data) {
@@ -501,6 +573,30 @@ export default {
             }
           }, 1000);
         });
+    },
+    /**
+     * 批量转交 */
+    changeReceiverBatch() {
+      this.$confirm(
+        '是否确认将选中线索转交给<span class="el-tag">' +
+          this.form.receivename +
+          "</span>",
+        { dangerouslyUseHTMLString: true }
+      ).then(() => {
+        const params = new FormData();
+        params.append("ids", this.ids);
+        params.append("receiveid", this.form.receiveid);
+        params.append("receivename", this.form.receivename);
+        changeClueReceiver(params).then(response => {
+          if (response.code == "200") {
+            this.msgSuccess("转交成功");
+            this.form.receiveID = "";
+            this.form.receiveName = "";
+            this.receiveSubmit = true;
+            this.getList();
+          }
+        });
+      });
     }
   }
 };
